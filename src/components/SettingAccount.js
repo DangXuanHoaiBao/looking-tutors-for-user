@@ -2,7 +2,6 @@ import React from 'react';
 import {Form, Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import userActions from '../actions/user';
-import history from '../helpers/history';
 
 class SettingAccount extends React.Component{
 
@@ -60,7 +59,7 @@ class SettingAccount extends React.Component{
     handleSubmit(e){
         e.preventDefault();
         const {password, passwordConfirm, errors, isCheckTeacher} = this.state;
-        const {fullName, email, settingAccount} = this.props;
+        const {fullName, email, signUp} = this.props;
       
         if(password !== passwordConfirm){
             this.setState({
@@ -71,9 +70,8 @@ class SettingAccount extends React.Component{
         }
         else{
             if(errors.password === '' && errors.passwordConfirm === '' && password.length !== 0 && passwordConfirm.length !== 0){
-                const role = isCheckTeacher ? 'Teacher' : 'Renter';
-                settingAccount(fullName, email, password, role);
-                history.push('/login');
+                const role = isCheckTeacher ? 'teacher' : 'renter';
+                signUp(fullName, email, password, role);
             }
         }
     }
@@ -81,7 +79,10 @@ class SettingAccount extends React.Component{
     render(){
         
         const {password, passwordConfirm, isCheckTeacher, isCheckRenter, errors} = this.state;
-
+        const {message} = this.props;
+        if(message){
+            alert(message);
+        }
         return (
             <div className="container ">
                 <div className="row justify-content-center mt-4 mb-4" >
@@ -131,12 +132,13 @@ class SettingAccount extends React.Component{
 }
 
 const mapStateToProps = (state) => ({
-    fullName: state.fullName,
-    email: state.email
+    fullName: state.sendInforToFormSignUp.fullName,
+    email: state.sendInforToFormSignUp.email,
+    message: state.signUp.message
 })
 
 const actionCreator = {
-    settingAccount: userActions.settingAccount
+    signUp: userActions.signUp
 }
 
 export default connect(mapStateToProps, actionCreator)(SettingAccount);

@@ -6,11 +6,11 @@ import {createStore, applyMiddleware} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import './styles/index.css';
 import App from './components/App';
-import userSignUpReducer from './reducers/user';
+import indexReducer from './reducers/index';
 
 
 const store = createStore(
-    userSignUpReducer,
+    indexReducer,
     composeWithDevTools(applyMiddleware(thunk))
 );
 

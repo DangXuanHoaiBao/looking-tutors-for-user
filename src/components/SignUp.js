@@ -40,9 +40,9 @@ class SignUp extends React.Component{
     handleSubmit(e){
         //e.preventDefault();
         const {fullName, email, errors} = this.state;
-        const {signUp} = this.props;
+        const {sendInforToFormSignUp} = this.props;
         if(errors.fullName === '' && errors.email === '' && fullName.length !== 0 && email.length !== 0){
-            signUp(fullName, email);
+            sendInforToFormSignUp(fullName, email);
             history.push('/setting-account');
         }
     }
@@ -85,8 +85,8 @@ class SignUp extends React.Component{
 }
 
 const mapDispatchToProps = dispatch => ({
-    signUp: (fullName, email) => { 
-        dispatch(userActions.signUp(fullName, email));
+    sendInforToFormSignUp: (fullName, email) => { 
+        dispatch(userActions.sendInforToFormSignUp(fullName, email));
     }
 })
 
