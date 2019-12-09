@@ -87,9 +87,9 @@ function login(email, password){
                 }
                 else{
                     const userInfo = JSON.parse(text).user;
-                    const user = userInfo.fullName;
-                    localStorage.setItem('user', user);
-                    dispatch(isSuccess(user, message));
+                    // const user = userInfo.fullName;
+                    localStorage.setItem('userInfo', userInfo);
+                    dispatch(isSuccess(userInfo, message));
                     history.push('/');
                 }
             })

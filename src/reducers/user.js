@@ -29,15 +29,15 @@ export const signUp = (state = {}, action) => {
     }
 }
 
-const user = localStorage.getItem('user');
-const stateDefault = user ? {'user': user} : {};
+const userInfo = localStorage.getItem('userInfo');
+const stateDefault = userInfo ? {'userInfo': userInfo} : {};
 export const login = (state = stateDefault, action) => {
     switch(action.type){
         case 'LOGIN_SUCCESS': {
             return {
                 ...state,
                 message: action.message,
-                user: action.user
+                userInfo: action.userInfo
             }
         }
         case 'LOGIN_FAIL': {

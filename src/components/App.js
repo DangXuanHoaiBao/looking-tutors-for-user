@@ -29,8 +29,8 @@ class App extends React.Component{
 
   render(){
 
-    const {user} = this.props;
-
+    const {userInfo} = this.props;
+    
     return (
       <Router history={history}>
         <Navbar bg="dark" expand="lg">
@@ -46,7 +46,7 @@ class App extends React.Component{
                 <FormControl type="text" placeholder="Search" className="mr-sm-2" />
                 <Button variant="outline-info">Search</Button>
               </Form>
-              {!user ? 
+              {!userInfo ? 
                 <Nav className="ml-auto">
                   <Link to="/login" className=" mr-3"> Đăng Nhập </Link>
                   <Link to="/sign-up" className=" mr-3"> Đăng Ký </Link>
@@ -108,7 +108,7 @@ class App extends React.Component{
 }
 
 const mapStateToProps = state => ({
-  user: state.login.user
+  userInfo: state.login.userInfo
 });
 
 const actionCreator = {
