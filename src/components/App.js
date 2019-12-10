@@ -11,6 +11,7 @@ import Home from '../components/Home';
 import SettingAccount from '../components/SettingAccount';
 import TeacherHome from '../components/Teacher/TeacherHome';
 import TeacherProfile from '../components/Teacher/TeacherProfile';
+import ClassDetail from '../components/ClassDetail';
 
 import '../styles/App.css';
 import logo from '../images/logo.PNG';
@@ -60,13 +61,14 @@ class App extends React.Component{
             </Navbar.Collapse>
           </div>
         </Navbar>
-        
+
         <Switch>
           <Route exact path="/login"> <Login /> </Route>
           <Route exact path="/sign-up"> <SignUp /> </Route>
           <Route exact path="/setting-account"> <SettingAccount /> </Route>
           <Route exact path="/home"> <TeacherHome /> </Route>
           <Route exact path="/teacher/profile" > <TeacherProfile /> </Route>
+          <Route exact path="/class-detail" > <ClassDetail /> </Route>
           <Route exact path="/"> <Home /> </Route>
 
         </Switch>
