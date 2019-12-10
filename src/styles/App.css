@@ -54,6 +54,10 @@ a:hover {
   margin-left: -270px !important;
 }
 
+.ml--20{
+  margin-left: -20px !important;
+}
+
 .w-20{
   width: 20%;
 }
