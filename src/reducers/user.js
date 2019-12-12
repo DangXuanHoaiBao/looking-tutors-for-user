@@ -52,3 +52,15 @@ export const login = (state = stateDefault, action) => {
         default: return state;
     }
 }
+
+export const getTeacherAll = (state = {}, action ) => {
+    switch(action.type){
+        case 'GET_TEACHER_ALL_SUCCESS': {
+            return {
+                ...state,
+                users: action.users
+            }
+        }
+        default: return state;
+    }
+}

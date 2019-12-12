@@ -52,10 +52,10 @@ function signUp(fullName, email, password, role){
 }
 
 function login(email, password){
-    function isSuccess(user, message){
+    function isSuccess(userInfo, message){
         return {
             type: 'LOGIN_SUCCESS',
-            user,
+            userInfo,
             message
         }
     }
@@ -87,6 +87,7 @@ function login(email, password){
                 }
                 else{
                     const userInfo = JSON.parse(text).user;
+                    console.log(userInfo.fullName);
                     // const user = userInfo.fullName;
                     localStorage.setItem('userInfo', userInfo);
                     dispatch(isSuccess(userInfo, message));
@@ -105,11 +106,42 @@ function logout(){
     }
 }
 
+function getTeacherAll(){
+
+    function isSuccess(users){
+        return {
+            type: 'GET_TEACHER_ALL_SUCCESS',
+            users
+        }
+    }
+
+    return dispatch=> {
+        fetch('http://localhost:3001/users/get-teacher-all', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(res => {
+            res.text().then(text => {
+                const users = JSON.parse(text);
+                if(res.status === 200){
+                    dispatch(isSuccess(users));
+            
+                }
+            })
+        })
+        .catch(error => console.log(error));
+    }
+}
+
 const userActions = {
     sendInforToFormSignUp,
     signUp,
     login,
-    logout
+    logout,
+    getTeacherAll
 };
 
 export default userActions;

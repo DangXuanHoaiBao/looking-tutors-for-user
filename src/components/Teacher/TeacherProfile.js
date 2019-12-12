@@ -24,8 +24,8 @@ class TeacherProfile extends React.Component{
                                 <Image src={user_img} className="img-fluid rounded-circle" />
                             </div>
                             <div className="col-md-11 ml--20 ">
-                                <div className="font-weight-bold">Bao Dang <span><i class="fas fa-check-circle text-primary"></i></span></div>
-                                <i class="fas fa-map-marker-alt text-primary"></i> &nbsp; <span>Quận 5, TPHCM</span>
+                                <div className="font-weight-bold">Bao Dang <span><i className="fas fa-check-circle text-primary"></i></span></div>
+                                <i className="fas fa-map-marker-alt text-primary"></i> &nbsp; <span>Quận 5, TPHCM</span>
                             </div>
                         </div>
                         <div className="row mt-3 mb-3 ml-1 mr-1">
@@ -81,11 +81,11 @@ class TeacherProfile extends React.Component{
                                 <Card.Body>
                                     <Card.Title>Toán luyện thi đại học</Card.Title>
                                     <Card.Text>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
+                                        <i className="fas fa-star"></i>
+                                        <i className="fas fa-star"></i>
+                                        <i className="fas fa-star"></i>
+                                        <i className="fas fa-star"></i>
+                                        <i className="fas fa-star"></i>
                                         <p>Chất lượng dạy tốt.</p>
                                     </Card.Text>
                                 </Card.Body>

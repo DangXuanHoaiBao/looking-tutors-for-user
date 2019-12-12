@@ -7,6 +7,8 @@ import logo from '../images/logo.PNG';
 import banner_img_1 from '../images/banner-img-1.jpg';
 import banner_img_3 from '../images/banner-img-3.jpg';
 import history from '../helpers/history';
+import userActions from '../actions/user';
+import { connect } from 'react-redux';
 
 class Home extends React.Component{
     constructor(props){
@@ -18,23 +20,59 @@ class Home extends React.Component{
     //     };
     //     this.handleSelect = this.handleSelect.bind(this);
     // }
-    
+
 	// handleSelect(selectedIndex, e) {
 	// 	this.setState({
 	// 		index: selectedIndex,
 	// 		direction: e.direction,
     // 	});
+
         this.handleClick = this.handleClick.bind(this);
 
     }
-    
+
+    componentWillMount(){
+        const {getTeacherAll} = this.props;
+        getTeacherAll();
+    }
+
     handleClick(){
         history.push('/teacher/profile');
     }
 
 	render() {
         // const { index, direction } = this.state;
-        
+        const {users} = this.props;
+        let listUser;
+        if(users){
+            console.log(users)
+            listUser = users.map((item, i) =>
+                <div className="row mt-4">
+                    <div className="col-md-4">
+                        <Card className="shadow">
+                            <Card.Header className="bg-gray-300">
+                                <div className="row ">
+                                    <div className="col-md-3">
+                                        <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
+                                    </div>
+                                    <div className="col-md-8">
+                                        <Card.Title > {item.fullName} </Card.Title>
+                                    </div>
+                                </div>
+                            </Card.Header>
+                            <Card.Body >
+                                <Card.Text>
+                                    {item.discribe}
+                                </Card.Text>
+                                <Button variant="success"> Thông Tin Chi Tiết </Button>
+                            </Card.Body>
+                        </Card>
+                    </div>
+                </div>   
+            )
+        }
+
+
         return (
             <div>
                 <Navbar bg="light">
@@ -83,7 +121,7 @@ class Home extends React.Component{
                 <div className="container">
                     <div className="row mt-4 mb-4 ">
                         <div className="col-md-2">
-                            <div className="mt-3 mb-3 font-weight-bold">Hiển Thị Theo:</div> 
+                            <div className="mt-3 mb-3 font-weight-bold">Hiển Thị Theo:</div>
                             <Form.Group controlId="formDistrict">
                                 <i class="fas fa-map-marker-alt text-primary"></i> &nbsp;
                                 <Form.Label className="">Địa Điểm</Form.Label>
@@ -116,82 +154,12 @@ class Home extends React.Component{
                             // activeIndex={index}
                             // direction={direction}
                             // onSelect={this.handleSelect}
-                            className=" mt-3 mb-3"
-                        >
+                            className=" mt-3 mb-3">
                             <Carousel.Item>
                                 <div className="container">
-                                    <div className="row">
-                                        <div className="col-md-4">
-                                            <Card className="shadow">
-                                                <Card.Header className="bg-gray-300">
-                                                    <div className="row ">
-                                                        <div className="col-md-3">
-                                                            <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                                        </div>
-                                                        <div className="col-md-8">
-                                                            <Card.Title > Họ Tên </Card.Title>
-                                                        </div>
-                                                    </div>
-                                                </Card.Header>
-                                                <Card.Body >
-                                                    <Card.Text>
-                                                        Mô tả công việc
-                                                        Các kĩ năng
-                                                    </Card.Text>
-                                                    <Button variant="success" onClick={this.handleClick}> Thông Tin Chi Tiết </Button>
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
 
-                                        <div className="col-md-4">
-                                            <Card className="shadow">
-                                                <Card.Header className="bg-gray-300">
-                                                    <div className="row ">
-                                                        <div className="col-md-3">
-                                                            <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                                        </div>
-                                                        <div className="col-md-8">
-                                                            <Card.Title > Họ Tên </Card.Title>
-                                                        </div>
-                                                    </div>
-                                                </Card.Header>
-                                                <Card.Body >
-                                                    <Card.Text>
-                                                        Mô tả công việc
-                                                        Các kĩ năng
-                                                    </Card.Text>
-                                                    <Button variant="success"> Thông Tin Chi Tiết </Button>
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
-
-                                        <div className="col-md-4">
-                                            <Card className="shadow">
-                                                <Card.Header className="bg-gray-300">
-                                                    <div className="row ">
-                                                        <div className="col-md-3">
-                                                            <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                                        </div>
-                                                        <div className="col-md-8">
-                                                            <Card.Title > Họ Tên </Card.Title>
-                                                        </div>
-                                                    </div>
-                                                </Card.Header>
-                                                <Card.Body >
-                                                    <Card.Text>
-                                                        Mô tả công việc
-                                                        Các kĩ năng
-                                                    </Card.Text>
-                                                    <Button variant="success"> Thông Tin Chi Tiết </Button>
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
-
-                                        
-                                    </div>  
+                                    {listUser}
                                     <div className="row mt-4">
-                                        
-
                                         <div className="col-md-4">
                                             <Card className="shadow">
                                                 <Card.Header className="bg-gray-300">
@@ -213,7 +181,6 @@ class Home extends React.Component{
                                                 </Card.Body>
                                             </Card>
                                         </div>
-
                                         <div className="col-md-4">
                                             <Card className="shadow">
                                                 <Card.Header className="bg-gray-300">
@@ -235,7 +202,6 @@ class Home extends React.Component{
                                                 </Card.Body>
                                             </Card>
                                         </div>
-
                                         <div className="col-md-4">
                                             <Card className="shadow">
                                                 <Card.Header className="bg-gray-300">
@@ -257,8 +223,8 @@ class Home extends React.Component{
                                                 </Card.Body>
                                             </Card>
                                         </div>
-                                    </div>          
-                                </div>  
+                                    </div>
+                                </div>
                             </Carousel.Item>
                             <Carousel.Item>
                                 <div className="container">
@@ -328,7 +294,7 @@ class Home extends React.Component{
                                                 </Card.Body>
                                             </Card>
                                         </div>
-                                    </div>        
+                                    </div>
                                     <div className="row mt-4">
                                         <div className="col-md-4">
                                             <Card className="shadow">
@@ -395,8 +361,8 @@ class Home extends React.Component{
                                                 </Card.Body>
                                             </Card>
                                         </div>
-                                    </div>          
-                                </div>  
+                                    </div>
+                                </div>
                             </Carousel.Item>
                         </Carousel>
                         </div>
@@ -407,4 +373,12 @@ class Home extends React.Component{
     }
 }
 
-export default Home;
+const mapStateToProps = state => ({
+    users: state.getTeacherAll.users
+})
+
+const actionCreator = {
+    getTeacherAll: userActions.getTeacherAll
+}
+
+export default connect(mapStateToProps, actionCreator)(Home);

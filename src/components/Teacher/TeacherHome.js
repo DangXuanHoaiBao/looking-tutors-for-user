@@ -2,9 +2,18 @@ import React from 'react';
 import {Tab, Row, Col, Nav, Image, ProgressBar, Button, Card, ListGroup} from 'react-bootstrap';
 import AllWork from './AllWork';
 import userImg from '../../images/user-img.jpg';
+import history from '../../helpers/history';
 
 class TeacherHome extends React.Component{
-    
+    constructor(props){
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(){
+        history.push('/teacher/update-info');
+    }
+
     render(){
         const now = 60;
 
@@ -48,30 +57,28 @@ class TeacherHome extends React.Component{
                         </div>
                         <div className="row mt-3">
                             <div className="col-md-12">
-                            <div><i className="fas fa-user-alt mr-2"></i>Họ tên</div>
-                            <div><i class="fas fa-envelope mr-2"></i>Email</div>
-                            <div><i class="fa fa-home mr-2"></i>Địa chỉ</div>
-                            <div><i class="fas fa-phone-square mr-2"></i>Số điện thoại</div>
-                            <div>Tỉ lệ thành công</div>
-                            <ProgressBar now={now} label={`${now}%`} />
-                            <div>Tỉ lệ đánh giá từ người học</div>
-                            <ProgressBar now={now} label={`${now}%`} />
+                                <div><i className="fas fa-user-alt mr-2"></i>Họ tên</div>
+                                <div><i class="fas fa-envelope mr-2"></i>Email</div>
+                                <div><i class="fa fa-home mr-2"></i>Địa chỉ</div>
+                                <div><i class="fas fa-phone-square mr-2"></i>Số điện thoại</div>
+                                <div>Tỉ lệ thành công</div>
+                                <ProgressBar now={now} label={`${now}%`} />
+                                <div>Tỉ lệ đánh giá từ người học</div>
+                                <ProgressBar now={now} label={`${now}%`} />
 
-                            <Button className="mt-2" variant="primary">Cập nhật thông tin</Button>
-
-                            <Card className="mt-2">
-                                <Card.Header>Giới thiệu</Card.Header>
-                                <ListGroup variant="flush">
-                                    <ListGroup.Item>
-                                        Cập nhật bài tự giới thiệu của người dạy, cập nhật bài tự giới thiệu của người dạy
-                                        <Button className="mt-2" variant="primary">Cập nhật</Button>
-                                    </ListGroup.Item>
-                                </ListGroup>
-                            </Card>
-                            <div><i class="fa fa-cogs mr-1" aria-hidden="true"></i> Kĩ năng</div>
-                            <div>Toán cấp 3</div>
-                            <div>Lý cấp 3</div>
-                            <div>Hóa cấp 3</div>
+                                <Card className="mt-2">
+                                    <Card.Header>Giới thiệu</Card.Header>
+                                    <ListGroup variant="flush">
+                                        <ListGroup.Item>
+                                            Cập nhật bài tự giới thiệu của người dạy, cập nhật bài tự giới thiệu của người dạy
+                                        </ListGroup.Item>
+                                    </ListGroup>
+                                </Card>
+                                <div><i class="fa fa-cogs mr-1" aria-hidden="true"></i> Kĩ năng</div>
+                                <div>Toán cấp 3</div>
+                                <div>Lý cấp 3</div>
+                                <div>Hóa cấp 3</div>
+                                <Button className="mt-2" variant="primary" onClick={this.handleClick}>Cập nhật thông tin</Button>
                             </div>
                         </div>
                     </div>
