@@ -1,7 +1,8 @@
 import React from 'react';
 import {Button, Card, Image, Carousel, Navbar, Nav, Form} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
-
+import Header from './Header';
+import Footer from './Footer';
 import userImg from '../images/user-img.jpg';
 import logo from '../images/logo.PNG';
 import banner_img_1 from '../images/banner-img-1.jpg';
@@ -14,21 +15,7 @@ class Home extends React.Component{
     constructor(props){
         super(props);
 
-	// 	this.state = {
-	// 		index: 0,
-	// 		direction: null,
-    //     };
-    //     this.handleSelect = this.handleSelect.bind(this);
-    // }
-
-	// handleSelect(selectedIndex, e) {
-	// 	this.setState({
-	// 		index: selectedIndex,
-	// 		direction: e.direction,
-    // 	});
-
         this.handleClick = this.handleClick.bind(this);
-
     }
 
     componentWillMount(){
@@ -41,12 +28,11 @@ class Home extends React.Component{
     }
 
 	render() {
-        // const { index, direction } = this.state;
+
         const {users} = this.props;
         let listUser;
         if(users){
             listUser = users.map((item, i) =>
-
                 <div className="col-md-4">
                     <Card className="shadow">
                         <Card.Header className="bg-gray-300">
@@ -73,6 +59,7 @@ class Home extends React.Component{
 
         return (
             <div>
+                <Header/>
                 <Navbar bg="light">
                     <div className="container justify-content-center">
                     <Nav>
@@ -86,7 +73,6 @@ class Home extends React.Component{
                     </Nav>
                     </div>
                 </Navbar>
-
                 <Carousel>
                     <Carousel.Item>
                     <Image
@@ -115,13 +101,12 @@ class Home extends React.Component{
                         </Carousel.Caption>
                     </Carousel.Item>
                 </Carousel>
-
                 <div className="container">
                     <div className="row mt-4 mb-4 ">
                         <div className="col-md-2">
                             <div className="mt-3 mb-3 font-weight-bold">Hiển Thị Theo:</div>
                             <Form.Group controlId="formDistrict">
-                                <i class="fas fa-map-marker-alt text-primary"></i> &nbsp;
+                                <i className="fas fa-map-marker-alt text-primary"></i> &nbsp;
                                 <Form.Label className="">Địa Điểm</Form.Label>
                                 <Form.Control as="select">
                                     <option>...</option>
@@ -130,7 +115,7 @@ class Home extends React.Component{
                             </Form.Group>
 
                             <Form.Group controlId="formDistrict">
-                                <i class="fas fa-dollar-sign text-primary"></i> &nbsp;
+                                <i className="fas fa-dollar-sign text-primary"></i> &nbsp;
                                 <Form.Label className="">Giá Mỗi Giờ</Form.Label>
                                 <Form.Control as="select">
                                     <option>...</option>
@@ -139,7 +124,7 @@ class Home extends React.Component{
                             </Form.Group>
 
                             <Form.Group controlId="formDistrict">
-                                <i class="fa fa-cogs text-primary" aria-hidden="true"></i> &nbsp;
+                                <i className="fa fa-cogs text-primary" aria-hidden="true"></i> &nbsp;
                                 <Form.Label className="">Kĩ Năng</Form.Label>
                                 <Form.Control as="select">
                                     <option>...</option>
@@ -148,11 +133,7 @@ class Home extends React.Component{
                             </Form.Group>
                         </div>
                         <div className="col-md-10">
-                        <Carousel
-                            // activeIndex={index}
-                            // direction={direction}
-                            // onSelect={this.handleSelect}
-                            className=" mt-3 mb-3">
+                        <Carousel className=" mt-3 mb-3">
                             <Carousel.Item>
                                 <div className="container">
                                     <div className="row mt-4">
@@ -174,6 +155,7 @@ class Home extends React.Component{
                         </div>
                     </div>
                 </div>
+                <Footer/>
             </div>
         );
     }
