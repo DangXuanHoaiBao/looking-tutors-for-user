@@ -1,14 +1,24 @@
 import React from 'react';
 import {Form, Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
+import userActions from '../../actions/user';
 
 class TeacherUpdate extends React.Component{
-    
+    // constructor(props){
+    //     super(props);
+
+    // }
+
+    componentWillMount(){
+        const {getProfile} = this.props;
+        getProfile();
+    }
+
     render(){
-        const {userInfo} = this.props;
-        if(userInfo){
-            // console.log((localStorage.getItem('userInfo')))
-        }
+
+        const {userProfile} = this.props;
+        console.log(userProfile);
+
         return(
             <div className="container ">
                 <div className="row justify-content-center mt-4 mb-4" >
@@ -19,12 +29,12 @@ class TeacherUpdate extends React.Component{
                                 <Form onSubmit={this.handleSubmit}>
                                     <Form.Group>
                                         <Form.Label>Chọn File Ảnh</Form.Label>
-                                        <Form.Control type="file" placeholder="" name="fullName"  onChange={this.handleChange}/>
+                                        <Form.Control type="file" placeholder=""/>
                                         <Form.Text className="text-danger"></Form.Text>
                                     </Form.Group>
                                     <Form.Group controlId="formBasicFullName">
                                         <Form.Label>Họ Tên</Form.Label>
-                                        <Form.Control type="text" placeholder="" name="fullName"  onChange={this.handleChange}/>
+                                        <Form.Control type="text" placeholder="" name="fullName" Change={this.handleChange}/>
                                         <Form.Text className="text-danger"></Form.Text>
                                     </Form.Group>
 
@@ -69,7 +79,11 @@ class TeacherUpdate extends React.Component{
 }
 
 const mapStateToProps = state => ({
-    userInfo: state.login.userInfo
+    userProfile: state.getProfile.userProfile
 });
 
-export default connect(mapStateToProps)(TeacherUpdate);
+const actionCreator = {
+    getProfile: userActions.getProfile
+}
+
+export default connect(mapStateToProps, actionCreator)(TeacherUpdate);

@@ -32,7 +32,7 @@ class App extends React.Component{
 
   render(){
 
-    const {userInfo} = this.props;
+    const {token} = this.props;
     
     return (
       <Router history={history}>
@@ -49,7 +49,7 @@ class App extends React.Component{
                 <FormControl type="text" placeholder="Search" className="mr-sm-2" />
                 <Button variant="outline-info">Search</Button>
               </Form>
-              {!userInfo ? 
+              {!token ? 
                 <Nav className="ml-auto">
                   <Link to="/login" className=" mr-3"> Đăng Nhập </Link>
                   <Link to="/sign-up" className=" mr-3"> Đăng Ký </Link>
@@ -67,10 +67,12 @@ class App extends React.Component{
           <Route exact path="/login"> <Login /> </Route>
           <Route exact path="/sign-up"> <SignUp /> </Route>
           <Route exact path="/setting-account"> <SettingAccount /> </Route>
+          <Route exact path="/class-detail" > <ClassDetail /> </Route>
+
           <Route exact path="/teacher"> <TeacherHome /> </Route>
           <Route exact path="/teacher/profile" > <TeacherProfile /> </Route>
-          <Route exact path="/class-detail" > <ClassDetail /> </Route>
-          <Route exact path="/teacher/update-info"> <TeacherUpdate /> </Route>
+          <Route exact path="/teacher/update-profile"> <TeacherUpdate /> </Route>
+          
           <Route exact path="/"> <Home /> </Route>
 
         </Switch>
@@ -114,7 +116,7 @@ class App extends React.Component{
 }
 
 const mapStateToProps = state => ({
-  userInfo: state.login.userInfo
+  token: state.login.token
 });
 
 const actionCreator = {

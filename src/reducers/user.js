@@ -29,15 +29,16 @@ export const signUp = (state = {}, action) => {
     }
 }
 
-const userInfo = localStorage.getItem('userInfo');
-const stateDefault = userInfo ? {'userInfo': userInfo} : {};
+const token = localStorage.getItem('token');
+const stateDefault = token ? {'token': token} : {};
+
 export const login = (state = stateDefault, action) => {
     switch(action.type){
         case 'LOGIN_SUCCESS': {
             return {
                 ...state,
                 message: action.message,
-                userInfo: action.userInfo
+                data: action.data
             }
         }
         case 'LOGIN_FAIL': {
@@ -59,6 +60,18 @@ export const getTeacherAll = (state = {}, action ) => {
             return {
                 ...state,
                 users: action.users
+            }
+        }
+        default: return state;
+    }
+}
+
+export const getProfile = (state = {}, action) => {
+    switch(action.type){
+        case 'GET_PROFILE_SUCCESS': {
+            return {
+                ...state,
+                userProfile: action.userProfile
             }
         }
         default: return state;

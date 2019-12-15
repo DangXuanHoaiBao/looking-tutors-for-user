@@ -45,30 +45,28 @@ class Home extends React.Component{
         const {users} = this.props;
         let listUser;
         if(users){
-            console.log(users)
             listUser = users.map((item, i) =>
-                <div className="row mt-4">
-                    <div className="col-md-4">
-                        <Card className="shadow">
-                            <Card.Header className="bg-gray-300">
-                                <div className="row ">
-                                    <div className="col-md-3">
-                                        <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                    </div>
-                                    <div className="col-md-8">
-                                        <Card.Title > {item.fullName} </Card.Title>
-                                    </div>
+
+                <div className="col-md-4">
+                    <Card className="shadow">
+                        <Card.Header className="bg-gray-300">
+                            <div className="row ">
+                                <div className="col-md-3">
+                                    <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
                                 </div>
-                            </Card.Header>
-                            <Card.Body >
-                                <Card.Text>
-                                    {item.discribe}
-                                </Card.Text>
-                                <Button variant="success"> Thông Tin Chi Tiết </Button>
-                            </Card.Body>
-                        </Card>
-                    </div>
-                </div>   
+                                <div className="col-md-8">
+                                    <Card.Title > {item.fullName} </Card.Title>
+                                </div>
+                            </div>
+                        </Card.Header>
+                        <Card.Body >
+                            <Card.Text>
+                                {item.discribe}
+                            </Card.Text>
+                            <Button variant="success" onClick={this.handleclick}> Thông Tin Chi Tiết </Button>
+                        </Card.Body>
+                    </Card>
+                </div>
             )
         }
 
@@ -157,210 +155,18 @@ class Home extends React.Component{
                             className=" mt-3 mb-3">
                             <Carousel.Item>
                                 <div className="container">
-
-                                    {listUser}
                                     <div className="row mt-4">
-                                        <div className="col-md-4">
-                                            <Card className="shadow">
-                                                <Card.Header className="bg-gray-300">
-                                                    <div className="row ">
-                                                        <div className="col-md-3">
-                                                            <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                                        </div>
-                                                        <div className="col-md-8">
-                                                            <Card.Title > Họ Tên </Card.Title>
-                                                        </div>
-                                                    </div>
-                                                </Card.Header>
-                                                <Card.Body >
-                                                    <Card.Text>
-                                                        Mô tả công việc
-                                                        Các kĩ năng
-                                                    </Card.Text>
-                                                    <Button variant="success"> Thông Tin Chi Tiết </Button>
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
-                                        <div className="col-md-4">
-                                            <Card className="shadow">
-                                                <Card.Header className="bg-gray-300">
-                                                    <div className="row ">
-                                                        <div className="col-md-3">
-                                                            <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                                        </div>
-                                                        <div className="col-md-8">
-                                                            <Card.Title > Họ Tên </Card.Title>
-                                                        </div>
-                                                    </div>
-                                                </Card.Header>
-                                                <Card.Body >
-                                                    <Card.Text>
-                                                        Mô tả công việc
-                                                        Các kĩ năng
-                                                    </Card.Text>
-                                                    <Button variant="success"> Thông Tin Chi Tiết </Button>
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
-                                        <div className="col-md-4">
-                                            <Card className="shadow">
-                                                <Card.Header className="bg-gray-300">
-                                                    <div className="row ">
-                                                        <div className="col-md-3">
-                                                            <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                                        </div>
-                                                        <div className="col-md-8">
-                                                            <Card.Title > Họ Tên </Card.Title>
-                                                        </div>
-                                                    </div>
-                                                </Card.Header>
-                                                <Card.Body >
-                                                    <Card.Text>
-                                                        Mô tả công việc
-                                                        Các kĩ năng
-                                                    </Card.Text>
-                                                    <Button variant="success"> Thông Tin Chi Tiết </Button>
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
-                                    </div>
+                                        {listUser}
+                                    </div> 
                                 </div>
                             </Carousel.Item>
                             <Carousel.Item>
                                 <div className="container">
                                     <div className="row">
-                                        <div className="col-md-4">
-                                            <Card className="shadow">
-                                                <Card.Header className="bg-gray-300">
-                                                    <div className="row ">
-                                                        <div className="col-md-3">
-                                                            <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                                        </div>
-                                                        <div className="col-md-8">
-                                                            <Card.Title > Họ Tên </Card.Title>
-                                                        </div>
-                                                    </div>
-                                                </Card.Header>
-                                                <Card.Body >
-                                                    <Card.Text>
-                                                        Mô tả công việc
-                                                        Các kĩ năng
-                                                    </Card.Text>
-                                                    <Button variant="success"> Thông Tin Chi Tiết </Button>
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
 
-                                        <div className="col-md-4">
-                                            <Card className="shadow">
-                                                <Card.Header className="bg-gray-300">
-                                                    <div className="row ">
-                                                        <div className="col-md-3">
-                                                            <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                                        </div>
-                                                        <div className="col-md-8">
-                                                            <Card.Title > Họ Tên </Card.Title>
-                                                        </div>
-                                                    </div>
-                                                </Card.Header>
-                                                <Card.Body >
-                                                    <Card.Text>
-                                                        Mô tả công việc
-                                                        Các kĩ năng
-                                                    </Card.Text>
-                                                    <Button variant="success"> Thông Tin Chi Tiết </Button>
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
-
-                                        <div className="col-md-4">
-                                            <Card className="shadow">
-                                                <Card.Header className="bg-gray-300">
-                                                    <div className="row ">
-                                                        <div className="col-md-3">
-                                                            <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                                        </div>
-                                                        <div className="col-md-8">
-                                                            <Card.Title > Họ Tên </Card.Title>
-                                                        </div>
-                                                    </div>
-                                                </Card.Header>
-                                                <Card.Body >
-                                                    <Card.Text>
-                                                        Mô tả công việc
-                                                        Các kĩ năng
-                                                    </Card.Text>
-                                                    <Button variant="success"> Thông Tin Chi Tiết </Button>
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
                                     </div>
                                     <div className="row mt-4">
-                                        <div className="col-md-4">
-                                            <Card className="shadow">
-                                                <Card.Header className="bg-gray-300">
-                                                    <div className="row ">
-                                                        <div className="col-md-3">
-                                                            <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                                        </div>
-                                                        <div className="col-md-8">
-                                                            <Card.Title > Họ Tên </Card.Title>
-                                                        </div>
-                                                    </div>
-                                                </Card.Header>
-                                                <Card.Body >
-                                                    <Card.Text>
-                                                        Mô tả công việc
-                                                        Các kĩ năng
-                                                    </Card.Text>
-                                                    <Button variant="success"> Thông Tin Chi Tiết </Button>
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
-
-                                        <div className="col-md-4">
-                                            <Card className="shadow">
-                                                <Card.Header className="bg-gray-300">
-                                                    <div className="row ">
-                                                        <div className="col-md-3">
-                                                            <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                                        </div>
-                                                        <div className="col-md-8">
-                                                            <Card.Title className=""> Họ Tên </Card.Title>
-                                                        </div>
-                                                    </div>
-                                                </Card.Header>
-                                                <Card.Body >
-                                                    <Card.Text>
-                                                        Mô tả công việc
-                                                        Các kĩ năng
-                                                    </Card.Text>
-                                                    <Button variant="success"> Thông Tin Chi Tiết </Button>
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
-
-                                        <div className="col-md-4">
-                                            <Card className="shadow">
-                                                <Card.Header className="bg-gray-300">
-                                                    <div className="row ">
-                                                        <div className="col-md-3">
-                                                            <Image src={userImg} className="img-fluid rounded-circle hoverable user-img" alt="" />
-                                                        </div>
-                                                        <div className="col-md-8">
-                                                            <Card.Title className=""> Họ Tên </Card.Title>
-                                                        </div>
-                                                    </div>
-                                                </Card.Header>
-                                                <Card.Body >
-                                                    <Card.Text>
-                                                        Mô tả công việc
-                                                        Các kĩ năng
-                                                    </Card.Text>
-                                                    <Button variant="success"> Thông Tin Chi Tiết </Button>
-                                                </Card.Body>
-                                            </Card>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </Carousel.Item>

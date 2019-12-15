@@ -86,7 +86,6 @@ class TeacherHome extends React.Component{
             </div>
         );
     }
-
 }
 
 export default TeacherHome;

@@ -52,11 +52,11 @@ function signUp(fullName, email, password, role){
 }
 
 function login(email, password){
-    function isSuccess(userInfo, message){
+    function isSuccess(data, message){
         return {
             type: 'LOGIN_SUCCESS',
-            userInfo,
-            message
+            message,
+            data
         }
     }
     function isFail(message){
@@ -86,11 +86,10 @@ function login(email, password){
                     history.push('/login');
                 }
                 else{
-                    const userInfo = JSON.parse(text).user;
-                    console.log(userInfo.fullName);
-                    // const user = userInfo.fullName;
-                    localStorage.setItem('userInfo', userInfo);
-                    dispatch(isSuccess(userInfo, message));
+                    const data = JSON.parse(text)
+                    const token = data.token;
+                    localStorage.setItem('token', token);
+                    dispatch(isSuccess(data, message));
                     history.push('/');
                 }
             })
@@ -121,18 +120,50 @@ function getTeacherAll(){
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            },
+            }
         })
         .then(res => {
             res.text().then(text => {
-                const users = JSON.parse(text);
+                const users = JSON.parse(text).user;
                 if(res.status === 200){
                     dispatch(isSuccess(users));
-            
                 }
             })
         })
         .catch(error => console.log(error));
+    }
+}
+
+function authenticationHeader(){
+    const token = localStorage.getItem('token');
+    if(token){
+        return {
+            'Authorization': `Bearer ${token}`
+        };
+    }
+    return null;
+}
+
+function getProfile(){
+    function isSuccess(userProfile){
+        return{
+            type: 'GET_PROFILE_SUCCESS',
+            userProfile
+        }
+    }
+    return dispatch=>{
+        fetch('http://localhost:3001/users/profile', {
+            method: 'GET',
+            headers: authenticationHeader()
+        })
+        .then(res => {
+            res.text().then(text => {
+                if(res.status === 200){
+                    const userProfile = JSON.parse(text);
+                    dispatch(isSuccess(userProfile));
+                }
+            })
+        })
     }
 }
 
@@ -141,6 +172,7 @@ const userActions = {
     signUp,
     login,
     logout,
+    getProfile,
     getTeacherAll
 };
 
