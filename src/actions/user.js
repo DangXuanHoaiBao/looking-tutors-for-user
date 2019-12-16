@@ -87,8 +87,10 @@ function login(email, password){
                 }
                 else{
                     const data = text;
+                    console.log(JSON.parse(data).token)
                     localStorage.setItem('data', JSON.stringify(data));
                     dispatch(isSuccess(data, message));
+                    dispatch(getProfile());
                     history.push('/teacher');
                 }
             })
@@ -135,10 +137,11 @@ function getTeacherAll(){
 }
 
 function authenticationHeader(){
-    const data = localStorage.getItem('data');
-    if(data){
+    const data = JSON.parse(localStorage.getItem('data'));
+    const token = JSON.parse(data).token;
+    if(token){
         return {
-            'Authorization': `Bearer ${data.token}`
+            'Authorization': `Bearer ${token}`
         };
     }
     return null;
@@ -152,7 +155,7 @@ function getProfile(){
         }
     }
     return dispatch=>{
-        fetch('http://localhost:3001/users/profile', {
+        fetch('http://localhost:3001/users/get-profile', {
             method: 'GET',
             headers: authenticationHeader()
         })
@@ -168,18 +171,6 @@ function getProfile(){
 }
 
 function updateProfile(oldEmail, newUser){
-    function isSuccess(message){
-        return {
-            type: 'UPDATE_PROFILE_SUCCESS',
-            message
-        }
-    }
-    function isFail(message){
-        return {
-            type: 'UPDATE_PROFILE_FAIL',
-            message
-        }
-    }
     return dispatch => {
         fetch('http://localhost:3001/users/update-profile',{
             method: 'POST',
@@ -193,14 +184,10 @@ function updateProfile(oldEmail, newUser){
             })
         })
         .then(res => {
+            console.log(res);
             res.text().then(text => {
-                const message = JSON.parse(text);
                 if(res.status === 200){
-                    dispatch(isSuccess(message));
                     dispatch(logout());
-                }
-                else{
-                    dispatch(isFail(message));
                 }
             })
         })
@@ -208,9 +195,38 @@ function updateProfile(oldEmail, newUser){
     }
 }
 
+function addSkill(userEmail, skill){
+    function isSuccess(message){
+        return {
+            type: 'ADD_SKILL_SUCCESS',
+            message
+        }
+    }
+    return dispatch => {
+        fetch('http://localhost:3001/users/add-skill', {
+            method: 'POST',
+            headers: {
+                'Accept': 'Application/json',
+                'Content-Type': 'Application/json'
+            },
+            body: JSON.stringify({
+                userEmail,
+                skill
+            })
+        })
+        .then(res => {
+            res.text().then(text => {
+                const message = JSON.parse(text);
+                dispatch(isSuccess(message));
+                history.push('/teacher')
+            })
+        })
+    }
+}
+
 function deleteSkill(userEmail, skillItem){
     return dispatch => {
-        fetch('http://localhost:3001/user/delete-skill-item', {
+        fetch('http://localhost:3001/users/delete-skill', {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',
@@ -223,7 +239,7 @@ function deleteSkill(userEmail, skillItem){
         })
         .then(res => {
             res.text().then(text => {
-                console.log(text);
+                history.push('/teacher')
             })
         })
         .catch(error => console.log(error))
@@ -238,7 +254,8 @@ const userActions = {
     getProfile,
     updateProfile,
     getTeacherAll,
-    deleteSkill
+    deleteSkill,
+    addSkill
 };
 
 export default userActions;

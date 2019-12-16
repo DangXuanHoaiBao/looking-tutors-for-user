@@ -53,6 +53,18 @@ export const login = (state = stateDefault, action) => {
     }
 }
 
+export const getProfile = (state = {}, action) => {
+    switch(action.type){
+        case 'GET_PROFILE_SUCCESS': {
+            return {
+                ...state,
+                userProfile: action.userProfile
+            }
+        }
+        default: return state;
+    }
+}
+
 export const getTeacherAll = (state = {}, action ) => {
     switch(action.type){
         case 'GET_TEACHER_ALL_SUCCESS': {
@@ -74,6 +86,18 @@ export const updateProfile = (state = {}, action) => {
             }
         }
         case 'UPDATE_PROFILE_FAIL': {
+            return {
+                ...state,
+                message: action.message
+            }
+        }
+        default: return state;
+    }
+}
+
+export const addSkill = (state = {}, action) => {
+    switch(action.type){
+        case 'ADD_SKILL_SUCCESS': {
             return {
                 ...state,
                 message: action.message
