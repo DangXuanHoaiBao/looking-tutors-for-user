@@ -37,7 +37,7 @@ export const login = (state = stateDefault, action) => {
             return {
                 ...state,
                 message: action.message,
-                data: JSON.parse(action.data)
+                data: action.data
             }
         }
         case 'LOGIN_FAIL': {

@@ -86,8 +86,7 @@ function login(email, password){
                     history.push('/login');
                 }
                 else{
-                    const data = text;
-                    console.log(JSON.parse(data).token)
+                    const data = JSON.parse(text);
                     localStorage.setItem('data', JSON.stringify(data));
                     dispatch(isSuccess(data, message));
                     dispatch(getProfile());
