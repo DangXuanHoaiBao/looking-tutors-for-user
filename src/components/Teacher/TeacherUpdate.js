@@ -32,18 +32,24 @@ class TeacherUpdate extends React.Component{
     }
 
     componentWillMount(){
-        const {data} = this.props;
-        if(data){
+        const {getProfile} = this.props;
+        getProfile();
+    }
+
+    componentDidMount(){
+        const {userProfile} = this.props;
+        if(userProfile){
             this.setState({
-                fullName: data.user.fullName,
-                email: data.user.email,
-                address: data.user.address,
-                phoneNumber: data.user.phoneNumber,
-                discribe: data.user.discribe,
-                arraySkills: data.user.skills
+                fullName: userProfile.fullName,
+                email: userProfile.email,
+                address: userProfile.address,
+                phoneNumber: userProfile.phoneNumber,
+                discribe: userProfile.discribe,
+                arraySkills: userProfile.skills
             })
         }
     }
+
     handleChange(e){
         const {name, value} = e.target;
         let errors = {
@@ -83,7 +89,7 @@ class TeacherUpdate extends React.Component{
     handleSubmit(e){
         e.preventDefault();
         const {fullName, email, address, phoneNumber, discribe, skills, errors} = this.state;
-        const {updateProfile, data} = this.props;
+        const {updateProfile, userProfile} = this.props;
 
         if(errors.fullName === '' && errors.email === '' && errors.address === '' && errors.phoneNumber === '' && 
            errors.discribe === '' && errors.skills === '' && fullName !== '' && email !== '' && address !== '' &&
@@ -97,16 +103,16 @@ class TeacherUpdate extends React.Component{
                 discribe: discribe,
                 skills: skills
             }
-            const oldEmail = data.user.email;
+            const oldEmail = userProfile.email;
             updateProfile(oldEmail, newUser);
             
         }
     }
 
-    handleClick(item){
-        const {deleteSkill, data} = this.props;
-        const userEmail = data.user.email;
-        deleteSkill(userEmail, item);
+    handleClick(skillItem){
+        const {deleteSkill, userProfile} = this.props
+        const userEmail = userProfile.user.email
+        deleteSkill(userEmail, skillItem)
     }
 
     render(){
@@ -117,16 +123,14 @@ class TeacherUpdate extends React.Component{
         //     alert(message);
         // }
 
-        const arrayTemp = arraySkills.map(item => 
-            <div className="mb-1">
-                <Button variant="secondary" disabled={true}>{item}</Button>
-                <Button className="ml-1" variant="secondary" onClick={(item) => this.handleClick(item)}>
-                    <i className="fa fa-trash-alt" aria-hidden="true"></i>
-                </Button>
-            </div>
-        )
-
-        console.log(arraySkills)
+        // const arrayTemp = arraySkills.map(skillItem => 
+        //     <div className="mb-1">
+        //         <Button variant="secondary" disabled={true}>{skillItem}</Button>
+        //         <Button className="ml-1" variant="secondary" onClick={() => this.handleClick(skillItem)}>
+        //             <i className="fa fa-trash-alt" aria-hidden="true"></i>
+        //         </Button>
+        //     </div>
+        // )
 
         return(
             <div>
@@ -172,7 +176,7 @@ class TeacherUpdate extends React.Component{
 
                                         <Form.Group controlId="formBasicSkills">
                                             <Form.Label>Kĩ Năng</Form.Label>
-                                            <div >{arrayTemp} </div>
+                                            {/* <div >{arrayTemp} </div> */}
                                             <Form.Control type="text" name="skills" value={skills} onChange={this.handleChange}/>
                                             {errors.skills ? <Form.Text className="text-danger">{errors.skills}</Form.Text> : null}
                                         </Form.Group>
@@ -193,11 +197,12 @@ class TeacherUpdate extends React.Component{
 }
 
 const mapStateToProps = state => ({
-    data: state.login.data,
+    userProfile: state.getProfile.userProfile,
     message: state.updateProfile.message
 });
 
 const actionCreator = {
+    getProfile: userActions.getProfile,
     updateProfile: userActions.updateProfile,
     deleteSkill: userActions.deleteSkill
 }

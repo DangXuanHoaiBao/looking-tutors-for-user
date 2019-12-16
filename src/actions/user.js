@@ -136,9 +136,10 @@ function getTeacherAll(){
 
 function authenticationHeader(){
     const data = localStorage.getItem('data');
+    console.log(JSON.parse(data).token);
     if(data){
         return {
-            'Authorization': `Bearer ${data.token}`
+            'Authorization': `Bearer ${JSON.parse(data).token}`
         };
     }
     return null;
@@ -152,7 +153,7 @@ function getProfile(){
         }
     }
     return dispatch=>{
-        fetch('http://localhost:3001/users/profile', {
+        fetch('http://localhost:3001/users/get-profile', {
             method: 'GET',
             headers: authenticationHeader()
         })
@@ -160,6 +161,7 @@ function getProfile(){
             res.text().then(text => {
                 if(res.status === 200){
                     const userProfile = JSON.parse(text);
+                    console.log(userProfile);
                     dispatch(isSuccess(userProfile));
                 }
             })
@@ -209,24 +211,36 @@ function updateProfile(oldEmail, newUser){
 }
 
 function deleteSkill(userEmail, skillItem){
+    function isSuccess(message){
+        return {
+            type: 'DELETE_SKILL_SUCCESS',
+            message
+        }
+    }
     return dispatch => {
-        fetch('http://localhost:3001/user/delete-skill-item', {
+        fetch('http://localhost:3001/users/delete-skill-item',{
             method: 'POST',
             headers: {
-                'Accept': 'Application/json',
-                'Content-Type': 'Application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
+            body: JSON.stringify ({
                 userEmail,
                 skillItem
             })
         })
         .then(res => {
             res.text().then(text => {
-                console.log(text);
+                const message = JSON.parse(text);
+                if(res.status === 200){
+                    dispatch(isSuccess(message));
+                }
+                else{
+                    
+                }
             })
         })
-        .catch(error => console.log(error))
+        .catch(errors => console.log(errors))
     }
 }
 

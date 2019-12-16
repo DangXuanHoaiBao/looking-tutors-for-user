@@ -20,7 +20,7 @@ class Header extends React.Component{
 
     render(){
         const {data} = this.props;
-
+        console.log(data.user)
         return (
             <Navbar bg="dark" expand="lg">
 
