@@ -95,10 +95,10 @@ export const updateProfile = (state = {}, action) => {
     }
 }
 
-export const deleteSkill = (state = {}, action) => {
+export const addSkill = (state = {}, action) => {
     switch(action.type){
-        case 'DELETE_SKILL_SUCCESS': {
-            return{
+        case 'ADD_SKILL_SUCCESS': {
+            return {
                 ...state,
                 message: action.message
             }
