@@ -29,8 +29,8 @@ export const signUp = (state = {}, action) => {
     }
 }
 
-const data = JSON.parse(localStorage.getItem('data'));
-const stateDefault = data ? {'data': JSON.parse(data)} : {};
+const data = localStorage.getItem('data');
+const stateDefault = data ? {'data': data} : {};
 export const login = (state = stateDefault, action) => {
     switch(action.type){
         case 'LOGIN_SUCCESS': {

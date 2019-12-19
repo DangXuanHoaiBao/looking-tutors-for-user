@@ -1,9 +1,12 @@
 import React from 'react';
-import {Form, Button} from 'react-bootstrap';
+import {Form, Button, Image} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import userActions from '../../actions/user';
 import Header from '../Header';
 import Footer from '../Footer';
+import {storage} from '../../firebase/config';
+
+import '../../styles/App.css';
 
 class TeacherUpdate extends React.Component{
 
@@ -17,6 +20,9 @@ class TeacherUpdate extends React.Component{
             discribe: '',
             arraySkills: [],
             skill: '',
+            imgFile: null,
+            userImg: '',
+            currentUrlImg: null,
             errorsFormIntroduce: {
                 fullName: '',
                 email: '',
@@ -26,6 +32,7 @@ class TeacherUpdate extends React.Component{
             },
             errorsFormSkill: ''
         }
+        this.handleChangeImage = this.handleChangeImage.bind(this);
         this.handleChangeFormIntroduce = this.handleChangeFormIntroduce.bind(this);
         this.handleChangeFormAddSkill = this.handleChangeFormAddSkill.bind(this);
         this.handleSubmitFormIntroduce = this.handleSubmitFormIntroduce.bind(this);
@@ -43,7 +50,16 @@ class TeacherUpdate extends React.Component{
             phoneNumber: user.phoneNumber,
             discribe: user.discribe,
             arraySkills: user.skills,
+            userImg: user.userImg
         })
+    }
+
+    handleChangeImage(e){
+        if(e.target.files[0]){
+            const imgFile = e.target.files[0];
+            this.setState(() => ({imgFile}));
+            // this.setState({currentUrlImg: imgFile});
+        }
     }
 
     handleChangeFormIntroduce(e){
@@ -92,7 +108,7 @@ class TeacherUpdate extends React.Component{
 
     handleSubmitFormIntroduce(e){
         e.preventDefault();
-        const {fullName, email, address, phoneNumber, discribe, errorsFormIntroduce} = this.state;
+        const {fullName, email, address, phoneNumber, discribe, errorsFormIntroduce, imgFile, userImg} = this.state;
         const {updateProfile, data} = this.props;
         if(errorsFormIntroduce.fullName === '' && errorsFormIntroduce.email === '' && errorsFormIntroduce.address === '' && errorsFormIntroduce.phoneNumber === '' && 
            errorsFormIntroduce.discribe === '' && fullName !== '' && email !== '' && address !== '' && phoneNumber !== '' && 
@@ -103,8 +119,26 @@ class TeacherUpdate extends React.Component{
                 email: email,
                 address: address,
                 phoneNumber: phoneNumber,
-                discribe: discribe
+                discribe: discribe,
+                userImg
             }
+
+            if(imgFile){
+                const uploadTask = storage.ref(`image/${imgFile.name}`).put(imgFile);
+                uploadTask.on('state_changed', 
+                (snapshot) => {
+
+                },
+                (error)=> {
+                    console.log(error);
+                },
+                () => {
+                    storage.ref('image').child(imgFile.name).getDownloadURL().then(url => {
+                        newUser.userImg = url;
+                    })
+                })
+            }
+            
             const oldEmail = data.user.email;
             updateProfile(oldEmail, newUser);
         }
@@ -126,10 +160,10 @@ class TeacherUpdate extends React.Component{
         deleteSkill(userEmail, item);
     }
 
-
     render(){
 
-        const {fullName, email, address, phoneNumber, discribe, skill, arraySkills, errorsFormIntroduce, errorsFormSkill} = this.state;
+        const {fullName, email, address, phoneNumber, discribe, skill, arraySkills, errorsFormIntroduce, 
+               errorsFormSkill, file, currentUrlImg} = this.state;
         // const {message} = this.props;
         // if(message){
         //     alert(message);
@@ -158,9 +192,8 @@ class TeacherUpdate extends React.Component{
                                     <h3 className="mb-3">Cập Nhật Thông Tin Cá Nhân</h3>
                                     <Form onSubmit={this.handleSubmitFormIntroduce}>
                                         <Form.Group>
-                                            <Form.Label>Chọn File Ảnh</Form.Label>
-                                            <Form.Control type="file" placeholder=""/>
-                                            <Form.Text className="text-danger"></Form.Text>
+                                        <Image src={currentUrlImg} roundedCircle className="w-50 h-50"/>
+                                        <Form.Control type="file" onChange={this.handleChangeImage}/>
                                         </Form.Group>
                                         <Form.Group controlId="formBasicFullName">
                                             <Form.Label>Họ Tên</Form.Label>

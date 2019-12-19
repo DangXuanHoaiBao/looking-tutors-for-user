@@ -2,7 +2,7 @@ import React from 'react';
 import {Tab, Row, Col, Nav, Image, ProgressBar, Button, Card, ListGroup} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import AllWork from './AllWork';
-import userImg from '../../images/user-img.jpg';
+// import userImg from '../../images/user-img.jpg';
 import history from '../../helpers/history';
 import Header from '../Header';
 import Footer from '../Footer';
@@ -14,15 +14,10 @@ class TeacherHome extends React.Component{
         this.handleClick = this.handleClick.bind(this);
     }
 
-    componentWillMount(){
-        const {getProfile} = this.props;
-        getProfile();
-    }
-
     handleClick(){
         // const {getProfile} = this.props;
         // getProfile();
-        history.push('/teacher/update-profile');
+        history.push('/update-profile');
     }
 
     render(){
@@ -77,7 +72,7 @@ class TeacherHome extends React.Component{
                     
                         <div className="col-md-3">
                             <div className="row">
-                                <div className="col-md-5"><Image src={userImg} fluid roundedCircle/></div>
+                                <div className="col-md-5"><Image src={user.userImg} fluid roundedCircle/></div>
                                 <div> Thông Tin </div>
                             </div>
                             <div className="row mt-3">

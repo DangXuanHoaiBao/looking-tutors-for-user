@@ -1,5 +1,6 @@
 import React from 'react';
 import { Router, Switch, Route } from 'react-router-dom';
+import {connect} from 'react-redux';
 import history from '../helpers/history';
 
 import Login from "../components/Login";
@@ -15,39 +16,39 @@ import StudentHome from './Student/StudentHome';
 import '../styles/App.css';
 
 class App extends React.Component{
-  constructor(props){
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(){
-    const {logout} = this.props;
-    logout();
-    history.push('/');
-  }
 
   render(){
 
+    const {data} = this.props;
+
     return (
       <Router history={history}>
-      
         <Switch>
-          <Route exact path="/login"> <Login/> </Route>
-          <Route exact path="/sign-up"> <SignUp/> </Route>
-          <Route exact path="/setting-account"> <SettingAccount/> </Route>
-          <Route exact path="/class-detail" > <ClassDetail/> </Route>
-
-          <Route exact path="/teacher"> <TeacherHome/> </Route>
-          <Route exact path="/teacher/profile" > <TeacherProfile/> </Route>
-          <Route exact path="/teacher/update-profile"> <TeacherUpdate/> </Route>
-
-          <Route exact path="/student"> <StudentHome/> </Route>
-
-          <Route exact path="/"> <Home /> </Route>
+          {data ?
+          <div>
+            <Route exact path="/"> <TeacherHome/> </Route>
+            <Route exact path="/profile" > <TeacherProfile/> </Route>
+            <Route exact path="/update-profile"> <TeacherUpdate/> </Route>
+          </div>
+          :
+          <div>
+            <Route exact path="/login"> <Login/> </Route>
+            <Route exact path="/sign-up"> <SignUp/> </Route>
+            <Route exact path="/setting-account"> <SettingAccount/> </Route>
+            <Route exact path="/class-detail" > <ClassDetail/> </Route>
+            
+            <Route exact path="/student"> <StudentHome/> </Route>
+            <Route exact path="/"> <Home /> </Route>
+          </div>
+          }
         </Switch>
       </Router>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  data: state.login.data
+})
+
+export default connect(mapStateToProps)(App);

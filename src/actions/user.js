@@ -90,7 +90,7 @@ function login(email, password){
                     localStorage.setItem('data', JSON.stringify(data));
                     dispatch(isSuccess(data, message));
                     dispatch(getProfile());
-                    history.push('/teacher');
+                    history.push('/');
                 }
             })
         })
@@ -137,11 +137,13 @@ function getTeacherAll(){
 
 function authenticationHeader(){
     const data = JSON.parse(localStorage.getItem('data'));
-    const token = JSON.parse(data).token;
-    if(token){
-        return {
-            'Authorization': `Bearer ${token}`
-        };
+    if(data){
+        const token = data.token;
+        if(token){
+            return {
+                'Authorization': `Bearer ${token}`
+            };
+        }
     }
     return null;
 }
@@ -183,7 +185,6 @@ function updateProfile(oldEmail, newUser){
             })
         })
         .then(res => {
-            console.log(res);
             res.text().then(text => {
                 if(res.status === 200){
                     dispatch(logout());
@@ -217,7 +218,7 @@ function addSkill(userEmail, skill){
             res.text().then(text => {
                 const message = JSON.parse(text);
                 dispatch(isSuccess(message));
-                history.push('/teacher')
+                history.push('/')
             })
         })
     }
@@ -238,7 +239,7 @@ function deleteSkill(userEmail, skillItem){
         })
         .then(res => {
             res.text().then(text => {
-                history.push('/teacher')
+                history.push('/')
             })
         })
         .catch(error => console.log(error))

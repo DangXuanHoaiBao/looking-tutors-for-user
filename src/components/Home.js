@@ -24,7 +24,7 @@ class Home extends React.Component{
     }
 
     handleClick(){
-        history.push('/teacher/profile');
+        history.push('/profile');
     }
 
 	render() {
