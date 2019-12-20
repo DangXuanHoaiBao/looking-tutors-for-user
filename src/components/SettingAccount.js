@@ -2,6 +2,8 @@ import React from 'react';
 import {Form, Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import userActions from '../actions/user';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 class SettingAccount extends React.Component{
 
@@ -84,48 +86,52 @@ class SettingAccount extends React.Component{
             alert(message);
         }
         return (
-            <div className="container ">
-                <div className="row justify-content-center mt-4 mb-4" >
-                    <div className='col-md-6 border border-dark shadow rounded'>
-                        <div className="row justify-content-center">
-                            <div className="col-md-8 mt-5 mb-5">
-                                <h3 className="mb-3">Thiết Lập Tài Khoản</h3>
-                                <Form onSubmit={this.handleSubmit}>
-                                    <Form.Group controlId="formBasicPassword">
-                                        <Form.Label>Mật Khẩu</Form.Label>
-                                        <Form.Control type="password" placeholder="Nhập mật khẩu" name="password" value={password} onChange={this.handleChange}/>
-                                        {errors.password ? <Form.Text className="text-danger">{errors.password}</Form.Text> : null}
-                                    </Form.Group>
+            <div>
+                <Header />
+                <div className="container ">
+                    <div className="row justify-content-center mt-4 mb-4" >
+                        <div className='col-md-6 border border-dark shadow rounded'>
+                            <div className="row justify-content-center">
+                                <div className="col-md-8 mt-5 mb-5">
+                                    <h3 className="mb-3">Thiết Lập Tài Khoản</h3>
+                                    <Form onSubmit={this.handleSubmit}>
+                                        <Form.Group controlId="formBasicPassword">
+                                            <Form.Label>Mật Khẩu</Form.Label>
+                                            <Form.Control type="password" placeholder="Nhập mật khẩu" name="password" value={password} onChange={this.handleChange}/>
+                                            {errors.password ? <Form.Text className="text-danger">{errors.password}</Form.Text> : null}
+                                        </Form.Group>
 
-                                    <Form.Group controlId="formBasicPasswordConfirm">
-                                        <Form.Label>Mật Khẩu Xác Nhận</Form.Label>
-                                        <Form.Control type="password" placeholder="Nhập mật khẩu xác nhận" name="passwordConfirm" value={passwordConfirm} onChange={this.handleChange}/>
-                                        {errors.passwordConfirm ? <Form.Text className="text-danger">{errors.passwordConfirm}</Form.Text> : null}
-                                    </Form.Group>
+                                        <Form.Group controlId="formBasicPasswordConfirm">
+                                            <Form.Label>Mật Khẩu Xác Nhận</Form.Label>
+                                            <Form.Control type="password" placeholder="Nhập mật khẩu xác nhận" name="passwordConfirm" value={passwordConfirm} onChange={this.handleChange}/>
+                                            {errors.passwordConfirm ? <Form.Text className="text-danger">{errors.passwordConfirm}</Form.Text> : null}
+                                        </Form.Group>
 
-                                    <div>Tôi muốn đăng ký tài khoản với vai trò</div>
-                                    <p/>
-                                    <div className="row justify-content-center">
-                                        <div className="checkbox mr-5">
-                                            <input type="checkbox" name="isCheckTeacher" checked={isCheckTeacher} onChange={this.onCheckChange}/>
-                                            <label className="ml-1" for="checkbox"><span>Người dạy</span></label>
+                                        <div>Tôi muốn đăng ký tài khoản với vai trò</div>
+                                        <p/>
+                                        <div className="row justify-content-center">
+                                            <div className="checkbox mr-5">
+                                                <input type="checkbox" name="isCheckTeacher" checked={isCheckTeacher} onChange={this.onCheckChange}/>
+                                                <label className="ml-1" for="checkbox"><span>Người dạy</span></label>
+                                            </div>
+                                            <div className="checkbox">
+                                                <input type="checkbox" name="isCheckRenter" checked={isCheckRenter} onChange={this.onCheckChange}/>
+                                                <label className="ml-1" for="checkbox"><span>Người thuê</span></label>
+                                            </div>
+
                                         </div>
-                                        <div className="checkbox">
-                                            <input type="checkbox" name="isCheckRenter" checked={isCheckRenter} onChange={this.onCheckChange}/>
-                                            <label className="ml-1" for="checkbox"><span>Người thuê</span></label>
-                                        </div>
-
-                                    </div>
-                                    <div className="border-bottom border-primary" />
-                                    <br/>
-                                    <Button className="w-100" variant="primary" type="submit">
-                                        Đăng Ký
-                                    </Button>
-                                </Form>
+                                        <div className="border-bottom border-primary" />
+                                        <br/>
+                                        <Button className="w-100" variant="primary" type="submit">
+                                            Đăng Ký
+                                        </Button>
+                                    </Form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <Footer/>
             </div>
         );
     }

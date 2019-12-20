@@ -48,7 +48,7 @@ class Header extends React.Component{
                     
                     <div className="container">
                         <Navbar.Brand> 
-                            <Link to="/teacher">  
+                            <Link to="/">  
                                 <Image src={logo} roundedCircle className="logo"></Image>
                             </Link> 
                         </Navbar.Brand>

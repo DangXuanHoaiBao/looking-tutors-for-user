@@ -156,6 +156,7 @@ function getTeacherWithAddress(address){
             res.text().then(text => {
                 if(res.status === 200){
                     const teacherAddress = JSON.parse(text).user;
+                    console.log(teacherAddress)
                     dispatch(isSuccess(teacherAddress))
                 }
             })

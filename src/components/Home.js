@@ -48,6 +48,7 @@ class Home extends React.Component{
             getTeacherWithAddress(value);
         }
         
+        
     }
 
     renderListUser(teacher, index){
@@ -96,6 +97,17 @@ class Home extends React.Component{
                     this.renderListUser(teacher, index)
                 )
                 renderListUsers_2 = teacherAll.slice(3, 7).map((teacher, index)=>
+                    this.renderListUser(teacher, index)
+                )
+            }
+        }
+        else {
+            const {teacherAddress} = this.props;
+            if(teacherAddress){
+                renderListUsers_1 = teacherAddress.slice(0, 3).map((teacher, index)=>
+                    this.renderListUser(teacher, index)
+                )
+                renderListUsers_2 = teacherAddress.slice(3, 7).map((teacher, index)=>
                     this.renderListUser(teacher, index)
                 )
             }
@@ -204,7 +216,7 @@ class Home extends React.Component{
 
 const mapStateToProps = state => ({
     teacherAll: state.getTeacherAll.teacherAll,
-    TeacherAddress: state.getTeacherWithAddress.TeacherAddress
+    teacherAddress: state.getTeacherWithAddress.teacherAddress
 })
 
 const actionCreator = {

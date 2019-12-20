@@ -91,7 +91,7 @@ class TeacherUpdate extends React.Component{
             errorsFormIntroduce.discribe = (value.length < 1 || value[0] === ' ') ? 'Giới thiệu không hợp lệ': '';
         }
         if(name === 'salary'){
-            errorsFormIntroduce.salary = (value.length < 1 || isNaN(value)) ? 'Lương theo giờ không hợp lệ': '';
+            errorsFormIntroduce.salary = (value.length < 1 || isNaN(value)) ? 'Lương theo giờ không hợp lệ': null;
         }
         this.setState({
             [name]: value,
@@ -115,12 +115,10 @@ class TeacherUpdate extends React.Component{
         e.preventDefault();
         const {fullName, email, address, phoneNumber, discribe, errorsFormIntroduce, imgFile, userImg, salary} = this.state;
         const {updateProfile, data} = this.props;
-        console.log(errorsFormIntroduce.fullName + " " + errorsFormIntroduce.email + " " + errorsFormIntroduce.phoneNumber + " " + errorsFormIntroduce.address + " " + errorsFormIntroduce.discirbe + " " + errorsFormIntroduce.salary);
         if(errorsFormIntroduce.fullName === '' && errorsFormIntroduce.email === '' && errorsFormIntroduce.address === '' && errorsFormIntroduce.phoneNumber === '' && 
            errorsFormIntroduce.discribe === '' && errorsFormIntroduce.salary === null && salary !== '' && fullName !== '' && email !== '' && address !== '' && phoneNumber !== '' && 
            discribe !== '' )
         {
-            console.log('ta da vao')
             const newUser = {
                 fullName: fullName,
                 email: email,
