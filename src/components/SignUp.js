@@ -38,7 +38,7 @@ class SignUp extends React.Component{
     }
 
     handleSubmit(e){
-        //e.preventDefault();
+        e.preventDefault();
         const {fullName, email, errors} = this.state;
         const {sendInforToFormSignUp} = this.props;
         if(errors.fullName === '' && errors.email === '' && fullName.length !== 0 && email.length !== 0){

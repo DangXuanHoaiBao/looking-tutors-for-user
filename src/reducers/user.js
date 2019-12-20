@@ -70,7 +70,19 @@ export const getTeacherAll = (state = {}, action ) => {
         case 'GET_TEACHER_ALL_SUCCESS': {
             return {
                 ...state,
-                users: action.users
+                teacherAll: action.teacherAll
+            }
+        }
+        default: return state;
+    }
+}
+
+export const getTeacherWithAddress = (state = {}, action) => {
+    switch(action.type){
+        case 'GET_TEACHER_WITH_ADDRESS': {
+            return {
+                ...state,
+                teacherAddress: action.teacherAddress
             }
         }
         default: return state;

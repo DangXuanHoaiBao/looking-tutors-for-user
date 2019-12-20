@@ -17,6 +17,7 @@ class TeacherUpdate extends React.Component{
             email: '',
             address: '',
             phoneNumber: '',
+            salary: null,
             discribe: '',
             arraySkills: [],
             skill: '',
@@ -28,7 +29,8 @@ class TeacherUpdate extends React.Component{
                 email: '',
                 address: '',
                 phoneNumber: '',
-                discirbe: ''
+                discirbe: '',
+                salary: null
             },
             errorsFormSkill: ''
         }
@@ -50,16 +52,16 @@ class TeacherUpdate extends React.Component{
             phoneNumber: user.phoneNumber,
             discribe: user.discribe,
             arraySkills: user.skills,
-            userImg: user.userImg
+            userImg: user.userImg,
+            salary: user.salary
         })
     }
 
     handleChangeImage(e){
-        if(e.target.files[0]){
-            const imgFile = e.target.files[0];
-            this.setState(() => ({imgFile}));
-            // this.setState({currentUrlImg: imgFile});
-        }
+        this.setState({
+            currentUrlImg: URL.createObjectURL(e.target.files[0]),
+            imgFile: e.target.files[0]
+        });
     }
 
     handleChangeFormIntroduce(e){
@@ -69,7 +71,8 @@ class TeacherUpdate extends React.Component{
             email: '',
             address: '',
             phoneNumber: '',
-            discribe: ''
+            discribe: '',
+            salary: null
         }
 
         if(name === 'fullName'){
@@ -82,12 +85,14 @@ class TeacherUpdate extends React.Component{
             errorsFormIntroduce.address = (value.length < 1 || value[0] === ' ') ? 'Địa chỉ không hợp lệ': '';
         }
         if(name === 'phoneNumber'){
-            errorsFormIntroduce.phoneNumber = (value.length < 1 || value.NaN) ? 'Số điện thoại không hợp lệ': '';
+            errorsFormIntroduce.phoneNumber = (value.length < 1 || isNaN(value)) ? 'Số điện thoại không hợp lệ': '';
         }
         if(name === 'discribe'){
             errorsFormIntroduce.discribe = (value.length < 1 || value[0] === ' ') ? 'Giới thiệu không hợp lệ': '';
         }
-
+        if(name === 'salary'){
+            errorsFormIntroduce.salary = (value.length < 1 || isNaN(value)) ? 'Lương theo giờ không hợp lệ': '';
+        }
         this.setState({
             [name]: value,
             errorsFormIntroduce
@@ -108,21 +113,24 @@ class TeacherUpdate extends React.Component{
 
     handleSubmitFormIntroduce(e){
         e.preventDefault();
-        const {fullName, email, address, phoneNumber, discribe, errorsFormIntroduce, imgFile, userImg} = this.state;
+        const {fullName, email, address, phoneNumber, discribe, errorsFormIntroduce, imgFile, userImg, salary} = this.state;
         const {updateProfile, data} = this.props;
+        console.log(errorsFormIntroduce.fullName + " " + errorsFormIntroduce.email + " " + errorsFormIntroduce.phoneNumber + " " + errorsFormIntroduce.address + " " + errorsFormIntroduce.discirbe + " " + errorsFormIntroduce.salary);
         if(errorsFormIntroduce.fullName === '' && errorsFormIntroduce.email === '' && errorsFormIntroduce.address === '' && errorsFormIntroduce.phoneNumber === '' && 
-           errorsFormIntroduce.discribe === '' && fullName !== '' && email !== '' && address !== '' && phoneNumber !== '' && 
+           errorsFormIntroduce.discribe === '' && errorsFormIntroduce.salary === null && salary !== '' && fullName !== '' && email !== '' && address !== '' && phoneNumber !== '' && 
            discribe !== '' )
         {
+            console.log('ta da vao')
             const newUser = {
                 fullName: fullName,
                 email: email,
                 address: address,
                 phoneNumber: phoneNumber,
                 discribe: discribe,
-                userImg
+                userImg: userImg,
+                salary: salary
             }
-
+            const oldEmail = data.user.email;
             if(imgFile){
                 const uploadTask = storage.ref(`image/${imgFile.name}`).put(imgFile);
                 uploadTask.on('state_changed', 
@@ -135,12 +143,14 @@ class TeacherUpdate extends React.Component{
                 () => {
                     storage.ref('image').child(imgFile.name).getDownloadURL().then(url => {
                         newUser.userImg = url;
+                        console.log(newUser.userImg);
+                        updateProfile(oldEmail, newUser);
                     })
                 })
             }
-            
-            const oldEmail = data.user.email;
-            updateProfile(oldEmail, newUser);
+            else{
+                updateProfile(oldEmail, newUser);
+            }
         }
     }
 
@@ -163,7 +173,7 @@ class TeacherUpdate extends React.Component{
     render(){
 
         const {fullName, email, address, phoneNumber, discribe, skill, arraySkills, errorsFormIntroduce, 
-               errorsFormSkill, file, currentUrlImg} = this.state;
+               errorsFormSkill, currentUrlImg, salary, userImg} = this.state;
         // const {message} = this.props;
         // if(message){
         //     alert(message);
@@ -172,8 +182,8 @@ class TeacherUpdate extends React.Component{
         if(arraySkills){
             arrayTemp = arraySkills.map(item => 
                 <div className="mb-1">
-                    <Button variant="secondary" disabled={true}>{item}</Button>
-                    <Button className="ml-1" variant="secondary" onClick={() => this.handleClickButtonDeleteSkill(item)}>
+                    <Button variant="secondary" size="sm" disabled={true}>{item}</Button>
+                    <Button className="ml-1" size="sm" variant="secondary" onClick={() => this.handleClickButtonDeleteSkill(item)}>
                         <i className="fa fa-trash-alt" aria-hidden="true"></i>
                     </Button>
                 </div>
@@ -192,32 +202,43 @@ class TeacherUpdate extends React.Component{
                                     <h3 className="mb-3">Cập Nhật Thông Tin Cá Nhân</h3>
                                     <Form onSubmit={this.handleSubmitFormIntroduce}>
                                         <Form.Group>
-                                        <Image src={currentUrlImg} roundedCircle className="w-50 h-50"/>
-                                        <Form.Control type="file" onChange={this.handleChangeImage}/>
+                                        {
+                                            currentUrlImg ? 
+                                                <Image src={currentUrlImg} roundedCircle className="w-50 h-50"/>
+                                            :
+                                                <Image src={userImg} roundedCircle className="w-50 h-50"/>
+                                        }
+                                        <Form.Control type="file" onChange={this.handleChangeImage} />
                                         </Form.Group>
                                         <Form.Group controlId="formBasicFullName">
-                                            <Form.Label>Họ Tên</Form.Label>
+                                            <Form.Label>Họ tên</Form.Label>
                                             <Form.Control type="text" name="fullName" value={fullName} onChange={this.handleChangeFormIntroduce}/>
                                             {errorsFormIntroduce.fullName ? <Form.Text className="text-danger">{errorsFormIntroduce.fullName}</Form.Text> : null}
                                         </Form.Group>
 
                                         <Form.Group controlId="formBasicEmail">
-                                            <Form.Label>Email</Form.Label>
+                                            <Form.Label>email</Form.Label>
                                             <Form.Control type="email" name="email" value={email}  onChange={this.handleChangeFormIntroduce}/>
                                             {errorsFormIntroduce.email ? <Form.Text className="text-danger">{errorsFormIntroduce.email}</Form.Text> : null}
                                         </Form.Group>
                                         <Form.Group controlId="formBasicAddress">
-                                            <Form.Label>Địa Chỉ</Form.Label>
+                                            <Form.Label>Địa chỉ</Form.Label>
                                             <Form.Control type="text" name="address" value={address}  onChange={this.handleChangeFormIntroduce}/>
+                                            
                                             {errorsFormIntroduce.address ? <Form.Text className="text-danger"> {errorsFormIntroduce.address}</Form.Text> : null}
                                         </Form.Group>
                                         <Form.Group controlId="formBasicPhoneNumber">
-                                            <Form.Label>Số Điện Thoại</Form.Label>
+                                            <Form.Label>Số điện thoại</Form.Label>
                                             <Form.Control type="text" name="phoneNumber" value={phoneNumber}  onChange={this.handleChangeFormIntroduce}/>
                                             {errorsFormIntroduce.phoneNumber ? <Form.Text className="text-danger">{errorsFormIntroduce.phoneNumber}</Form.Text> : null}
                                         </Form.Group>
+                                        <Form.Group controlId="formBasicSalary">
+                                            <Form.Label>Lương theo giờ</Form.Label>
+                                            <Form.Control type="text" name="salary" value={salary}  onChange={this.handleChangeFormIntroduce}/>
+                                            {errorsFormIntroduce.salary ? <Form.Text className="text-danger">{errorsFormIntroduce.salary}</Form.Text> : null}
+                                        </Form.Group>
                                         <Form.Group controlId="formBasicDiscribe">
-                                            <Form.Label>Giới Thiệu</Form.Label>
+                                            <Form.Label>Giới thiệu</Form.Label>
                                             <Form.Control className="" type="text" name="discribe" value={discribe}  onChange={this.handleChangeFormIntroduce}/>
                                             {errorsFormIntroduce.discribe ? <Form.Text className="text-danger">{errorsFormIntroduce.discribe}</Form.Text> : null}
                                         </Form.Group>

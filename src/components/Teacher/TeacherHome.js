@@ -2,7 +2,6 @@ import React from 'react';
 import {Tab, Row, Col, Nav, Image, ProgressBar, Button, Card, ListGroup} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import AllWork from './AllWork';
-// import userImg from '../../images/user-img.jpg';
 import history from '../../helpers/history';
 import Header from '../Header';
 import Footer from '../Footer';
@@ -14,9 +13,12 @@ class TeacherHome extends React.Component{
         this.handleClick = this.handleClick.bind(this);
     }
 
+    componentWillMount(){
+        const {getProfile} = this.props;
+        getProfile();
+    }
+
     handleClick(){
-        // const {getProfile} = this.props;
-        // getProfile();
         history.push('/update-profile');
     }
 
@@ -30,7 +32,7 @@ class TeacherHome extends React.Component{
         if(user.skills){
             listSkill = user.skills.map(item => 
                 <div className="mb-1">
-                    <Button variant="secondary" disabled={true}>{item}</Button>
+                    <Button variant="secondary" className="text-white" size="sm" disabled={true}>{item}</Button>
                 </div>
             )
         }
@@ -72,30 +74,36 @@ class TeacherHome extends React.Component{
                     
                         <div className="col-md-3">
                             <div className="row">
-                                <div className="col-md-5"><Image src={user.userImg} fluid roundedCircle/></div>
-                                <div> Thông Tin </div>
+                                <div className="col-md-4"><Image src={user.userImg} fluid roundedCircle/></div>
+                                <div>
+                                    <div className="font-weight-bold">{user.fullName}<span><i className="fas fa-check-circle text-primary"></i></span></div>
+                                    <div><i className="fas fa-map-marker-alt text-primary"></i> &nbsp; <span>{user.address}</span></div>
+                                    <span>{user.salary}/h</span>
+                                </div>
                             </div>
                             <div className="row mt-3">
                                 <div className="col-md-12">
-                                    <div><i className="fas fa-user-alt mr-2"></i>{user.fullName}</div>
-                                    <div><i className="fas fa-envelope mr-2"></i>{user.email}</div>
-                                    <div><i className="fa fa-home mr-2"></i>{user.address}</div>
-                                    <div><i className="fas fa-phone-square mr-2"></i>{user.phoneNumber}</div>
-                                    <div>Tỉ lệ thành công</div>
+                                    <div><i className="fas fa-envelope text-primary mr-2"></i>{user.email}</div>
+                                    <div><i className="fas fa-phone-square text-primary mr-2"></i>{user.phoneNumber}</div>
+                                    <p/>
+                                    <div className="font-weight-bold">Tỉ lệ thành công</div>
                                     <ProgressBar now={now} label={`${now}%`} />
-                                    <div>Tỉ lệ đánh giá từ người học</div>
+                                    <p/>
+                                    <div className="font-weight-bold">Tỉ lệ đánh giá từ người học</div>
                                     <ProgressBar now={now} label={`${now}%`} />
-
+                                    <p/>
                                     <Card className="mt-2">
-                                        <Card.Header>Giới thiệu</Card.Header>
+                                        <Card.Header className="font-weight-bold">Giới thiệu</Card.Header>
                                         <ListGroup variant="flush">
                                             <ListGroup.Item>
                                                 {user.discribe}
                                             </ListGroup.Item>
                                         </ListGroup>
                                     </Card>
-                                    <div><i className="fa fa-cogs mr-1" aria-hidden="true"></i> Kĩ năng</div>
+                                    <p/>
+                                    <div className="font-weight-bold"><i className="fa fa-cogs text-primary mr-1" aria-hidden="true"></i> Kĩ năng</div>
                                     {listSkill}
+                                    <p/>
                                     <Button className="mt-2" variant="primary" onClick={this.handleClick}>Cập nhật thông tin</Button>
                                 </div>
                             </div>

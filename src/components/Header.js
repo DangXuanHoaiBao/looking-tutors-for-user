@@ -3,6 +3,7 @@ import { Navbar, Nav, Form, FormControl, Button, Image} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import userActions from '../actions/user';
+import history from '../helpers/history';
 
 import logo from '../images/logo.PNG';
 
@@ -16,6 +17,7 @@ class Header extends React.Component{
     handleClick(){
         const {logout} = this.props;
         logout();
+        history.push('/');
     }
 
     render(){

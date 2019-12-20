@@ -100,7 +100,6 @@ function login(email, password){
 
 function logout(){
     localStorage.removeItem('data');
-    history.push('/')
     return {
         type: 'LOGOUT'
     }
@@ -108,10 +107,10 @@ function logout(){
 
 function getTeacherAll(){
 
-    function isSuccess(users){
+    function isSuccess(teacherAll){
         return {
             type: 'GET_TEACHER_ALL_SUCCESS',
-            users
+            teacherAll
         }
     }
 
@@ -125,13 +124,43 @@ function getTeacherAll(){
         })
         .then(res => {
             res.text().then(text => {
-                const users = JSON.parse(text).user;
+                const teacherAll = JSON.parse(text).user;
                 if(res.status === 200){
-                    dispatch(isSuccess(users));
+                    dispatch(isSuccess(teacherAll));
                 }
             })
         })
         .catch(error => console.log(error));
+    }
+}
+
+function getTeacherWithAddress(address){
+    function isSuccess(teacherAddress){
+        return {
+            type: 'GET_TEACHER_WITH_ADDRESS',
+            teacherAddress
+        }
+    }
+    return dispatch => {
+        fetch('http://localhost:3001/users/get-teacher-with-address',{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                address
+            })
+        })
+        .then(res => {
+            res.text().then(text => {
+                if(res.status === 200){
+                    const teacherAddress = JSON.parse(text).user;
+                    dispatch(isSuccess(teacherAddress))
+                }
+            })
+        })
+        .catch(error => console.log(error))
     }
 }
 
@@ -188,6 +217,7 @@ function updateProfile(oldEmail, newUser){
             res.text().then(text => {
                 if(res.status === 200){
                     dispatch(logout());
+                    history.push('/');
                 }
             })
         })
@@ -254,6 +284,7 @@ const userActions = {
     getProfile,
     updateProfile,
     getTeacherAll,
+    getTeacherWithAddress,
     deleteSkill,
     addSkill
 };
