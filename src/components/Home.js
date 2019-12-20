@@ -17,23 +17,15 @@ class Home extends React.Component{
             address: '',
             salary: null,
             showTeacherAddress: false,
+            showTeacherSalary: false,
             showTeacherAll: true
         }
         this.handleChange = this.handleChange.bind(this);
     }
 
     componentWillMount(){
-        const {showTeacherAll} = this.state;
-
-        if(showTeacherAll){
-            const {getTeacherAll} = this.props;
-            getTeacherAll();
-        }
-        else{
-            const {getTeacherWithAddress} = this.props;
-            const {address} = this.state;
-            getTeacherWithAddress(address);
-        }
+        const {getTeacherAll} = this.props;
+        getTeacherAll();
     }
 
     handleChange(e){
@@ -43,11 +35,20 @@ class Home extends React.Component{
             this.setState({
                 address: value,
                 showTeacherAddress: true,
+                showTeacherSalary: false,
                 showTeacherAll: false,
             }) 
             getTeacherWithAddress(value);
         }
-        
+        // else if(name==="salary"){
+        //     this.setState({
+        //         salary: value,
+        //         showTeacherSalary: true,
+        //         showTeacherAddress: false,
+        //         showTeacherAll: false
+        //     })
+        //     // getTeacherWithSalary(value);
+        // }
         
     }
 
@@ -87,7 +88,7 @@ class Home extends React.Component{
     }
 
 	render() {
-        const {showTeacherAll, address, salary} = this.state;
+        const {showTeacherAll, showTeacherAddress, address, salary} = this.state;
         let renderListUsers_1;
         let renderListUsers_2;
         if(showTeacherAll){
@@ -101,13 +102,24 @@ class Home extends React.Component{
                 )
             }
         }
-        else {
+        else if(showTeacherAddress){
             const {teacherAddress} = this.props;
             if(teacherAddress){
                 renderListUsers_1 = teacherAddress.slice(0, 3).map((teacher, index)=>
                     this.renderListUser(teacher, index)
                 )
                 renderListUsers_2 = teacherAddress.slice(3, 7).map((teacher, index)=>
+                    this.renderListUser(teacher, index)
+                )
+            }
+        }
+        else{
+            const {teacherSalary} = this.props;
+            if(teacherSalary){
+                renderListUsers_1 = teacherSalary.slice(0, 3).map((teacher, index)=>
+                    this.renderListUser(teacher, index)
+                )
+                renderListUsers_2 = teacherSalary.slice(3, 7).map((teacher, index)=>
                     this.renderListUser(teacher, index)
                 )
             }
@@ -216,12 +228,14 @@ class Home extends React.Component{
 
 const mapStateToProps = state => ({
     teacherAll: state.getTeacherAll.teacherAll,
-    teacherAddress: state.getTeacherWithAddress.teacherAddress
+    teacherAddress: state.getTeacherWithAddress.teacherAddress,
+    // teacherSalary: state.getTeacherWithSalary.teacherSalary
 })
 
 const actionCreator = {
     getTeacherAll: userActions.getTeacherAll,
-    getTeacherWithAddress: userActions.getTeacherWithAddress
+    getTeacherWithAddress: userActions.getTeacherWithAddress,
+    // getTeacherWithSalary: userActions.getTeacherWithSalary
 }
 
 export default connect(mapStateToProps, actionCreator)(Home);
