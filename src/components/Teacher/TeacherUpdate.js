@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import userActions from '../../actions/user';
 import Header from '../Header';
 import Footer from '../Footer';
-import {storage} from '../../firebase/config';
+import {storage} from '../../config/firebase-config';
 
 import '../../styles/App.css';
 

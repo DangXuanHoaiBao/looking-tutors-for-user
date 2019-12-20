@@ -1,4 +1,5 @@
 import history from '../helpers/history';
+import config from '../config/api-config';
 
 function sendInforToFormSignUp(fullName, email){
     return { 
@@ -22,7 +23,7 @@ function signUp(fullName, email, password, role){
         }
     }
     return dispatch => {
-        fetch('http://localhost:3001/users/sign-up',{
+        fetch(`${config.apiUrlLocal}/users/sign-up`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -66,7 +67,7 @@ function login(email, password){
         }
     }
     return dispatch => {
-        fetch('http://localhost:3001/users/login', {
+        fetch(`${config.apiUrlLocal}/users/login`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -116,7 +117,7 @@ function getTeacherAll(){
     }
 
     return dispatch=> {
-        fetch('http://localhost:3001/users/get-teacher-all', {
+        fetch(`${config.apiUrlLocal}/users/get-teacher-all`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -156,7 +157,7 @@ function getProfile(){
         }
     }
     return dispatch=>{
-        fetch('http://localhost:3001/users/get-profile', {
+        fetch(`${config.apiUrlLocal}/users/get-profile`, {
             method: 'GET',
             headers: authenticationHeader()
         })
@@ -173,7 +174,7 @@ function getProfile(){
 
 function updateProfile(oldEmail, newUser){
     return dispatch => {
-        fetch('http://localhost:3001/users/update-profile',{
+        fetch(`${config.apiUrlLocal}/users/update-profile`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -203,7 +204,7 @@ function addSkill(userEmail, skill){
         }
     }
     return dispatch => {
-        fetch('http://localhost:3001/users/add-skill', {
+        fetch(`${config.apiUrlLocal}/users/add-skill`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',
@@ -226,7 +227,7 @@ function addSkill(userEmail, skill){
 
 function deleteSkill(userEmail, skillItem){
     return dispatch => {
-        fetch('http://localhost:3001/users/delete-skill', {
+        fetch(`${config.apiUrlLocal}/users/delete-skill`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',

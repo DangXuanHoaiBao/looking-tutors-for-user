@@ -1,6 +1,8 @@
 import React from 'react';
 import {Form, Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
+import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
 import history from '../helpers/history';
 import userActions from '../actions/user';
 
@@ -46,6 +48,14 @@ class SignUp extends React.Component{
             history.push('/setting-account');
         }
     }
+    responseFacebook = (response) => {
+        console.log(response);
+      }
+  
+    responseGoogle = (response) => {
+        console.log(response);
+    }
+  
 
     render(){
 
@@ -74,6 +84,28 @@ class SignUp extends React.Component{
                                     <Button className="w-100" variant="primary" type="submit">
                                         Đăng Ký
                                     </Button>
+                                    <br />
+                                    <br />
+                                    <FacebookLogin
+                                        appId="" //APP ID NOT CREATED YET
+                                        fields="name,email,picture"
+                                        callback={this.responseFacebook}
+                                        className="kep-login-facebook"
+                                    />
+                                    
+                                   
+                                   
+                                    <br />
+                                    <br />
+
+
+                                    <GoogleLogin
+                                        className="w-100"
+                                        clientId="" //CLIENTID NOT CREATED YET
+                                        buttonText="LOGIN WITH GOOGLE"
+                                        onSuccess={this.responseGoogle}
+                                        onFailure={this.responseGoogle}
+                                    />
                                 </Form>
                             </div>
                         </div>

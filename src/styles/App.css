@@ -89,3 +89,10 @@ a:hover {
 .bg-gray-300{
   background-color: #e2e8f0;
 }
+
+.kep-login-facebook{
+  width: 100% !important;
+  height: 40px;
+  padding: 2px !important;
+  border-radius: 4px !important;
+}
