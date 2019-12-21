@@ -1,10 +1,10 @@
 import React from 'react';
 import {Form, Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
-import FacebookLogin from 'react-facebook-login';
-import GoogleLogin from 'react-google-login';
 import history from '../helpers/history';
 import userActions from '../actions/user';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 class SignUp extends React.Component{
     constructor(props){
@@ -40,20 +40,13 @@ class SignUp extends React.Component{
     }
 
     handleSubmit(e){
-        //e.preventDefault();
+        e.preventDefault();
         const {fullName, email, errors} = this.state;
         const {sendInforToFormSignUp} = this.props;
         if(errors.fullName === '' && errors.email === '' && fullName.length !== 0 && email.length !== 0){
             sendInforToFormSignUp(fullName, email);
             history.push('/setting-account');
         }
-    }
-    responseFacebook = (response) => {
-        console.log(response);
-      }
-  
-    responseGoogle = (response) => {
-        console.log(response);
     }
   
 
@@ -62,55 +55,37 @@ class SignUp extends React.Component{
         const {fullName, email, errors} = this.state;
 
         return (
-            <div className="container ">
-                <div className="row justify-content-center mt-4 mb-4" >
-                    <div className='col-md-6 border border-dark shadow rounded'>
-                        <div className="row justify-content-center">
-                            <div className="col-md-8 mt-5 mb-5">
-                                <h3 className="mb-3">Đăng Ký Tài Khoản</h3>
-                                <Form onSubmit={this.handleSubmit}>
+            <div>
+                <Header/>
+                <div className="container ">
+                    <div className="row justify-content-center mt-4 mb-4" >
+                        <div className='col-md-6 border border-dark shadow rounded'>
+                            <div className="row justify-content-center">
+                                <div className="col-md-8 mt-5 mb-5">
+                                    <h3 className="mb-3">Đăng Ký Tài Khoản</h3>
+                                    <Form onSubmit={this.handleSubmit}>
 
-                                    <Form.Group controlId="formFirstName">
-                                        <Form.Label>Họ tên</Form.Label>
-                                        <Form.Control type="text" placeholder="Nhập họ tên" name="fullName" value={fullName} onChange={this.handleChange}/>
-                                        {errors.fullName ? <Form.Text className="text-danger">{errors.fullName}</Form.Text> : null}
-                                    </Form.Group>
+                                        <Form.Group controlId="formFirstName">
+                                            <Form.Label>Họ tên</Form.Label>
+                                            <Form.Control type="text" placeholder="Nhập họ tên" name="fullName" value={fullName} onChange={this.handleChange}/>
+                                            {errors.fullName ? <Form.Text className="text-danger">{errors.fullName}</Form.Text> : null}
+                                        </Form.Group>
 
-                                    <Form.Group controlId="formBasicEmail">
-                                        <Form.Label>Email</Form.Label>
-                                        <Form.Control type="email" placeholder="Nhập email" name="email" value={email} onChange={this.handleChange}/>
-                                        {errors.email ? <Form.Text className="text-danger">{errors.email}</Form.Text> : null}
-                                    </Form.Group>
-                                    <Button className="w-100" variant="primary" type="submit">
-                                        Đăng Ký
-                                    </Button>
-                                    <br />
-                                    <br />
-                                    <FacebookLogin
-                                        appId="" //APP ID NOT CREATED YET
-                                        fields="name,email,picture"
-                                        callback={this.responseFacebook}
-                                        className="kep-login-facebook"
-                                    />
-                                    
-                                   
-                                   
-                                    <br />
-                                    <br />
-
-
-                                    <GoogleLogin
-                                        className="w-100"
-                                        clientId="" //CLIENTID NOT CREATED YET
-                                        buttonText="LOGIN WITH GOOGLE"
-                                        onSuccess={this.responseGoogle}
-                                        onFailure={this.responseGoogle}
-                                    />
-                                </Form>
+                                        <Form.Group controlId="formBasicEmail">
+                                            <Form.Label>Email</Form.Label>
+                                            <Form.Control type="email" placeholder="Nhập email" name="email" value={email} onChange={this.handleChange}/>
+                                            {errors.email ? <Form.Text className="text-danger">{errors.email}</Form.Text> : null}
+                                        </Form.Group>
+                                        <Button className="w-100" variant="primary" type="submit">
+                                            Đăng Ký
+                                        </Button>
+                                    </Form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <Footer/>
             </div>
         );
     }

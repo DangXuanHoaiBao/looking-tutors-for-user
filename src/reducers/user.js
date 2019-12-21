@@ -29,6 +29,7 @@ export const signUp = (state = {}, action) => {
     }
 }
 
+
 const data = localStorage.getItem('data');
 const stateDefault = data ? {'data': data} : {};
 export const login = (state = stateDefault, action) => {
@@ -53,6 +54,26 @@ export const login = (state = stateDefault, action) => {
     }
 }
 
+export const signUp_Login_With_Google_Facebook = (state = stateDefault, action) => {
+    switch (action.type){
+        case 'SUCCESS_WITH_GOOGLE_FACEBOOK': {
+            return {
+                ...state,
+                message: action.message,
+                data: action.data
+            }
+        }
+        case 'FAIL_WITH_GOOGLE_FACEBOOK': {
+            return {
+                ...state,
+                message: action.message
+            }
+        }
+        default: return state;
+    }
+
+}
+
 export const getProfile = (state = {}, action) => {
     switch(action.type){
         case 'GET_PROFILE_SUCCESS': {
@@ -70,7 +91,19 @@ export const getTeacherAll = (state = {}, action ) => {
         case 'GET_TEACHER_ALL_SUCCESS': {
             return {
                 ...state,
-                users: action.users
+                teacherAll: action.teacherAll
+            }
+        }
+        default: return state;
+    }
+}
+
+export const getTeacherWithAddress = (state = {}, action) => {
+    switch(action.type){
+        case 'GET_TEACHER_WITH_ADDRESS': {
+            return {
+                ...state,
+                teacherAddress: action.teacherAddress
             }
         }
         default: return state;

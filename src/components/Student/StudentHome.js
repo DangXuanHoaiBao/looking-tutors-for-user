@@ -1,14 +1,11 @@
 import React from 'react';
-import {Tab, Row, Col, Nav, Image, ProgressBar, Button, Card, ListGroup} from 'react-bootstrap';
+import {Tab, Row, Col, Nav, Image, Button} from 'react-bootstrap';
 import AllTeacher from './AllTeacher';
 import userImg from '../../images/user-img.jpg';
 import Header from '../Header';
 import Footer from '../Footer';
 
 class StudentHome extends React.Component{
-    constructor(props){
-        super(props);
-    }
 
     render(){
 

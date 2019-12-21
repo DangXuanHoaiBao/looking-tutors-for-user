@@ -24,22 +24,21 @@ class App extends React.Component{
     return (
       <Router history={history}>
         <Switch>
-          {data ?
-          <div>
-            <Route exact path="/"> <TeacherHome/> </Route>
-            <Route exact path="/profile" > <TeacherProfile/> </Route>
-            <Route exact path="/update-profile"> <TeacherUpdate/> </Route>
-          </div>
-          :
-          <div>
+          {!data ?
+          <>
             <Route exact path="/login"> <Login/> </Route>
             <Route exact path="/sign-up"> <SignUp/> </Route>
             <Route exact path="/setting-account"> <SettingAccount/> </Route>
             <Route exact path="/class-detail" > <ClassDetail/> </Route>
-            
+            <Route exact path="/profile" > <TeacherProfile/> </Route>
             <Route exact path="/student"> <StudentHome/> </Route>
             <Route exact path="/"> <Home /> </Route>
-          </div>
+          </>
+          :
+          <>
+          <Route exact path="/update-profile"> <TeacherUpdate/> </Route>
+          <Route exact path="/"> <TeacherHome/> </Route>
+          </>
           }
         </Switch>
       </Router>

@@ -52,6 +52,58 @@ function signUp(fullName, email, password, role){
     }
 }
 
+function signUp_Login_With_Google_Facebook(fullName, email, password, userImg, typeAccount){
+    function isSuccess(data, message){
+        return {
+            type: 'SUCCESS_WITH_GOOGLE_FACEBOOK',
+            message,
+            data
+        }
+    }
+    function isFail(data, message){
+        return {
+            type: 'FAIL_WITH_GOOGLE_FACEBOOK',
+            message,
+            data
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/check-to-signup-or-login`,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'fullName': fullName,
+                'email': email,
+                'password': password,
+                'userImg': userImg,
+                'typeAccount': typeAccount
+            })
+        })
+        .then(res => {
+            res.text().then(text => {
+                if(res.status === 400){
+                    history.push('/login');
+                }
+                else{
+                    const data = JSON.parse(text);
+                    localStorage.setItem('data', JSON.stringify(data));
+                    dispatch(getProfile());
+                    if(data.user.role === ''){
+                        history.push('/set-role');
+                    }
+                    else{
+                        history.push('/')
+                    }
+                }
+            })
+        })
+        .catch(error => console.log(error));
+    }
+}
+
 function login(email, password){
     function isSuccess(data, message){
         return {
@@ -79,9 +131,9 @@ function login(email, password){
             })
         })
         .then(res => {
-            res.text().then(text => {
-                const messageJson = JSON.parse(text).message;
-                const message = messageJson.message;
+                res.text().then(text => {
+                    const messageJson = JSON.parse(text).message;
+                    const message = messageJson.message;
                 if(res.status === 400){
                     dispatch(isFail(message));
                     history.push('/login');
@@ -101,7 +153,6 @@ function login(email, password){
 
 function logout(){
     localStorage.removeItem('data');
-    history.push('/')
     return {
         type: 'LOGOUT'
     }
@@ -109,10 +160,10 @@ function logout(){
 
 function getTeacherAll(){
 
-    function isSuccess(users){
+    function isSuccess(teacherAll){
         return {
             type: 'GET_TEACHER_ALL_SUCCESS',
-            users
+            teacherAll
         }
     }
 
@@ -126,13 +177,44 @@ function getTeacherAll(){
         })
         .then(res => {
             res.text().then(text => {
-                const users = JSON.parse(text).user;
+                const teacherAll = JSON.parse(text).user;
                 if(res.status === 200){
-                    dispatch(isSuccess(users));
+                    dispatch(isSuccess(teacherAll));
                 }
             })
         })
         .catch(error => console.log(error));
+    }
+}
+
+function getTeacherWithAddress(address){
+    function isSuccess(teacherAddress){
+        return {
+            type: 'GET_TEACHER_WITH_ADDRESS',
+            teacherAddress
+        }
+    }
+    return dispatch => {
+        fetch('http://localhost:3001/users/get-teacher-with-address',{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                address
+            })
+        })
+        .then(res => {
+            res.text().then(text => {
+                if(res.status === 200){
+                    const teacherAddress = JSON.parse(text).user;
+                    console.log(teacherAddress)
+                    dispatch(isSuccess(teacherAddress))
+                }
+            })
+        })
+        .catch(error => console.log(error))
     }
 }
 
@@ -189,6 +271,7 @@ function updateProfile(oldEmail, newUser){
             res.text().then(text => {
                 if(res.status === 200){
                     dispatch(logout());
+                    history.push('/');
                 }
             })
         })
@@ -255,8 +338,10 @@ const userActions = {
     getProfile,
     updateProfile,
     getTeacherAll,
+    getTeacherWithAddress,
     deleteSkill,
-    addSkill
+    addSkill,
+    signUp_Login_With_Google_Facebook
 };
 
 export default userActions;
