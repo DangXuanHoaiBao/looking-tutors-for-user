@@ -48,6 +48,7 @@ class SignUp extends React.Component{
             history.push('/setting-account');
         }
     }
+  
 
     render(){
 

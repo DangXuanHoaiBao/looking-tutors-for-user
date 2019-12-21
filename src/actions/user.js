@@ -1,4 +1,5 @@
 import history from '../helpers/history';
+import config from '../config/api-config';
 
 function sendInforToFormSignUp(fullName, email){
     return { 
@@ -22,7 +23,7 @@ function signUp(fullName, email, password, role){
         }
     }
     return dispatch => {
-        fetch('http://localhost:3001/users/sign-up',{
+        fetch(`${config.apiUrlLocal}/users/sign-up`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -51,6 +52,58 @@ function signUp(fullName, email, password, role){
     }
 }
 
+function signUp_Login_With_Google_Facebook(fullName, email, password, userImg, typeAccount){
+    function isSuccess(data, message){
+        return {
+            type: 'SUCCESS_WITH_GOOGLE_FACEBOOK',
+            message,
+            data
+        }
+    }
+    function isFail(data, message){
+        return {
+            type: 'FAIL_WITH_GOOGLE_FACEBOOK',
+            message,
+            data
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/check-to-signup-or-login`,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'fullName': fullName,
+                'email': email,
+                'password': password,
+                'userImg': userImg,
+                'typeAccount': typeAccount
+            })
+        })
+        .then(res => {
+            res.text().then(text => {
+                if(res.status === 400){
+                    history.push('/login');
+                }
+                else{
+                    const data = JSON.parse(text);
+                    localStorage.setItem('data', JSON.stringify(data));
+                    dispatch(getProfile());
+                    if(data.user.role === ''){
+                        history.push('/set-role');
+                    }
+                    else{
+                        history.push('/')
+                    }
+                }
+            })
+        })
+        .catch(error => console.log(error));
+    }
+}
+
 function login(email, password){
     function isSuccess(data, message){
         return {
@@ -66,7 +119,7 @@ function login(email, password){
         }
     }
     return dispatch => {
-        fetch('http://localhost:3001/users/login', {
+        fetch(`${config.apiUrlLocal}/users/login`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -78,9 +131,9 @@ function login(email, password){
             })
         })
         .then(res => {
-            res.text().then(text => {
-                const messageJson = JSON.parse(text).message;
-                const message = messageJson.message;
+                res.text().then(text => {
+                    const messageJson = JSON.parse(text).message;
+                    const message = messageJson.message;
                 if(res.status === 400){
                     dispatch(isFail(message));
                     history.push('/login');
@@ -115,7 +168,7 @@ function getTeacherAll(){
     }
 
     return dispatch=> {
-        fetch('http://localhost:3001/users/get-teacher-all', {
+        fetch(`${config.apiUrlLocal}/users/get-teacher-all`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -246,7 +299,7 @@ function getProfile(){
         }
     }
     return dispatch=>{
-        fetch('http://localhost:3001/users/get-profile', {
+        fetch(`${config.apiUrlLocal}/users/get-profile`, {
             method: 'GET',
             headers: authenticationHeader()
         })
@@ -263,7 +316,7 @@ function getProfile(){
 
 function updateProfile(oldEmail, newUser){
     return dispatch => {
-        fetch('http://localhost:3001/users/update-profile',{
+        fetch(`${config.apiUrlLocal}/users/update-profile`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -294,7 +347,7 @@ function addSkill(userEmail, skill){
         }
     }
     return dispatch => {
-        fetch('http://localhost:3001/users/add-skill', {
+        fetch(`${config.apiUrlLocal}/users/add-skill`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',
@@ -317,7 +370,7 @@ function addSkill(userEmail, skill){
 
 function deleteSkill(userEmail, skillItem){
     return dispatch => {
-        fetch('http://localhost:3001/users/delete-skill', {
+        fetch(`${config.apiUrlLocal}/users/delete-skill`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',
@@ -349,7 +402,8 @@ const userActions = {
     getTeacherWithSalary,
     getTeacherWithSkill,
     deleteSkill,
-    addSkill
+    addSkill,
+    signUp_Login_With_Google_Facebook
 };
 
 export default userActions;
