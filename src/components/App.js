@@ -8,7 +8,7 @@ import SignUp from '../components/SignUp';
 import Home from '../components/Home';
 import SettingAccount from '../components/SettingAccount';
 import TeacherHome from './Teacher/TeacherHome';
-import TeacherProfile from './Teacher/TeacherProfile';
+import TeacherDetail from './Teacher/TeacherDetail';
 import TeacherUpdate from './Teacher/TeacherUpdate';
 import ClassDetail from './ClassDetail';
 import StudentHome from './Student/StudentHome';
@@ -30,7 +30,7 @@ class App extends React.Component{
             <Route exact path="/sign-up"> <SignUp/> </Route>
             <Route exact path="/setting-account"> <SettingAccount/> </Route>
             <Route exact path="/class-detail" > <ClassDetail/> </Route>
-            <Route exact path="/profile" > <TeacherProfile/> </Route>
+            <Route exact path="/profile/:teacher" > <TeacherDetail/> </Route>
             <Route exact path="/student"> <StudentHome/> </Route>
             <Route exact path="/"> <Home /> </Route>
           </>

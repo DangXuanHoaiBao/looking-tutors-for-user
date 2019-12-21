@@ -8,6 +8,7 @@ import userActions from '../actions/user';
 import logo from '../images/logo.PNG';
 import banner_img_1 from '../images/banner-img-1.jpg';
 import banner_img_3 from '../images/banner-img-3.jpg';
+import history from '../helpers/history';
 import '../styles/App.css';
 
 class Home extends React.Component{
@@ -16,11 +17,15 @@ class Home extends React.Component{
         this.state = {
             address: '',
             salary: null,
+            skill: '',
+            errorSalary: '',
             showTeacherAddress: false,
             showTeacherSalary: false,
-            showTeacherAll: true
+            showTeacherAll: true,
+            showTeacherSkill: false
         }
         this.handleChange = this.handleChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     componentWillMount(){
@@ -29,27 +34,69 @@ class Home extends React.Component{
     }
 
     handleChange(e){
-        const {getTeacherWithAddress} = this.props;
         const {name, value} = e.target;
         if(name==="address"){
+            const {getTeacherWithAddress} = this.props;
             this.setState({
                 address: value,
+                salary: null,
+                skill: '',
                 showTeacherAddress: true,
                 showTeacherSalary: false,
                 showTeacherAll: false,
+                showTeacherSkill: false
             }) 
             getTeacherWithAddress(value);
         }
-        // else if(name==="salary"){
-        //     this.setState({
-        //         salary: value,
-        //         showTeacherSalary: true,
-        //         showTeacherAddress: false,
-        //         showTeacherAll: false
-        //     })
-        //     // getTeacherWithSalary(value);
-        // }
+        if(name==="salary"){
+            let errorSalary;
+            if(isNaN(value)){
+                const errorSalary = 'lương không hợp lệ';
+                this.setState({
+                    address: '',
+                    skill: '',
+                    showTeacherAddress: false,
+                    showTeacherAll: false,
+                    showTeacherSalary: false,
+                    showTeacherSkill: false,
+                    errorSalary
+                })
+            }
+            else{
+                const {getTeacherWithSalary} = this.props;
+                errorSalary = '';
+                this.setState({
+                    salary: value,
+                    address: '',
+                    skill: '',
+                    showTeacherSalary: true,
+                    showTeacherAddress: false,
+                    showTeacherAll: false,
+                    showTeacherSkill: false,
+                    errorSalary
+                })
+                getTeacherWithSalary(value);
+            }
+        }
+        if(name==="skill"){
+            const {getTeacherWithSkill} = this.props;
+            this.setState({
+                skill: value,
+                salary: null,
+                address: '',
+                showTeacherSkill: true,
+                showTeacherSalary: false,
+                showTeacherAddress: false,
+                showTeacherAll: false
+            })
+            getTeacherWithSkill(value);
+        }
         
+    }
+
+    handleClick(teacher){
+        const teacherStringJson = JSON.stringify(teacher);
+        history.push(`/profile/:${teacherStringJson}`);
     }
 
     renderListUser(teacher, index){
@@ -80,7 +127,7 @@ class Home extends React.Component{
                             teacher.skills.map(skill => <Button variant="secondary" size="sm" disabled>{skill}</Button>)
                         }
                     </Card.Text>
-                    <Button className="shadow" variant="primary" onClick={this.handleClick}> Thông Tin Chi Tiết </Button>
+                    <Button className="shadow" variant="primary" onClick={()=> this.handleClick(teacher)}> Thông Tin Chi Tiết </Button>
                 </Card.Body>
             </Card>
         </div>
@@ -88,7 +135,7 @@ class Home extends React.Component{
     }
 
 	render() {
-        const {showTeacherAll, showTeacherAddress, address, salary} = this.state;
+        const {showTeacherAll, showTeacherAddress, showTeacherSalary, showTeacherSkill, errorSalary, address, salary, skill} = this.state;
         let renderListUsers_1;
         let renderListUsers_2;
         if(showTeacherAll){
@@ -113,13 +160,24 @@ class Home extends React.Component{
                 )
             }
         }
-        else{
+        else if(showTeacherSalary){
             const {teacherSalary} = this.props;
             if(teacherSalary){
                 renderListUsers_1 = teacherSalary.slice(0, 3).map((teacher, index)=>
                     this.renderListUser(teacher, index)
                 )
                 renderListUsers_2 = teacherSalary.slice(3, 7).map((teacher, index)=>
+                    this.renderListUser(teacher, index)
+                )
+            }
+        }
+        else if(showTeacherSkill){
+            const {teacherSkill} = this.props;
+            if(teacherSkill){
+                renderListUsers_1 = teacherSkill.slice(0, 3).map((teacher, index)=>
+                    this.renderListUser(teacher, index)
+                )
+                renderListUsers_2 = teacherSkill.slice(4, 7).map((teacher, index)=>
                     this.renderListUser(teacher, index)
                 )
             }
@@ -189,13 +247,14 @@ class Home extends React.Component{
                             <Form.Group controlId="formDistrict">
                                 <Form.Label className="">Giá Mỗi Giờ</Form.Label>
                                     <Form.Control type="text" name="salary" value={salary} onChange={this.handleChange}></Form.Control>
+                                    <Form.Text className="text-danger">{errorSalary}</Form.Text>
                             </Form.Group>
 
                             <Form.Group controlId="formDistrict">
                                 <i className="fa fa-cogs text-primary" aria-hidden="true"></i> &nbsp;
                                 <Form.Label className="">Kĩ Năng</Form.Label>
-                                    <Form.Control as="select">
-                                        <option>...</option>
+                                    <Form.Control as="select" name="skill" value={skill} onChange={this.handleChange}>
+                                        <option></option>
                                         <option>Toán</option>
                                     </Form.Control>
                             </Form.Group>
@@ -207,15 +266,18 @@ class Home extends React.Component{
                                         <div className="row mt-4">
                                             {renderListUsers_1}
                                         </div> 
-                                    </div>
-                                </Carousel.Item>
-                                <Carousel.Item>
-                                    <div className="container">
                                         <div className="row mt-4">
                                             {renderListUsers_2}
                                         </div>
                                     </div>
                                 </Carousel.Item>
+                                {/* <Carousel.Item>
+                                    <div className="container">
+                                        <div className="row mt-4">
+                                            {renderListUsers_2}
+                                        </div>
+                                    </div>
+                                </Carousel.Item> */}
                             </Carousel>
                         </div>
                     </div>
@@ -229,13 +291,15 @@ class Home extends React.Component{
 const mapStateToProps = state => ({
     teacherAll: state.getTeacherAll.teacherAll,
     teacherAddress: state.getTeacherWithAddress.teacherAddress,
-    // teacherSalary: state.getTeacherWithSalary.teacherSalary
+    teacherSalary: state.getTeacherWithSalary.teacherSalary,
+    teacherSkill: state.getTeacherWithSkill.teacherSkill
 })
 
 const actionCreator = {
     getTeacherAll: userActions.getTeacherAll,
     getTeacherWithAddress: userActions.getTeacherWithAddress,
-    // getTeacherWithSalary: userActions.getTeacherWithSalary
+    getTeacherWithSalary: userActions.getTeacherWithSalary,
+    getTeacherWithSkill: userActions.getTeacherWithSkill
 }
 
 export default connect(mapStateToProps, actionCreator)(Home);

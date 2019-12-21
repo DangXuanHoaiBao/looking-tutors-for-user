@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import {sendInforToFormSignUp, signUp, login, getProfile, updateProfile, 
-        getTeacherAll, getTeacherWithAddress, addSkill} from './user';
+        getTeacherAll, getTeacherWithAddress, addSkill, getTeacherWithSalary, getTeacherWithSkill} from './user';
 
 export default combineReducers({
     sendInforToFormSignUp,
@@ -10,5 +10,7 @@ export default combineReducers({
     updateProfile,
     getTeacherAll,
     getTeacherWithAddress,
+    getTeacherWithSalary,
+    getTeacherWithSkill,
     addSkill
 });

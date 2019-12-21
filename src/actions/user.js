@@ -165,6 +165,66 @@ function getTeacherWithAddress(address){
     }
 }
 
+function getTeacherWithSalary(salary){
+    function isSuccess(teacherSalary){
+        return {
+            type: 'GET_TEACHER_WITH_SALARY',
+            teacherSalary
+        }
+    }
+    return dispatch => {
+        fetch('http://localhost:3001/users/get-teacher-with-salary',{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                salary
+            })
+        })
+        .then(res => {
+            res.text().then(text => {
+                if(res.status === 200){
+                    const teacherSalary = JSON.parse(text).user;
+                    dispatch(isSuccess(teacherSalary))
+                }
+            })
+        })
+        .catch(error => console.log(error))
+    }
+}
+
+function getTeacherWithSkill(skill){
+    function isSuccess(teacherSkill){
+        return {
+            type: 'GET_TEACHER_WITH_SKILL',
+            teacherSkill
+        }
+    }
+    return dispatch => {
+        fetch('http://localhost:3001/users/get-teacher-with-skill',{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                skill
+            })
+        })
+        .then(res => {
+            res.text().then(text => {
+                if(res.status === 200){
+                    const teacherSkill = JSON.parse(text).user;
+                    dispatch(isSuccess(teacherSkill))
+                }
+            })
+        })
+        .catch(error => console.log(error))
+    }
+}
+
 function authenticationHeader(){
     const data = JSON.parse(localStorage.getItem('data'));
     if(data){
@@ -286,6 +346,8 @@ const userActions = {
     updateProfile,
     getTeacherAll,
     getTeacherWithAddress,
+    getTeacherWithSalary,
+    getTeacherWithSkill,
     deleteSkill,
     addSkill
 };

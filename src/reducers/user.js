@@ -89,6 +89,30 @@ export const getTeacherWithAddress = (state = {}, action) => {
     }
 }
 
+export const getTeacherWithSalary = (state = {}, action) => {
+    switch(action.type){
+        case 'GET_TEACHER_WITH_SALARY': {
+            return {
+                ...state,
+                teacherSalary: action.teacherSalary
+            }
+        }
+        default: return state;
+    }
+}
+
+export const getTeacherWithSkill = (state = {}, action) => {
+    switch(action.type){
+        case 'GET_TEACHER_WITH_SKILL': {
+            return {
+                ...state,
+                teacherSkill: action.teacherSkill
+            }
+        }
+        default: return state;
+    }
+}
+
 export const updateProfile = (state = {}, action) => {
     switch(action.type){
         case 'UPDATE_PROFILE_SUCCESS': {

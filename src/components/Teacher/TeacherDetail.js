@@ -15,6 +15,9 @@ class TeacherProfile extends React.Component{
     }
 
     render(){
+        const {teacher} = this.props.match.params.teacher;
+    
+        console.log(JSON.parse(teacher));
         return (
             <div className="container"> 
                 <div className="row mt-4 mb-4">
