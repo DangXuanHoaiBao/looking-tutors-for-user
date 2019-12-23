@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Carousel, Navbar, Nav, Form, Button, Card} from 'react-bootstrap';
+import {Image, Carousel, Navbar, Nav, Form, Button, Card, Pagination} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
 import Header from './Header';
@@ -22,10 +22,12 @@ class Home extends React.Component{
             showTeacherAddress: false,
             showTeacherSalary: false,
             showTeacherAll: true,
-            showTeacherSkill: false
+            showTeacherSkill: false,
+            currentPage: 0
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleChangePage = this.handleChangePage.bind(this);
     }
 
     componentWillMount(){
@@ -36,35 +38,50 @@ class Home extends React.Component{
     handleChange(e){
         const {name, value} = e.target;
         if(name==="address"){
-            const {getTeacherWithAddress} = this.props;
-            this.setState({
-                address: value,
-                salary: null,
-                skill: '',
-                showTeacherAddress: true,
-                showTeacherSalary: false,
-                showTeacherAll: false,
-                showTeacherSkill: false
-            }) 
-            getTeacherWithAddress(value);
+            if(value !== ""){
+                const {getTeacherWithAddress} = this.props;
+                this.setState({
+                    address: value,
+                    salary: null,
+                    skill: '',
+                    showTeacherAddress: true,
+                    showTeacherSalary: false,
+                    showTeacherAll: false,
+                    showTeacherSkill: false
+                }) 
+                getTeacherWithAddress(value);
+            }
+            else{
+                const {getTeacherAll} = this.props;
+                this.setState({
+                    address: '',
+                    salary: null,
+                    skill: '',
+                    showTeacherAddress: false,
+                    showTeacherSalary: false,
+                    showTeacherAll: true,
+                    showTeacherSkill: false
+                }) 
+                getTeacherAll();
+            }
         }
         if(name==="salary"){
-            let errorSalary;
-            if(isNaN(value)){
-                const errorSalary = 'lương không hợp lệ';
+            if(value === ""){
+                const {getTeacherAll} = this.props;
                 this.setState({
                     address: '',
                     skill: '',
+                    salary: null,
                     showTeacherAddress: false,
-                    showTeacherAll: false,
+                    showTeacherAll: true,
                     showTeacherSalary: false,
                     showTeacherSkill: false,
-                    errorSalary
+                    errorSalary: ''
                 })
+                getTeacherAll();
             }
-            else{
+            else if(!isNaN(value)){
                 const {getTeacherWithSalary} = this.props;
-                errorSalary = '';
                 this.setState({
                     salary: value,
                     address: '',
@@ -73,36 +90,68 @@ class Home extends React.Component{
                     showTeacherAddress: false,
                     showTeacherAll: false,
                     showTeacherSkill: false,
-                    errorSalary
+                    errorSalary: ''
                 })
                 getTeacherWithSalary(value);
             }
+            else{
+                this.setState({
+                    address: '',
+                    salary: null,
+                    skill: '',
+                    showTeacherAddress: false,
+                    showTeacherSalary: false,
+                    showTeacherAll: false,
+                    showTeacherSkill: false,
+                    errorSalary: "lương không hợp lệ"
+                }) 
+            }
         }
         if(name==="skill"){
-            const {getTeacherWithSkill} = this.props;
-            this.setState({
-                skill: value,
-                salary: null,
-                address: '',
-                showTeacherSkill: true,
-                showTeacherSalary: false,
-                showTeacherAddress: false,
-                showTeacherAll: false
-            })
-            getTeacherWithSkill(value);
+            if(value !== ""){
+                const {getTeacherWithSkill} = this.props;
+                this.setState({
+                    skill: value,
+                    salary: null,
+                    address: '',
+                    showTeacherSkill: true,
+                    showTeacherSalary: false,
+                    showTeacherAddress: false,
+                    showTeacherAll: false
+                })
+                getTeacherWithSkill(value);
+            }
+            else{
+                const {getTeacherAll} = this.props;
+                this.setState({
+                    address: '',
+                    salary: null,
+                    skill: '',
+                    showTeacherAddress: false,
+                    showTeacherSalary: false,
+                    showTeacherAll: true,
+                    showTeacherSkill: false
+                }) 
+                getTeacherAll();
+            }
         }
         
     }
 
-    handleClick(teacher){
-        const teacherStringJson = JSON.stringify(teacher);
-        history.push(`/profile/:${teacherStringJson}`);
+    handleChangePage(e){
+        this.setState({
+            currentPage: Number(e.target.text)
+        })
     }
 
-    renderListUser(teacher, index){
+    handleClick(teacher){
+        history.push("/detail", teacher);
+    }
+
+    renderUser(teacher, index){
         return(
         <div key={index} className="col-md-4">
-            <Card className="shadow" style={{ height: '15rem' }}>
+            <Card className="shadow" >
                 <Card.Header className="bg-gray-300">
                     <div className="row">
                         <div className="col-md-3">
@@ -135,54 +184,99 @@ class Home extends React.Component{
     }
 
 	render() {
-        const {showTeacherAll, showTeacherAddress, showTeacherSalary, showTeacherSkill, errorSalary, address, salary, skill} = this.state;
+        const {showTeacherAll, showTeacherAddress, showTeacherSalary, 
+               errorSalary, address, salary, skill, currentPage} = this.state;
+
         let renderListUsers_1;
         let renderListUsers_2;
+        let items = [];
         if(showTeacherAll){
             const {teacherAll} = this.props;
             if(teacherAll){
-                renderListUsers_1 = teacherAll.slice(0, 3).map((teacher, index)=>
-                    this.renderListUser(teacher, index)
+                const numberPage = teacherAll.length / 6;
+                let numberPageRounded = Math.round(numberPage);
+                const temp = numberPage - numberPageRounded;
+                if(temp > 0){
+                    numberPageRounded = numberPageRounded + 1;
+                }
+                for (let i = 0; i < numberPageRounded; i = i + 1){
+                    items.push(<Pagination.Item key={i} onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                }
+                renderListUsers_1 = teacherAll.slice(currentPage * 6, currentPage*6 + 3).map((teacher, index)=>
+                this.renderUser(teacher, index)
                 )
-                renderListUsers_2 = teacherAll.slice(3, 7).map((teacher, index)=>
-                    this.renderListUser(teacher, index)
+                renderListUsers_2 = teacherAll.slice(currentPage * 6 + 3, currentPage * 6 + 6).map((teacher, index)=>
+                    this.renderUser(teacher, index)
                 )
             }
         }
         else if(showTeacherAddress){
             const {teacherAddress} = this.props;
             if(teacherAddress){
-                renderListUsers_1 = teacherAddress.slice(0, 3).map((teacher, index)=>
-                    this.renderListUser(teacher, index)
+                const numberPage = teacherAddress.length / 6;
+                let numberPageRounded = Math.round(numberPage);
+                const temp = numberPage - numberPageRounded;
+                if(temp > 0){
+                    numberPageRounded = numberPageRounded + 1;
+                }
+                for (let i = 0; i < numberPageRounded; i = i + 1){
+                    items.push(<Pagination.Item key={i} onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                }
+                renderListUsers_1 = teacherAddress.slice(currentPage * 6, currentPage*6 + 3).map((teacher, index)=>
+                this.renderUser(teacher, index)
                 )
-                renderListUsers_2 = teacherAddress.slice(3, 7).map((teacher, index)=>
-                    this.renderListUser(teacher, index)
+                renderListUsers_2 = teacherAddress.slice(currentPage * 6 + 3, currentPage * 6 + 6).map((teacher, index)=>
+                    this.renderUser(teacher, index)
                 )
             }
         }
         else if(showTeacherSalary){
             const {teacherSalary} = this.props;
             if(teacherSalary){
-                renderListUsers_1 = teacherSalary.slice(0, 3).map((teacher, index)=>
-                    this.renderListUser(teacher, index)
+                const numberPage = teacherSalary.length / 6;
+                let numberPageRounded = Math.round(numberPage);
+                const temp = numberPage - numberPageRounded;
+                if(temp > 0){
+                    numberPageRounded = numberPageRounded + 1;
+                }
+                for (let i = 0; i < numberPageRounded; i = i + 1){
+                    items.push(<Pagination.Item key={i} onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                }
+                renderListUsers_1 = teacherSalary.slice(currentPage * 6, currentPage*6 + 3).map((teacher, index)=>
+                this.renderUser(teacher, index)
                 )
-                renderListUsers_2 = teacherSalary.slice(3, 7).map((teacher, index)=>
-                    this.renderListUser(teacher, index)
+                renderListUsers_2 = teacherSalary.slice(currentPage * 6 + 3, currentPage * 6 + 6).map((teacher, index)=>
+                    this.renderUser(teacher, index)
                 )
             }
         }
-        else if(showTeacherSkill){
+        else{
             const {teacherSkill} = this.props;
             if(teacherSkill){
-                renderListUsers_1 = teacherSkill.slice(0, 3).map((teacher, index)=>
-                    this.renderListUser(teacher, index)
+                const numberPage = teacherSkill.length / 6;
+                let numberPageRounded = Math.round(numberPage);
+                const temp = numberPage - numberPageRounded;
+                if(temp > 0){
+                    numberPageRounded = numberPageRounded + 1;
+                }
+                for (let i = 0; i < numberPageRounded; i = i + 1){
+                    items.push(<Pagination.Item key={i} onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                }
+                renderListUsers_1 = teacherSkill.slice(currentPage * 6, currentPage*6 + 3).map((teacher, index)=>
+                this.renderUser(teacher, index)
                 )
-                renderListUsers_2 = teacherSkill.slice(4, 7).map((teacher, index)=>
-                    this.renderListUser(teacher, index)
+                renderListUsers_2 = teacherSkill.slice(currentPage * 6 + 3, currentPage * 6 + 6).map((teacher, index)=>
+                    this.renderUser(teacher, index)
                 )
             }
         }
-
+        const paginationBasic = (
+            <div className="row justify-content-center mt-3">
+                <Pagination size="sm" className="border">
+                    {items}
+                </Pagination>
+            </div>
+        );
         return (
             <div>
                 <Header/>
@@ -259,29 +353,19 @@ class Home extends React.Component{
                                     </Form.Control>
                             </Form.Group>
                         </div>
-                        <div className="col-md-10">
-                            <Carousel className=" mt-3 mb-3">
-                                <Carousel.Item>
-                                    <div className="container">
-                                        <div className="row mt-4">
-                                            {renderListUsers_1}
-                                        </div> 
-                                        <div className="row mt-4">
-                                            {renderListUsers_2}
-                                        </div>
-                                    </div>
-                                </Carousel.Item>
-                                {/* <Carousel.Item>
-                                    <div className="container">
-                                        <div className="row mt-4">
-                                            {renderListUsers_2}
-                                        </div>
-                                    </div>
-                                </Carousel.Item> */}
-                            </Carousel>
+                        <div className="col-md-10 ">
+                            <div className="row mt-3">
+                                {renderListUsers_1}
+                            </div> 
+                            <div className="row mt-3">
+                                {renderListUsers_2}
+                            </div>
+                            {paginationBasic}
                         </div>
+                        
                     </div>
                 </div>
+                
                 <Footer/>
             </div>
         );

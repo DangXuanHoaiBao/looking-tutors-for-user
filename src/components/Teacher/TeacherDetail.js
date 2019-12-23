@@ -2,8 +2,6 @@ import React from 'react';
 import {Image, Card, ListGroup, Button} from 'react-bootstrap';
 import history from '../../helpers/history';
 
-import user_img from '../../images/user-img.jpg';
-
 class TeacherProfile extends React.Component{
     constructor(props){
         super(props);
@@ -15,20 +13,25 @@ class TeacherProfile extends React.Component{
     }
 
     render(){
-        const {teacher} = this.props.match.params.teacher;
-    
-        console.log(JSON.parse(teacher));
+        const teacher = history.location.state;
+        let listSkill;
+        if(teacher.skills){
+            listSkill = teacher.skills.map((skill, index) => {
+                return <Button key={index} variant="secondary" disabled >{skill}</Button>
+            })
+        }
+       
         return (
             <div className="container"> 
                 <div className="row mt-4 mb-4">
                     <div className="col-md-12 border shadow">
                         <div className="row mt-3">
                             <div className="col-md-1">
-                                <Image src={user_img} className="img-fluid rounded-circle" />
+                                <Image src={teacher.userImg} className="img-fluid rounded-circle" />
                             </div>
                             <div className="col-md-11 ml--20 ">
-                                <div className="font-weight-bold">Bao Dang <span><i className="fas fa-check-circle text-primary"></i></span></div>
-                                <i className="fas fa-map-marker-alt text-primary"></i> &nbsp; <span>Quận 5, TPHCM</span>
+                                <div className="font-weight-bold">{teacher.fullName} <span><i className="fas fa-check-circle text-primary"></i></span></div>
+                                <i className="fas fa-map-marker-alt text-primary"></i> &nbsp; <span>{teacher.address}</span>
                             </div>
                         </div>
                         <div className="row mt-3 mb-3 ml-1 mr-1">
@@ -36,15 +39,13 @@ class TeacherProfile extends React.Component{
                                 <div className="row">
                                     <Card.Body>
                                         <Card.Text>
-                                            Báo Mới là một trang web tổng hợp tin tức tự động và thông minh được xây dựng bởi ePi Technologies, 
-                                            đứng đầu là Nguyễn Anh Tuấn.
-                                            Mỗi ngày Báo Mới xử lý hơn 6000 tin tức từ ~100 báo điện tử ở Việt Nam
+                                            {teacher.discribe}
                                         </Card.Text>
                                     </Card.Body>
                                 </div>
                                 <div className="row">
                                     <div className="col-md-2">
-                                        Giá/h
+                                        {teacher.salary}Giá/h
                                     </div>
                                     <div className="col-md-2">
                                         Số lượng lớp đã nhận
@@ -103,9 +104,7 @@ class TeacherProfile extends React.Component{
                         <ListGroup variant="flush">
                             <ListGroup.Item>
                                 <Card.Body>
-                                    <Button className="" disabled variant="secondary">Toán</Button> &emsp;
-                                    <Button disabled variant="secondary">Lý</Button> &emsp;
-                                    <Button disabled variant="secondary">Hóa</Button> 
+                                    {listSkill}
                                 </Card.Body>
                             </ListGroup.Item>
                         </ListGroup>

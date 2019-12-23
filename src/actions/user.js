@@ -1,14 +1,6 @@
 import history from '../helpers/history';
 import config from '../config/api-config';
 
-function sendInforToFormSignUp(fullName, email){
-    return { 
-            type: 'SEND_INFOR_TO_FORM_SIGN_UP',
-            fullName,
-            email
-        }
-};
-
 function signUp(fullName, email, password, role){
     function isSuccess(message){
         return {
@@ -53,20 +45,20 @@ function signUp(fullName, email, password, role){
 }
 
 function signUp_Login_With_Google_Facebook(fullName, email, password, userImg, typeAccount){
-    function isSuccess(data, message){
-        return {
-            type: 'SUCCESS_WITH_GOOGLE_FACEBOOK',
-            message,
-            data
-        }
-    }
-    function isFail(data, message){
-        return {
-            type: 'FAIL_WITH_GOOGLE_FACEBOOK',
-            message,
-            data
-        }
-    }
+    // function isSuccess(data, message){
+    //     return {
+    //         type: 'SUCCESS_WITH_GOOGLE_FACEBOOK',
+    //         message,
+    //         data
+    //     }
+    // }
+    // function isFail(data, message){
+    //     return {
+    //         type: 'FAIL_WITH_GOOGLE_FACEBOOK',
+    //         message,
+    //         data
+    //     }
+    // }
     return dispatch => {
         fetch(`${config.apiUrlLocal}/users/check-to-signup-or-login`,{
             method: 'POST',
@@ -391,7 +383,6 @@ function deleteSkill(userEmail, skillItem){
 }
 
 const userActions = {
-    sendInforToFormSignUp,
     signUp,
     login,
     logout,

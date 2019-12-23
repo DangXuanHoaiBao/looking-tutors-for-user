@@ -30,7 +30,7 @@ class App extends React.Component{
             <Route exact path="/sign-up"> <SignUp/> </Route>
             <Route exact path="/setting-account"> <SettingAccount/> </Route>
             <Route exact path="/class-detail" > <ClassDetail/> </Route>
-            <Route exact path="/profile/:teacher" > <TeacherDetail/> </Route>
+            <Route exact path="/detail" > <TeacherDetail/> </Route>
             <Route exact path="/student"> <StudentHome/> </Route>
             <Route exact path="/"> <Home /> </Route>
           </>

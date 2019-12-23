@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import userActions from '../actions/user';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import history from '../helpers/history';
 
 class SettingAccount extends React.Component{
 
@@ -61,8 +62,8 @@ class SettingAccount extends React.Component{
     handleSubmit(e){
         e.preventDefault();
         const {password, passwordConfirm, errors, isCheckTeacher} = this.state;
-        const {fullName, email, signUp} = this.props;
-      
+        const {signUp} = this.props;
+        const userAccount = history.location.state;
         if(password !== passwordConfirm){
             this.setState({
                 errors: {
@@ -73,7 +74,7 @@ class SettingAccount extends React.Component{
         else{
             if(errors.password === '' && errors.passwordConfirm === '' && password.length !== 0 && passwordConfirm.length !== 0){
                 const role = isCheckTeacher ? 'teacher' : 'renter';
-                signUp(fullName, email, password, role);
+                signUp(userAccount.fullName, userAccount.email, password, role);
             }
         }
     }
@@ -81,10 +82,10 @@ class SettingAccount extends React.Component{
     render(){
         
         const {password, passwordConfirm, isCheckTeacher, isCheckRenter, errors} = this.state;
-        const {message} = this.props;
-        if(message){
-            alert(message);
-        }
+        // const {message} = this.props;
+        // if(message){
+        //     alert(message);
+        // }
         return (
             <div>
                 <Header />
@@ -138,8 +139,6 @@ class SettingAccount extends React.Component{
 }
 
 const mapStateToProps = (state) => ({
-    fullName: state.sendInforToFormSignUp.fullName,
-    email: state.sendInforToFormSignUp.email,
     message: state.signUp.message
 })
 
