@@ -18,9 +18,15 @@ export const signUp = (state = {}, action) => {
 
 
 const data = JSON.parse(localStorage.getItem('data'));
-const stateDefault = data ? {'data': data} : {};
+const stateDefault = data ? {isLogining: true, data: data} : {};
 export const login = (state = stateDefault, action) => {
     switch(action.type){
+        case 'LOGIN_REQUEST': {
+            return {
+                ...state,
+                isLogining: true
+            }
+        }
         case 'LOGIN_SUCCESS': {
             return {
                 ...state,
@@ -31,7 +37,8 @@ export const login = (state = stateDefault, action) => {
         case 'LOGIN_FAIL': {
             return {
                 ...state,
-                message: action.message
+                message: action.message,
+                isLogining: false
             }
         }
         case 'LOGOUT': {

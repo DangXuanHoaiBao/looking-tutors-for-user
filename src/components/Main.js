@@ -1,16 +1,12 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import {connect} from 'react-redux';
+import {ToastContainer} from 'react-toastify';
 
+import Private from '../helpers/private';
 import Login from "./Login";
 import SignUp from './SignUp';
-import Home from './Home';
 import SettingAccount from './SettingAccount';
-import TeacherHome from './Teacher/TeacherHome';
-import TeacherUpdate from './Teacher/TeacherUpdate';
-import ClassDetail from './ClassDetail';
-import StudentHome from './Student/StudentHome';
-import Info from './Teacher/TeacherInfo';
 
 import '../styles/App.css';
 
@@ -20,18 +16,17 @@ class Main extends React.Component{
 
     return (
       <Switch>
-          <Route exact path="/"> <Home /> </Route>
-          <Route exact path="/login"> <Login/> </Route>
-          <Route exact path="/sign-up"> <SignUp/> </Route>
-          <Route exact path="/setting-account"> <SettingAccount/> </Route>
-          <Route exact path="/class-detail" > <ClassDetail/> </Route>
-          <Route exact path="/student"> <StudentHome/> </Route>
-          <Route exact path="/info"><Info /></Route>
-          <Route exact path="/update-profile"> <TeacherUpdate/> </Route>
+          <Private.PrivateStartPage exact path="/" />
+          <Private.IsLogin exact path="/login" component={Login} />
+          <Private.IsLogin exact path="/sign-up" component={SignUp} />
+          <Private.IsLogin exact path="/setting-account" component={SettingAccount} />
+          <Private.PrivateInfo exact path="/info" />
+          <ToastContainer />
       </Switch>
+      
     );
   }
-}
+} 
 
 const mapStateToProps = state => ({
   data: state.login.data

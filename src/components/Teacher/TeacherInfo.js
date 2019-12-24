@@ -4,7 +4,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable react/jsx-fragments */
 /* eslint-disable react/prefer-stateless-function */
-import React, { Fragment } from "react";
+import React from "react";
 import {connect} from 'react-redux';
 import {
   Row,
@@ -19,7 +19,7 @@ import {
   Button,
   Media,
 } from "reactstrap";
-import { toast, Bounce } from 'react-toastify';
+import { toast, Bounce,ToastContainer } from 'react-toastify';
 import { FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { faFan } from '@fortawesome/free-solid-svg-icons';
 import userActions from "../../actions/user";
@@ -238,7 +238,7 @@ class Info extends React.Component {
   handleAddSkill(e){
     e.preventDefault();
     const { arraySkills, skill } = this.state;
-    if(arraySkills.indexOf(skill) === -1){
+    if(arraySkills.indexOf(skill) === -1 && skill !== 'Mặc định' && skill !== ''){
       arraySkills.push(skill);
       this.setState({arraySkills: arraySkills});
     }
@@ -299,7 +299,8 @@ class Info extends React.Component {
                     {reviewImage === null && userImg !== '' &&
                       <Media object  width={100}
                       height={100}
-                      src={userImg} className="rounded-circle"/>
+                      src={userImg} className="rounded-circle" >
+                      </Media>
                     }
                     {reviewImage === null && userImg === '' &&
                       <Media object  width={100}
@@ -396,6 +397,7 @@ class Info extends React.Component {
           </Col>
           <Col md="3" />
         </Row>
+        <ToastContainer />
       </div>
     );
   }

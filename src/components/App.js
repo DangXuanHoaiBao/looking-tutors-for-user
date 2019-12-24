@@ -3,6 +3,7 @@ import { Router } from 'react-router-dom';
 import {connect} from 'react-redux';
 import history from '../helpers/history';
 
+import Alert from './Alert';
 import Header from './Header';
 import Footer from './Footer';
 import Main from './Main';
@@ -18,7 +19,7 @@ class App extends React.Component{
         <Header />
         <Main />
         <Footer />
-    </Router>
+      </Router>
     );
   }
 }

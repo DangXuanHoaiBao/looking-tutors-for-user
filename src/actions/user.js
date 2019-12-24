@@ -2,6 +2,7 @@
 import history from '../helpers/history';
 import config from '../config/api-config';
 import authHeader from '../helpers/auth-header';
+import alertActions from '../actions/alert';
 
 function signUp(fullName, email, password, role){
     function isSuccess(message){
@@ -165,7 +166,12 @@ function signUp_Login_With_Google_Facebook(fullName, email, password, userImg, t
     }
 }
 
-function login(email, password){
+function login(email, password, rememberUsername){
+    function request() { 
+        return { 
+            type: 'LOGIN_REQUEST' 
+        } 
+    }
     function isSuccess(data, message){
         return {
             type: 'LOGIN_SUCCESS',
@@ -180,6 +186,13 @@ function login(email, password){
         }
     }
     return dispatch => {
+        dispatch(request());
+        if(rememberUsername === true){
+            localStorage.setItem('username', email);
+        }
+        else{
+            localStorage.removeItem('username');
+        }
         fetch(`${config.apiUrlLocal}/users/login`, {
             method: 'POST',
             headers: {
@@ -193,19 +206,15 @@ function login(email, password){
         })
         .then(handleResponse)
         .then(res => {
-            const message = res.message;
-            if(res.status === 400){
-                dispatch(isFail(message));
-                history.push('/login');
-            }
-            else{
-                localStorage.setItem('data', JSON.stringify(res));
-                dispatch(isSuccess(res, message));
+            localStorage.setItem('data', JSON.stringify(res));
+                dispatch(isSuccess(res, "Đăng nhập thành công"));
                 dispatch(getProfile());
                 history.push('/');
-            }
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+            dispatch(alertActions.error(error.message));
+            dispatch(isFail(error.message));
+        });
     }
 }
 
@@ -411,17 +420,17 @@ function updateInfo(newUser){
         })
         .then(handleResponse)
         .then(
-            message => {
+            res => {
                 const data = JSON.parse(localStorage.getItem('data'));
                 localStorage.removeItem('data');
                 const {fullName, address, phoneNumber, salary, discribe, skills, userImg} = newUser;
                 data.user = {...data.user, fullName, address, phoneNumber, salary, discribe, skills, userImg}
-                console.log(data.user);
                 localStorage.setItem('data', JSON.stringify(data));
                 dispatch(updateResOfNavigation(data));
+                dispatch(alertActions.success(res.message));
             },
             error => {
-
+                dispatch(alertActions.error(error));
             })
         .catch(errors => console.log(errors))
     };
