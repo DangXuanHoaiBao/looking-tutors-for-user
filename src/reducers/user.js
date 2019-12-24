@@ -3,13 +3,13 @@ export const signUp = (state = {}, action) => {
         case 'SIGN_UP_SUCCESS': {
             return {
                 ...state,
-                message: action.message
+                messageFail: action.message
             }
         }
         case 'SIGN_UP_FAIL':{
             return {
                 ...state,
-                message: action.message
+                messageSuccess: action.message
             }
         }
         default: return state;
@@ -17,7 +17,7 @@ export const signUp = (state = {}, action) => {
 }
 
 
-const data = localStorage.getItem('data');
+const data = JSON.parse(localStorage.getItem('data'));
 const stateDefault = data ? {'data': data} : {};
 export const login = (state = stateDefault, action) => {
     switch(action.type){
@@ -85,6 +85,18 @@ export const getTeacherAll = (state = {}, action ) => {
     }
 }
 
+export const getAllCourses = (state = {}, action ) => {
+    switch(action.type){
+        case 'GET_ALL_COURSES_SUCCESS': {
+            return {
+                ...state,
+                allCourses: action.allCourses
+            }
+        }
+        default: return state;
+    }
+}
+
 export const getTeacherWithAddress = (state = {}, action) => {
     switch(action.type){
         case 'GET_TEACHER_WITH_ADDRESS': {
@@ -121,15 +133,15 @@ export const getTeacherWithSkill = (state = {}, action) => {
     }
 }
 
-export const updateProfile = (state = {}, action) => {
+export const sendCodeActivatedAccountByEmail = (state = {}, action) => {
     switch(action.type){
-        case 'UPDATE_PROFILE_SUCCESS': {
+        case 'SEND_CODE_ACTIVATED_ACCOUNT_BY_EMAIL_FAIL': {
             return {
                 ...state,
                 message: action.message
             }
         }
-        case 'UPDATE_PROFILE_FAIL': {
+        case 'SEND_CODE_ACTIVATED_ACCOUNT_BY_EMAIL_SUCCESS': {
             return {
                 ...state,
                 message: action.message
@@ -139,9 +151,15 @@ export const updateProfile = (state = {}, action) => {
     }
 }
 
-export const addSkill = (state = {}, action) => {
+export const activatedAccount = (state = {}, action) => {
     switch(action.type){
-        case 'ADD_SKILL_SUCCESS': {
+        case 'ACTIVATED_ACCOUNT_FAIL': {
+            return {
+                ...state,
+                message: action.message
+            }
+        }
+        case 'ACTIVATED_ACCOUNT_SUCCESS': {
             return {
                 ...state,
                 message: action.message

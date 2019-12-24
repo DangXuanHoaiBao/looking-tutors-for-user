@@ -1,15 +1,16 @@
 import {combineReducers} from 'redux';
-import {signUp, login, getProfile, updateProfile, 
-        getTeacherAll, getTeacherWithAddress, addSkill, getTeacherWithSalary, getTeacherWithSkill} from './user';
+import {signUp, login, getProfile, getTeacherAll, getTeacherWithAddress, getTeacherWithSalary, getTeacherWithSkill,
+        sendCodeActivatedAccountByEmail, activatedAccount, getAllCourses} from './user';
 
 export default combineReducers({
     signUp,
     login,
     getProfile,
-    updateProfile,
     getTeacherAll,
     getTeacherWithAddress,
     getTeacherWithSalary,
     getTeacherWithSkill,
-    addSkill
+    sendCodeActivatedAccountByEmail,
+    activatedAccount,
+    getAllCourses
 });

@@ -139,8 +139,9 @@ class Home extends React.Component{
     }
 
     handleChangePage(e){
+        const numberPage =  Number(e.target.text) - 1;
         this.setState({
-            currentPage: Number(e.target.text)
+            currentPage: numberPage
         })
     }
 
@@ -199,8 +200,13 @@ class Home extends React.Component{
                 if(temp > 0){
                     numberPageRounded = numberPageRounded + 1;
                 }
-                for (let i = 0; i < numberPageRounded; i = i + 1){
-                    items.push(<Pagination.Item key={i} onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                for (let i = 1; i <= numberPageRounded; i = i + 1){
+                    if((currentPage + 1) === i){
+                        items.push(<Pagination.Item key={i} active onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                    }
+                    else{
+                        items.push(<Pagination.Item key={i} onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                    }
                 }
                 renderListUsers_1 = teacherAll.slice(currentPage * 6, currentPage*6 + 3).map((teacher, index)=>
                 this.renderUser(teacher, index)
@@ -219,11 +225,16 @@ class Home extends React.Component{
                 if(temp > 0){
                     numberPageRounded = numberPageRounded + 1;
                 }
-                for (let i = 0; i < numberPageRounded; i = i + 1){
-                    items.push(<Pagination.Item key={i} onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                for (let i = 1; i <= numberPageRounded; i = i + 1){
+                    if((currentPage + 1) === i){
+                        items.push(<Pagination.Item key={i} active onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                    }
+                    else{
+                        items.push(<Pagination.Item key={i} onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                    }
                 }
                 renderListUsers_1 = teacherAddress.slice(currentPage * 6, currentPage*6 + 3).map((teacher, index)=>
-                this.renderUser(teacher, index)
+                    this.renderUser(teacher, index)
                 )
                 renderListUsers_2 = teacherAddress.slice(currentPage * 6 + 3, currentPage * 6 + 6).map((teacher, index)=>
                     this.renderUser(teacher, index)
@@ -239,8 +250,13 @@ class Home extends React.Component{
                 if(temp > 0){
                     numberPageRounded = numberPageRounded + 1;
                 }
-                for (let i = 0; i < numberPageRounded; i = i + 1){
-                    items.push(<Pagination.Item key={i} onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                for (let i = 1; i <= numberPageRounded; i = i + 1){
+                    if((currentPage + 1) === i){
+                        items.push(<Pagination.Item key={i} active onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                    }
+                    else{
+                        items.push(<Pagination.Item key={i} onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                    }
                 }
                 renderListUsers_1 = teacherSalary.slice(currentPage * 6, currentPage*6 + 3).map((teacher, index)=>
                 this.renderUser(teacher, index)
@@ -259,8 +275,13 @@ class Home extends React.Component{
                 if(temp > 0){
                     numberPageRounded = numberPageRounded + 1;
                 }
-                for (let i = 0; i < numberPageRounded; i = i + 1){
-                    items.push(<Pagination.Item key={i} onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                for (let i = 1; i <= numberPageRounded; i = i + 1){
+                    if((currentPage + 1) === i){
+                        items.push(<Pagination.Item key={i} active onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                    }
+                    else{
+                        items.push(<Pagination.Item key={i} onClick={this.handleChangePage} >{i}</Pagination.Item>)
+                    }
                 }
                 renderListUsers_1 = teacherSkill.slice(currentPage * 6, currentPage*6 + 3).map((teacher, index)=>
                 this.renderUser(teacher, index)

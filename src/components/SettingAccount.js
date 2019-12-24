@@ -82,10 +82,13 @@ class SettingAccount extends React.Component{
     render(){
         
         const {password, passwordConfirm, isCheckTeacher, isCheckRenter, errors} = this.state;
-        // const {message} = this.props;
-        // if(message){
-        //     alert(message);
-        // }
+        const {messageFail, messageSuccess} = this.props;
+        if(messageFail){
+            alert(messageFail);
+        }
+        if(messageSuccess){
+            alert(messageSuccess)
+        }
         return (
             <div>
                 <Header />
@@ -139,7 +142,8 @@ class SettingAccount extends React.Component{
 }
 
 const mapStateToProps = (state) => ({
-    message: state.signUp.message
+    messageFail: state.signUp.messageFail,
+    messageSuccess: state.signUp.messageSuccess
 })
 
 const actionCreator = {

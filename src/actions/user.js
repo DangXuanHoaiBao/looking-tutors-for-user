@@ -37,28 +37,94 @@ function signUp(fullName, email, password, role){
                 }
                 else{
                     dispatch(isSuccess(message))
-                    history.push('/login');
+                    history.push('/activated-account', email);
                 }
             });
         })
     }
 }
 
+function sendCodeActivatedAccountByEmail(email){
+    function isFail(message){
+        return {
+            type: 'SEND_CODE_ACTIVATED_ACCOUNT_BY_EMAIL_FAIL',
+            message
+        }
+    }
+    function isSuccess(message){
+        return {
+            type: 'SEND_CODE_ACTIVATED_ACCOUNT_BY_EMAIL_SUCCESS',
+            message
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/send-code-activated-account-by-email`, {
+            method: 'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email
+            })
+        })
+        .then(res => {
+            res.text().then(text => {
+                const message = JSON.parse(text).message;
+                console.log(message);
+                if(res.status === 200){
+                    dispatch(isFail(message));
+                }
+                else{
+                    dispatch(isSuccess(message));
+                }
+            })
+        })
+    }
+}
+
+function activatedAccount(email, code){
+    function isFail(message){
+        return {
+            type: 'ACTIVATED_ACCOUNT_FAIL',
+            message
+        }
+    }
+    function isSuccess(message){
+        return {
+            type: 'ACTIVATED_ACCOUNT_SUCCESS',
+            message
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/activated-account`, {
+            method: 'POST',
+            header: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body:  JSON.stringify({
+                email,
+                code
+            })
+        })
+        .then(res => {
+            res.text().then(text => {
+                const message = JSON.parse(text);
+                if(res.status === 400){
+                    dispatch(isFail(message))
+                    history.push('/activated-account');
+                }
+                else{
+                    dispatch(isSuccess(message));
+                    history.push('/login');
+                }
+            })
+        })
+    }
+}
+
 function signUp_Login_With_Google_Facebook(fullName, email, password, userImg, typeAccount){
-    // function isSuccess(data, message){
-    //     return {
-    //         type: 'SUCCESS_WITH_GOOGLE_FACEBOOK',
-    //         message,
-    //         data
-    //     }
-    // }
-    // function isFail(data, message){
-    //     return {
-    //         type: 'FAIL_WITH_GOOGLE_FACEBOOK',
-    //         message,
-    //         data
-    //     }
-    // }
     return dispatch => {
         fetch(`${config.apiUrlLocal}/users/check-to-signup-or-login`,{
             method: 'POST',
@@ -132,6 +198,7 @@ function login(email, password){
                 }
                 else{
                     const data = JSON.parse(text);
+           
                     localStorage.setItem('data', JSON.stringify(data));
                     dispatch(isSuccess(data, message));
                     dispatch(getProfile());
@@ -332,12 +399,6 @@ function updateProfile(oldEmail, newUser){
 }
 
 function addSkill(userEmail, skill){
-    function isSuccess(message){
-        return {
-            type: 'ADD_SKILL_SUCCESS',
-            message
-        }
-    }
     return dispatch => {
         fetch(`${config.apiUrlLocal}/users/add-skill`, {
             method: 'POST',
@@ -351,11 +412,9 @@ function addSkill(userEmail, skill){
             })
         })
         .then(res => {
-            res.text().then(text => {
-                const message = JSON.parse(text);
-                dispatch(isSuccess(message));
+            if(res.status === 200){
                 history.push('/')
-            })
+            }
         })
     }
 }
@@ -382,6 +441,57 @@ function deleteSkill(userEmail, skillItem){
     }
 }
 
+function addNewCourse(newCourse, ownerCourse){
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/add-new-course`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'Application/json',
+                'Content-Type': 'Application/json'
+            },
+            body: JSON.stringify({
+                newCourse,
+                ownerCourse
+            })
+        })
+        .then(res => {
+            res.text().then(text => {
+                history.push('/')
+            })
+        })
+        .catch(error => console.log(error))
+    }
+}
+
+function getAllCourses(){
+
+    function isSuccess(allCourses){
+        return {
+            type: 'GET_ALL_COURSES_SUCCESS',
+            allCourses
+        }
+    }
+
+    return dispatch=> {
+        fetch(`${config.apiUrlLocal}/users/get-all-courses`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => {
+            res.text().then(text => {
+                const allCourses = JSON.parse(text);
+                if(res.status === 200){
+                    dispatch(isSuccess(allCourses));
+                }
+            })
+        })
+        .catch(error => console.log(error));
+    }
+}
+
 const userActions = {
     signUp,
     login,
@@ -394,7 +504,11 @@ const userActions = {
     getTeacherWithSkill,
     deleteSkill,
     addSkill,
-    signUp_Login_With_Google_Facebook
+    signUp_Login_With_Google_Facebook,
+    sendCodeActivatedAccountByEmail,
+    activatedAccount,
+    addNewCourse,
+    getAllCourses
 };
 
 export default userActions;
