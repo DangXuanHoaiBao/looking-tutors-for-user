@@ -1,28 +1,15 @@
-export const sendInforToFormSignUp = (state = {}, action) => {
-    switch(action.type){
-        case 'SEND_INFOR_TO_FORM_SIGN_UP': {
-            return {
-                ...state,
-                fullName: action.fullName,
-                email: action.email
-            }
-        }
-        default: return state;
-    }
-}
-
 export const signUp = (state = {}, action) => {
     switch(action.type){
         case 'SIGN_UP_SUCCESS': {
             return {
                 ...state,
-                message: action.message
+                messageFail: action.message
             }
         }
         case 'SIGN_UP_FAIL':{
             return {
                 ...state,
-                message: action.message
+                messageSuccess: action.message
             }
         }
         default: return state;
@@ -98,6 +85,18 @@ export const getTeacherAll = (state = {}, action ) => {
     }
 }
 
+export const getAllCourses = (state = {}, action ) => {
+    switch(action.type){
+        case 'GET_ALL_COURSES_SUCCESS': {
+            return {
+                ...state,
+                allCourses: action.allCourses
+            }
+        }
+        default: return state;
+    }
+}
+
 export const getTeacherWithAddress = (state = {}, action) => {
     switch(action.type){
         case 'GET_TEACHER_WITH_ADDRESS': {
@@ -110,15 +109,39 @@ export const getTeacherWithAddress = (state = {}, action) => {
     }
 }
 
-export const updateProfile = (state = {}, action) => {
+export const getTeacherWithSalary = (state = {}, action) => {
     switch(action.type){
-        case 'UPDATE_PROFILE_SUCCESS': {
+        case 'GET_TEACHER_WITH_SALARY': {
+            return {
+                ...state,
+                teacherSalary: action.teacherSalary
+            }
+        }
+        default: return state;
+    }
+}
+
+export const getTeacherWithSkill = (state = {}, action) => {
+    switch(action.type){
+        case 'GET_TEACHER_WITH_SKILL': {
+            return {
+                ...state,
+                teacherSkill: action.teacherSkill
+            }
+        }
+        default: return state;
+    }
+}
+
+export const sendCodeActivatedAccountByEmail = (state = {}, action) => {
+    switch(action.type){
+        case 'SEND_CODE_ACTIVATED_ACCOUNT_BY_EMAIL_FAIL': {
             return {
                 ...state,
                 message: action.message
             }
         }
-        case 'UPDATE_PROFILE_FAIL': {
+        case 'SEND_CODE_ACTIVATED_ACCOUNT_BY_EMAIL_SUCCESS': {
             return {
                 ...state,
                 message: action.message
@@ -128,9 +151,15 @@ export const updateProfile = (state = {}, action) => {
     }
 }
 
-export const addSkill = (state = {}, action) => {
+export const activatedAccount = (state = {}, action) => {
     switch(action.type){
-        case 'ADD_SKILL_SUCCESS': {
+        case 'ACTIVATED_ACCOUNT_FAIL': {
+            return {
+                ...state,
+                message: action.message
+            }
+        }
+        case 'ACTIVATED_ACCOUNT_SUCCESS': {
             return {
                 ...state,
                 message: action.message

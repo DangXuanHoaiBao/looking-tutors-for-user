@@ -1,8 +1,6 @@
 import React from 'react';
 import {Form, Button} from 'react-bootstrap';
-import {connect} from 'react-redux';
 import history from '../helpers/history';
-import userActions from '../actions/user';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -42,10 +40,12 @@ class SignUp extends React.Component{
     handleSubmit(e){
         e.preventDefault();
         const {fullName, email, errors} = this.state;
-        const {sendInforToFormSignUp} = this.props;
+        const userAccount = {
+            fullName,
+            email
+        }
         if(errors.fullName === '' && errors.email === '' && fullName.length !== 0 && email.length !== 0){
-            sendInforToFormSignUp(fullName, email);
-            history.push('/setting-account');
+            history.push('/setting-account', userAccount);
         }
     }
   
@@ -89,10 +89,4 @@ class SignUp extends React.Component{
     }
 }
 
-const mapDispatchToProps = dispatch => ({
-    sendInforToFormSignUp: (fullName, email) => { 
-        dispatch(userActions.sendInforToFormSignUp(fullName, email));
-    }
-})
-
-export default connect(null, mapDispatchToProps)(SignUp);
+export default SignUp;

@@ -8,7 +8,7 @@ import {storage} from '../../config/firebase-config';
 
 import '../../styles/App.css';
 
-class TeacherUpdate extends React.Component{
+class StudentUpdate extends React.Component{
 
     constructor(props){
         super(props);
@@ -17,10 +17,6 @@ class TeacherUpdate extends React.Component{
             email: '',
             address: '',
             phoneNumber: '',
-            salary: null,
-            discribe: '',
-            arraySkills: [],
-            skill: '',
             imgFile: null,
             userImg: '',
             currentUrlImg: null,
@@ -29,17 +25,11 @@ class TeacherUpdate extends React.Component{
                 email: '',
                 address: '',
                 phoneNumber: '',
-                discirbe: '',
-                salary: null
             },
-            errorsFormSkill: ''
         }
         this.handleChangeImage = this.handleChangeImage.bind(this);
         this.handleChangeFormIntroduce = this.handleChangeFormIntroduce.bind(this);
-        this.handleChangeFormAddSkill = this.handleChangeFormAddSkill.bind(this);
         this.handleSubmitFormIntroduce = this.handleSubmitFormIntroduce.bind(this);
-        this.handleSubmitFormAddSkill = this.handleSubmitFormAddSkill.bind(this);
-        this.handleClickButtonDeleteSkill = this.handleClickButtonDeleteSkill.bind(this);
     }
 
     componentWillMount(){
@@ -49,11 +39,8 @@ class TeacherUpdate extends React.Component{
             fullName: user.fullName,
             email: user.email,
             address: user.address,
-            phoneNumber: user.phoneNumber,
-            discribe: user.discribe,
-            arraySkills: user.skills,
-            userImg: user.userImg,
-            salary: user.salary
+            phoneNumber: user.phoneNumber, 
+            userImg: user.userImg
         })
     }
 
@@ -70,9 +57,7 @@ class TeacherUpdate extends React.Component{
             fullName: '',
             email: '',
             address: '',
-            phoneNumber: '',
-            discribe: '',
-            salary: null
+            phoneNumber: ''
         }
 
         if(name === 'fullName'){
@@ -87,46 +72,28 @@ class TeacherUpdate extends React.Component{
         if(name === 'phoneNumber'){
             errorsFormIntroduce.phoneNumber = (value.length < 1 || isNaN(value)) ? 'Số điện thoại không hợp lệ': '';
         }
-        if(name === 'discribe'){
-            errorsFormIntroduce.discribe = (value.length < 1 || value[0] === ' ') ? 'Giới thiệu không hợp lệ': '';
-        }
-        if(name === 'salary'){
-            errorsFormIntroduce.salary = (value.length < 1 || isNaN(value)) ? 'Lương theo giờ không hợp lệ': null;
-        }
+      
         this.setState({
             [name]: value,
             errorsFormIntroduce
         })
     }
 
-    handleChangeFormAddSkill(e){
-        const {name, value} = e.target;
-        let errorsFormSkill = '';
-        if(name === 'skill'){
-            errorsFormSkill = (value.length < 1 || value[0] === ' ') ? 'Kĩ năng không hợp lệ': '';
-        }
-        this.setState({
-            [name]: value,
-            errorsFormSkill
-        })
-    }
+    
 
     handleSubmitFormIntroduce(e){
         e.preventDefault();
-        const {fullName, email, address, phoneNumber, discribe, errorsFormIntroduce, imgFile, userImg, salary} = this.state;
+        const {fullName, email, address, phoneNumber, errorsFormIntroduce, imgFile, userImg} = this.state;
         const {updateProfile, data} = this.props;
         if(errorsFormIntroduce.fullName === '' && errorsFormIntroduce.email === '' && errorsFormIntroduce.address === '' && errorsFormIntroduce.phoneNumber === '' && 
-           errorsFormIntroduce.discribe === '' && errorsFormIntroduce.salary === null && salary !== '' && fullName !== '' && email !== '' && address !== '' && phoneNumber !== '' && 
-           discribe !== '' )
+           fullName !== '' && email !== '' && address !== '' && phoneNumber !== '')
         {
             const newUser = {
                 fullName: fullName,
                 email: email,
                 address: address,
                 phoneNumber: phoneNumber,
-                discribe: discribe,
-                userImg: userImg,
-                salary: salary
+                userImg: userImg  
             }
             const oldEmail = data.user.email;
             if(imgFile){
@@ -141,7 +108,6 @@ class TeacherUpdate extends React.Component{
                 () => {
                     storage.ref('image').child(imgFile.name).getDownloadURL().then(url => {
                         newUser.userImg = url;
-                        console.log(newUser.userImg);
                         updateProfile(oldEmail, newUser);
                     })
                 })
@@ -152,42 +118,14 @@ class TeacherUpdate extends React.Component{
         }
     }
 
-    handleSubmitFormAddSkill(e){
-        e.preventDefault();
-        const {addSkill, data} = this.props;
-        const {skill, errorFormSkill} = this.state;
-        if(!errorFormSkill && skill !== ''){
-            const userEmail = data.user.email;
-            addSkill(userEmail, skill);
-        }
-    }
-
-    handleClickButtonDeleteSkill(item){
-        const {deleteSkill, data} = this.props;
-        const userEmail = data.user.email;
-        deleteSkill(userEmail, item);
-    }
-
     render(){
 
-        const {fullName, email, address, phoneNumber, discribe, skill, arraySkills, errorsFormIntroduce, 
-               errorsFormSkill, currentUrlImg, salary, userImg} = this.state;
-    
-        let arrayTemp;
-        if(arraySkills){
-            arrayTemp = arraySkills.map(item => 
-                <div className="mb-1">
-                    <Button variant="secondary" size="sm" disabled={true}>{item}</Button>
-                    <Button className="ml-1" size="sm" variant="secondary" onClick={() => this.handleClickButtonDeleteSkill(item)}>
-                        <i className="fa fa-trash-alt" aria-hidden="true"></i>
-                    </Button>
-                </div>
-            )
-        }
-
+        const {fullName, email, address, phoneNumber, errorsFormIntroduce, 
+               currentUrlImg, userImg} = this.state;
 
         return(
             <div>
+                <Header />
                 <div className="container ">
                     <div className="row justify-content-center mt-4 mb-4" >
                         <div className='col-md-6 border border-dark shadow rounded'>
@@ -207,34 +145,24 @@ class TeacherUpdate extends React.Component{
                                         <Form.Group controlId="formBasicFullName">
                                             <Form.Label>Họ tên</Form.Label>
                                             <Form.Control type="text" name="fullName" value={fullName} onChange={this.handleChangeFormIntroduce}/>
-                                            {errorsFormIntroduce.fullName ? <Form.Text className="text-danger">{errorsFormIntroduce.fullName}</Form.Text> : null}
+                                            <Form.Text className="text-danger">{errorsFormIntroduce.fullName}</Form.Text>
                                         </Form.Group>
 
                                         <Form.Group controlId="formBasicEmail">
                                             <Form.Label>email</Form.Label>
                                             <Form.Control type="email" name="email" value={email}  onChange={this.handleChangeFormIntroduce}/>
-                                            {errorsFormIntroduce.email ? <Form.Text className="text-danger">{errorsFormIntroduce.email}</Form.Text> : null}
+                                            <Form.Text className="text-danger">{errorsFormIntroduce.email}</Form.Text>
                                         </Form.Group>
                                         <Form.Group controlId="formBasicAddress">
                                             <Form.Label>Địa chỉ</Form.Label>
                                             <Form.Control type="text" name="address" value={address}  onChange={this.handleChangeFormIntroduce}/>
                                             
-                                            {errorsFormIntroduce.address ? <Form.Text className="text-danger"> {errorsFormIntroduce.address}</Form.Text> : null}
+                                        <Form.Text className="text-danger"> {errorsFormIntroduce.address}</Form.Text>
                                         </Form.Group>
                                         <Form.Group controlId="formBasicPhoneNumber">
                                             <Form.Label>Số điện thoại</Form.Label>
                                             <Form.Control type="text" name="phoneNumber" value={phoneNumber}  onChange={this.handleChangeFormIntroduce}/>
-                                            {errorsFormIntroduce.phoneNumber ? <Form.Text className="text-danger">{errorsFormIntroduce.phoneNumber}</Form.Text> : null}
-                                        </Form.Group>
-                                        <Form.Group controlId="formBasicSalary">
-                                            <Form.Label>Lương theo giờ</Form.Label>
-                                            <Form.Control type="text" name="salary" value={salary}  onChange={this.handleChangeFormIntroduce}/>
-                                            {errorsFormIntroduce.salary ? <Form.Text className="text-danger">{errorsFormIntroduce.salary}</Form.Text> : null}
-                                        </Form.Group>
-                                        <Form.Group controlId="formBasicDiscribe">
-                                            <Form.Label>Giới thiệu</Form.Label>
-                                            <Form.Control className="" type="text" name="discribe" value={discribe}  onChange={this.handleChangeFormIntroduce}/>
-                                            {errorsFormIntroduce.discribe ? <Form.Text className="text-danger">{errorsFormIntroduce.discribe}</Form.Text> : null}
+                                            <Form.Text className="text-danger">{errorsFormIntroduce.phoneNumber}</Form.Text>
                                         </Form.Group>
                                         <Button className="w-100" variant="primary" type="submit">
                                             Cập Nhật
@@ -245,26 +173,8 @@ class TeacherUpdate extends React.Component{
                             </div>
                         </div>
                     </div>
-                    
-                    <div className="row justify-content-center mt-4 mb-4" >
-                        <div className='col-md-6 border border-dark shadow rounded'>
-                            <div className="row justify-content-center">
-                                <div className="col-md-10 mt-5 mb-5">
-                                <h3 className="mb-3">Cập Nhật Kĩ Năng</h3>
-                                <div >{arrayTemp} </div>
-                                <Form onSubmit={this.handleSubmitFormAddSkill}> 
-                                    <Form.Group controlId="formBasicSkills">
-                                        <Form.Label>kĩ năng</Form.Label>
-                                        <Form.Control type="text" name="skill" value={skill} onChange={this.handleChangeFormAddSkill}/>
-                                        {errorsFormSkill ? <Form.Text className="text-danger">{errorsFormSkill}</Form.Text> : null}
-                                    </Form.Group>
-                                    <Button className="w-100 mt-2" variant="primary" type="submit"> Thêm Kĩ Năng Mới </Button>
-                                </Form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
+                <Footer/>
             </div>
         );
     }
@@ -277,9 +187,7 @@ const mapStateToProps = state => ({
 
 const actionCreator = {
     updateProfile: userActions.updateProfile,
-    addSkill: userActions.addSkill,
-    deleteSkill: userActions.deleteSkill,
     getProfile: userActions.getProfile
 }
 
-export default connect(mapStateToProps, actionCreator)(TeacherUpdate);
+export default connect(mapStateToProps, actionCreator)(StudentUpdate);
