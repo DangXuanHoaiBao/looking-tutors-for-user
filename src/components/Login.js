@@ -138,52 +138,48 @@ class Login extends React.Component{
             errorMessageLogin = true;
         }
         return (
-            <div>
-                <Header/>
-                <div className="container ">
-                    {errorMessageLogin ? 
-                        <Alert variant='danger' className="mt-3">
-                            {message}
-                        </Alert>
-                        :
-                        null
-                    }
-                    <div className="row justify-content-center mt-4 mb-4" >
-                        <div className='col-md-6 border border-dark shadow rounded'>
-                            <div className="row justify-content-center">
-                                <div className="col-md-8 mt-5 mb-5">
-                                    <h3 className="mb-3">Đăng Nhập Tài Khoản</h3>
-                                    <Form onSubmit={this.handleSubmit}>
-                                        <Form.Group controlId="formBasicEmail">
-                                            <Form.Label>Email</Form.Label>
-                                            <Form.Control type="email" placeholder="Nhập email" name="email" value={email} onChange={this.handleChange}/>
-                                            {errors.email ? <Form.Text className="text-danger">{errors.email}</Form.Text> : null}
-                                        </Form.Group>
+            <div className="container form-margin-top">
+                {errorMessageLogin ? 
+                    <Alert variant='danger' className="mt-3">
+                        {message}
+                    </Alert>
+                    :
+                    null
+                }
+                <div className="row justify-content-center mt-4 mb-4" >
+                    <div className='col-md-6 border border-dark shadow rounded'>
+                        <div className="row justify-content-center">
+                            <div className="col-md-8 mt-5 mb-5">
+                                <h3 className="mb-3">Đăng Nhập Tài Khoản</h3>
+                                <Form onSubmit={this.handleSubmit}>
+                                    <Form.Group controlId="formBasicEmail">
+                                        <Form.Label>Email</Form.Label>
+                                        <Form.Control type="email" placeholder="Nhập email" name="email" value={email} onChange={this.handleChange}/>
+                                        {errors.email ? <Form.Text className="text-danger">{errors.email}</Form.Text> : null}
+                                    </Form.Group>
 
-                                        <Form.Group controlId="formBasicPassword">
-                                            <Form.Label>Mật Khẩu</Form.Label>
-                                            <Form.Control type="password" placeholder="Nhập mật khẩu" name="password" value={password} onChange={this.handleChange}/>
-                                            {errors.password ? <Form.Text className="text-danger">{errors.password}</Form.Text> : null}
-                                        </Form.Group>
-                                        <Form.Group controlId="formBasicCheckbox">
-                                            <Form.Check type="checkbox" label="Ghi nhớ tài khoản" />
-                                        </Form.Group>
-                                        <Button className="w-100" variant="primary" type="submit">
-                                            Đăng Nhập
-                                        </Button>
-                                        <Button className="loginBtn loginBtn--facebook w-100" onClick={this.handleLoginWithFacebook}>
-                                            Đăng nhập với Facebook
-                                        </Button>
-                                        <Button className="loginBtn loginBtn--google w-100" onClick={this.handleLoginWithGoogle}>
-                                            Đăng nhập với Google
-                                        </Button>
-                                    </Form>
-                                </div>
+                                    <Form.Group controlId="formBasicPassword">
+                                        <Form.Label>Mật Khẩu</Form.Label>
+                                        <Form.Control type="password" placeholder="Nhập mật khẩu" name="password" value={password} onChange={this.handleChange}/>
+                                        {errors.password ? <Form.Text className="text-danger">{errors.password}</Form.Text> : null}
+                                    </Form.Group>
+                                    <Form.Group controlId="formBasicCheckbox">
+                                        <Form.Check type="checkbox" label="Ghi nhớ tài khoản" />
+                                    </Form.Group>
+                                    <Button className="w-100" variant="primary" type="submit">
+                                        Đăng Nhập
+                                    </Button>
+                                    <Button className="loginBtn loginBtn--facebook w-100" onClick={this.handleLoginWithFacebook}>
+                                        Đăng nhập với Facebook
+                                    </Button>
+                                    <Button className="loginBtn loginBtn--google w-100" onClick={this.handleLoginWithGoogle}>
+                                        Đăng nhập với Google
+                                    </Button>
+                                </Form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <Footer/>
             </div>
         );
     }

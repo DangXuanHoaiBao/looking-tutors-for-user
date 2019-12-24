@@ -88,7 +88,7 @@ class SettingAccount extends React.Component{
         return (
             <div>
                 <Header />
-                <div className="container ">
+                <div className="container form-margin-top">
                     <div className="row justify-content-center mt-4 mb-4" >
                         <div className='col-md-6 border border-dark shadow rounded'>
                             <div className="row justify-content-center">

@@ -11,7 +11,7 @@ class Footer extends React.Component {
         const {data} = this.props;
 
         return (
-            <Card bg="dark">
+            <Card bg="dark" valign="bottom">
                 <div className="container mt-3 mb-3 text-white">
                     <div className="row mb-3">
                     <div className="col-md-2 border-right">

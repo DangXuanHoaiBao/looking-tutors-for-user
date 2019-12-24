@@ -166,3 +166,31 @@ a:hover {
 .loginBtn--google:focus {
   background: #E74B37 !important;
 }
+
+.custom-button{
+  margin: 0 0 0 1em;
+}
+
+.form-margin-top{
+  margin-top: 6.5em;
+}
+
+.widget-content .widget-numbers {
+  font-size: 1.6rem;
+  line-height: 1; 
+}
+.widget-content .widget-content-wrapper {
+  display: flex;
+  flex: 1;
+  position: relative;
+  align-items: center; 
+}
+.widget-content-left{
+  color: rgba(255, 255, 255, 0.8);
+}
+.header-btn-lg {
+  display: flex;
+  align-items: center;
+  position: relative;
+  color: rgba(255, 255, 255, 0.8); 
+ }

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import history from '../helpers/history';
 import config from '../config/api-config';
 
@@ -91,6 +92,7 @@ function signUp_Login_With_Google_Facebook(fullName, email, password, userImg, t
                     const data = JSON.parse(text);
                     localStorage.setItem('data', JSON.stringify(data));
                     dispatch(getProfile());
+                    console.log('Phân quyền: ' + data.user.role);
                     if(data.user.role === ''){
                         history.push('/set-role');
                     }
@@ -130,22 +132,19 @@ function login(email, password){
                 'password': password
             })
         })
+        .then(handleResponse)
         .then(res => {
-                res.text().then(text => {
-                    const messageJson = JSON.parse(text).message;
-                    const message = messageJson.message;
-                if(res.status === 400){
-                    dispatch(isFail(message));
-                    history.push('/login');
-                }
-                else{
-                    const data = JSON.parse(text);
-                    localStorage.setItem('data', JSON.stringify(data));
-                    dispatch(isSuccess(data, message));
-                    dispatch(getProfile());
-                    history.push('/');
-                }
-            })
+            const message = res.message;
+            if(res.status === 400){
+                dispatch(isFail(message));
+                history.push('/login');
+            }
+            else{
+                localStorage.setItem('data', JSON.stringify(res));
+                dispatch(isSuccess(res, message));
+                dispatch(getProfile());
+                history.push('/');
+            }
         })
         .catch(error => console.log(error));
     }
@@ -328,6 +327,23 @@ function deleteSkill(userEmail, skillItem){
         })
         .catch(error => console.log(error))
     }
+}
+function handleResponse(response) {
+    return response.text().then(text => {
+        const data = text && JSON.parse(text);
+        if (!response.ok) {
+            if (response.status === 401) {
+                // auto logout if 401 response returned from api
+                logout();
+                location.reload(true);
+            }
+
+            const error = (data && data.message) || response.statusText;
+            return Promise.reject(error);
+        }
+
+        return data;
+    });
 }
 
 const userActions = {

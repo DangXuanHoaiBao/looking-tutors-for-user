@@ -39,7 +39,6 @@ class TeacherHome extends React.Component{
 
         return(
             <div>
-                <Header/>
                 <div className="container">
                     <div className="row mt-4 mb-4">
                         <div className="col-md-9">
@@ -110,7 +109,6 @@ class TeacherHome extends React.Component{
                         </div>
                     </div> 
                 </div>
-                <Footer/>
             </div>
         );
     }
