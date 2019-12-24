@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import history from '../helpers/history';
 import config from '../config/api-config';
+import authHeader from '../helpers/auth-header';
 
 function signUp(fullName, email, password, role){
     function isSuccess(message){
@@ -396,6 +397,37 @@ function updateProfile(oldEmail, newUser){
     }
 }
 
+function updateInfo(newUser){
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/update-info`,{
+            method: 'PUT',
+            headers: {
+                ...authHeader(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify ({
+                newUser
+            })
+        })
+        .then(handleResponse)
+        .then(
+            message => {
+                const data = JSON.parse(localStorage.getItem('data'));
+                localStorage.removeItem('data');
+                const {fullName, address, phoneNumber, salary, discribe, skills, userImg} = newUser;
+                data.user = {...data.user, fullName, address, phoneNumber, salary, discribe, skills, userImg}
+                console.log(data.user);
+                localStorage.setItem('data', JSON.stringify(data));
+                dispatch(updateResOfNavigation(data));
+            },
+            error => {
+
+            })
+        .catch(errors => console.log(errors))
+    };
+    function updateResOfNavigation(data) { return { type: 'LOGIN_SUCCESS', data: data } }
+}
+
 function addSkill(userEmail, skill){
     return dispatch => {
         fetch(`${config.apiUrlLocal}/users/add-skill`, {
@@ -523,7 +555,8 @@ const userActions = {
     sendCodeActivatedAccountByEmail,
     activatedAccount,
     addNewCourse,
-    getAllCourses
+    getAllCourses,
+    updateInfo
 };
 
 export default userActions;

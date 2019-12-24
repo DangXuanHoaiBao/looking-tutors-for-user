@@ -25,7 +25,7 @@ class Header extends React.Component{
         if(data)
             console.log(data)
         return (
-            <Navbar fixed="top" collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar fixed="top" collapseOnSelect expand="lg" bg="dark" variant="dark" >
                 <Navbar.Brand> 
                     <Link to="/">  
                         <Image src={logo2} roundedCircle className="logo"></Image>
