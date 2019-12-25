@@ -1,22 +1,3 @@
-export const signUp = (state = {}, action) => {
-    switch(action.type){
-        case 'SIGN_UP_SUCCESS': {
-            return {
-                ...state,
-                messageFail: action.message
-            }
-        }
-        case 'SIGN_UP_FAIL':{
-            return {
-                ...state,
-                messageSuccess: action.message
-            }
-        }
-        default: return state;
-    }
-}
-
-
 const data = JSON.parse(localStorage.getItem('data'));
 const stateDefault = data ? {'data': data} : {};
 export const login = (state = stateDefault, action) => {
@@ -85,12 +66,12 @@ export const getTeacherAll = (state = {}, action ) => {
     }
 }
 
-export const getAllCourses = (state = {}, action ) => {
+export const getAllCoursesNoRequest = (state = {}, action ) => {
     switch(action.type){
-        case 'GET_ALL_COURSES_SUCCESS': {
+        case 'GET_ALL_COURSES_NO_REQUEST': {
             return {
                 ...state,
-                allCourses: action.allCourses
+                allCoursesNoRequest: action.allCoursesNoRequest
             }
         }
         default: return state;
@@ -133,36 +114,60 @@ export const getTeacherWithSkill = (state = {}, action) => {
     }
 }
 
-export const sendCodeActivatedAccountByEmail = (state = {}, action) => {
+export const teacherGetAllCoursesNoRequest = (state = {}, action) => {
     switch(action.type){
-        case 'SEND_CODE_ACTIVATED_ACCOUNT_BY_EMAIL_FAIL': {
+        case 'TEACHER_GET_ALL_COURSES_NO_REQUEST': {
             return {
                 ...state,
-                message: action.message
-            }
-        }
-        case 'SEND_CODE_ACTIVATED_ACCOUNT_BY_EMAIL_SUCCESS': {
-            return {
-                ...state,
-                message: action.message
+                allCoursesNoRequest: action.courses
             }
         }
         default: return state;
     }
 }
 
-export const activatedAccount = (state = {}, action) => {
+export const teacherGetAllCoursesRequestingTeach = (state = {}, action) => {
     switch(action.type){
-        case 'ACTIVATED_ACCOUNT_FAIL': {
+        case 'TEACHER_GET_ALL_COURSES_REQUESTING_TEACH': {
             return {
                 ...state,
-                message: action.message
+                allCoursesRequestingTeach: action.courses
             }
         }
-        case 'ACTIVATED_ACCOUNT_SUCCESS': {
+        default: return state;
+    }
+}
+
+export const teacherGetAllCoursesRequestingReceivedTeach = (state = {}, action) => {
+    switch(action.type){
+        case 'TEACHER_GET_ALL_COURSES_REQUESTING_RECEIVED_TEACH': {
             return {
                 ...state,
-                message: action.message
+                allCoursesRequestingReceivedTeach: action.courses
+            }
+        }
+        default: return state;
+    }
+}
+
+export const studentGetAllCoursesRequestingReceivedTeach = (state = {}, action) => {
+    switch(action.type){
+        case 'STUDENT_GET_ALL_COURSES_REQUESTING_RECEIVED_TEACH': {
+            return {
+                ...state,
+                allCoursesRequestingReceivedTeach: action.courses
+            }
+        }
+        default: return state;
+    }
+}
+
+export const studentGetAllCoursesNoReceived = (state = {}, action) => {
+    switch(action.type){
+        case 'STUDENT_GET_ALL_COURSES_NO_RECEIVED': {
+            return {
+                ...state,
+                allCoursesNoReceived: action.courses
             }
         }
         default: return state;

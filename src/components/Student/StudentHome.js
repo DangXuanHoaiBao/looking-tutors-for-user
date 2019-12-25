@@ -12,6 +12,7 @@ class StudentHome extends React.Component{
         this.handleClickUpdate = this.handleClickUpdate.bind(this);
         this.handleClickAddNewCourse = this.handleClickAddNewCourse.bind(this);
         this.handleClickSubmitCourse = this.handleClickSubmitCourse.bind(this);
+        this.handleClickDetail = this.handleClickDetail.bind(this);
     }
     componentWillMount(){
         const {getTeacherAll, getProfile} = this.props;
@@ -23,12 +24,20 @@ class StudentHome extends React.Component{
         history.push('/student-update');
     }
 
-    handleClickAddNewCourse(user){
-        history.push('/add-new-course', user);
+    handleClickAddNewCourse(ownerCourse){
+        history.push('/add-new-course', ownerCourse);
     }
 
-    handleClickSubmitCourse(){
-        history.push('/all-courses');
+    handleClickSubmitCourse(student, teacher){
+        const user = {
+            student,
+            teacher
+        }
+        history.push('/all-courses', user);
+    }
+
+    handleClickDetail(student){
+        history.push('/detail', student);
     }
 
     render(){
@@ -49,17 +58,15 @@ class StudentHome extends React.Component{
                                 </div>
                                 <div className='col-md-10'>
                                     <Card.Title>{teacher.fullName}</Card.Title>
-                                    <Card.Text>
-                                        <div>{teacher.address}</div>
-                                        <div>{teacher.salary}/h</div>
-                                    </Card.Text>
+                                    <div><i class="fas fa-map-marker-alt"></i> &nbsp; {teacher.address}</div>
+                                    <div><i class="fas fa-donate"></i> &nbsp; {teacher.salary}/h</div> 
                                 </div>
                             </div>
                             <div className="row mt-3">
                                 <div className="col-md-12">
-                                    <div>Mô tả: <span>{teacher.discribe}</span></div>
-                                    <div>Kĩ năng: <span>{teacher.skills.map(skill => <Button variant="secondary" size="sm" disabled>{skill}</Button>)}</span></div>
-                                    <div className="mt-2"><Button variant="primary" onClick={this.handleClickSubmitCourse}>Đăng kí học</Button></div>
+                                    <div className="font-weight-bold">Mô tả:</div> &emsp;&emsp;&emsp;<span>{teacher.discribe}</span>
+                                    <div className="font-weight-bold">Kĩ năng:</div> &emsp;&emsp;&emsp; <span>{teacher.skills.map(skill => <Button variant="secondary" size="sm" disabled>{skill}</Button>)}</span>
+                                    <div className="mt-2"><Button variant="primary" onClick={() => this.handleClickSubmitCourse(user, teacher)}>Đăng kí học</Button></div>
                                 </div>
                             </div>
                         </Card.Body>   
@@ -123,6 +130,11 @@ class StudentHome extends React.Component{
                                 <div>
                                     <div className="font-weight-bold">{user.fullName}<span><i className="fas fa-check-circle text-primary"></i></span></div>
                                     <div><i className="fas fa-map-marker-alt text-primary"></i> &nbsp; <span>{user.address}</span></div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-12 mt-1">
+                                    <Button size="sm" onClick={() => this.handleClickDetail(user)}><i class="fa fa-home" aria-hidden="true"></i> Cá Nhân</Button>
                                 </div>
                             </div>
                             

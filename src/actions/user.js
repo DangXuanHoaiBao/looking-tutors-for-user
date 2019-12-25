@@ -1,19 +1,8 @@
 import history from '../helpers/history';
 import config from '../config/api-config';
+import { Alert } from 'react-bootstrap';
 
 function signUp(fullName, email, password, role){
-    function isSuccess(message){
-        return {
-            type: 'SIGN_UP_SUCCESS',
-            message
-        }
-    }
-    function isFail(message){
-        return {
-            type: 'SIGN_UP_FAIL',
-            message
-        }
-    }
     return dispatch => {
         fetch(`${config.apiUrlLocal}/users/sign-up`,{
             method: 'POST',
@@ -29,14 +18,12 @@ function signUp(fullName, email, password, role){
             })
         })
         .then(res => {
-            res.text().then(text => {
-                const message = JSON.parse(text).message;
+            res.json().then(message => {
+                alert(message)
                 if(res.status === 400){
-                    dispatch(isFail(message));
                     history.push('/sign-up');
                 }
                 else{
-                    dispatch(isSuccess(message))
                     history.push('/activated-account', email);
                 }
             });
@@ -45,18 +32,6 @@ function signUp(fullName, email, password, role){
 }
 
 function sendCodeActivatedAccountByEmail(email){
-    function isFail(message){
-        return {
-            type: 'SEND_CODE_ACTIVATED_ACCOUNT_BY_EMAIL_FAIL',
-            message
-        }
-    }
-    function isSuccess(message){
-        return {
-            type: 'SEND_CODE_ACTIVATED_ACCOUNT_BY_EMAIL_SUCCESS',
-            message
-        }
-    }
     return dispatch => {
         fetch(`${config.apiUrlLocal}/users/send-code-activated-account-by-email`, {
             method: 'POST',
@@ -69,33 +44,14 @@ function sendCodeActivatedAccountByEmail(email){
             })
         })
         .then(res => {
-            res.text().then(text => {
-                const message = JSON.parse(text).message;
-                console.log(message);
-                if(res.status === 200){
-                    dispatch(isFail(message));
-                }
-                else{
-                    dispatch(isSuccess(message));
-                }
+            res.json().then(message => {
+                alert(message);
             })
         })
     }
 }
 
 function activatedAccount(email, code){
-    function isFail(message){
-        return {
-            type: 'ACTIVATED_ACCOUNT_FAIL',
-            message
-        }
-    }
-    function isSuccess(message){
-        return {
-            type: 'ACTIVATED_ACCOUNT_SUCCESS',
-            message
-        }
-    }
     return dispatch => {
         fetch(`${config.apiUrlLocal}/users/activated-account`, {
             method: 'POST',
@@ -109,14 +65,12 @@ function activatedAccount(email, code){
             })
         })
         .then(res => {
-            res.text().then(text => {
-                const message = JSON.parse(text);
+            res.json().then(message => {
+                alert(message);
                 if(res.status === 400){
-                    dispatch(isFail(message))
                     history.push('/activated-account');
                 }
                 else{
-                    dispatch(isSuccess(message));
                     history.push('/login');
                 }
             })
@@ -198,7 +152,6 @@ function login(email, password){
                 }
                 else{
                     const data = JSON.parse(text);
-           
                     localStorage.setItem('data', JSON.stringify(data));
                     dispatch(isSuccess(data, message));
                     dispatch(getProfile());
@@ -463,32 +416,201 @@ function addNewCourse(newCourse, ownerCourse){
     }
 }
 
-function getAllCourses(){
+function teacherGetAllCoursesNoRequest(teacher){
 
-    function isSuccess(allCourses){
+    function isSuccess(courses){
         return {
-            type: 'GET_ALL_COURSES_SUCCESS',
-            allCourses
+            type: 'TEACHER_GET_ALL_COURSES_NO_REQUEST',
+            courses
         }
     }
 
     return dispatch=> {
-        fetch(`${config.apiUrlLocal}/users/get-all-courses`, {
-            method: 'GET',
+        fetch(`${config.apiUrlLocal}/users/teacher-get-all-courses-no-request`, {
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({
+                teacher
+            })
         })
         .then(res => {
             res.text().then(text => {
-                const allCourses = JSON.parse(text);
+                const courses = JSON.parse(text);
                 if(res.status === 200){
-                    dispatch(isSuccess(allCourses));
+                    dispatch(isSuccess(courses));
                 }
             })
         })
         .catch(error => console.log(error));
+    }
+}
+
+function teacherRequestingReceivedTeachCourse(idCourse, requestor, requestedPersonTemp){
+    const requestedPerson = {
+        email:  requestedPersonTemp.emailOwner,
+        fullName: requestedPersonTemp.fullNameOwner,
+        phoneNumber: requestedPersonTemp.phoneNumberOwner
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/teacher-requesting-received-teach-course`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                idCourse,
+                requestor,
+                requestedPerson
+            })
+        })
+        .then(res => {
+            res.json().then(message=>  {
+                alert(message);
+            })
+        })
+    }
+}
+
+function teacherGetAllCoursesRequestingTeach(teacher){
+    function isGot(courses){
+        return {
+            type: 'TEACHER_GET_ALL_COURSES_REQUESTING_TEACH',
+            courses
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/teacher-get-all-courses-requesting-teach`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ teacher })
+        })
+        .then(res => {
+            res.json().then(courses => {
+                dispatch(isGot(courses))
+            })
+        })
+    }
+}
+
+function teacherGetAllCoursesRequestingReceivedTeach(teacher){
+    function isGot(courses){
+        return {
+            type: 'TEACHER_GET_ALL_COURSES_REQUESTING_RECEIVED_TEACH',
+            courses
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/teacher-get-all-courses-requesting-received-teach`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ teacher })
+        })
+        .then(res => {
+            res.json().then(courses => {
+                dispatch(isGot(courses))
+            })
+        })
+    }
+}
+
+function teacherCancelRequestingReceivedTeach(idCourse){
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/teacher-cancel-requesting-received-teach`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({idCourse})
+        })
+        .then(res => {
+            res.json().then(message => {
+                alert(message);
+                history.push('/');
+            })
+        })
+    }
+}
+
+function studentGetAllCoursesRequestingReceivedTeach(student){
+    function isGot(courses){
+        return {
+            type: 'STUDENT_GET_ALL_COURSES_REQUESTING_RECEIVED_TEACH',
+            courses
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/student-get-all-courses-requesting-received-teach`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({student})
+        })
+        .then(res => {
+            res.json().then(courses => {
+                dispatch(isGot(courses));
+            })
+        })
+    }
+}
+
+function studentGetAllCoursesNoReceived(requestor){
+    function isGot(courses){
+        return {
+            type: 'STUDENT_GET_ALL_COURSES_NO_RECEIVED',
+            courses
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/student-get-all-courses-no-received`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                requestor
+            })
+        })
+        .then(res => {
+            res.json().then(courses => {
+                dispatch(isGot(courses));
+            })
+        })
+    }
+}
+
+function studentRequestingTeachCourse(idCourse, student, teacher){
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/student-requesting-teach-course`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                idCourse,
+                student,
+                teacher
+            })
+        })
+        .then(res => {
+            res.json().then(message=>  {
+                alert(message);
+            })
+        })
     }
 }
 
@@ -508,7 +630,16 @@ const userActions = {
     sendCodeActivatedAccountByEmail,
     activatedAccount,
     addNewCourse,
-    getAllCourses
+
+    teacherGetAllCoursesNoRequest,
+    teacherRequestingReceivedTeachCourse,
+    teacherGetAllCoursesRequestingTeach,
+    teacherGetAllCoursesRequestingReceivedTeach,
+    teacherCancelRequestingReceivedTeach,
+
+    studentGetAllCoursesRequestingReceivedTeach,
+    studentGetAllCoursesNoReceived,
+    studentRequestingTeachCourse
 };
 
 export default userActions;

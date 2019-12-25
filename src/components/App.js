@@ -10,12 +10,13 @@ import SettingAccount from '../components/SettingAccount';
 import TeacherHome from './Teacher/TeacherHome';
 import TeacherDetail from './Teacher/TeacherDetail';
 import TeacherUpdate from './Teacher/TeacherUpdate';
-import ClassDetail from './ClassDetail';
 import StudentHome from './Student/StudentHome';
 import StudentUpdate from './Student/StudentUpdate';
+import StudentDetail from './Student/StudentDetail';
 import AddNewCourse from './Student/NewCourse';
 import ActivatedAccount from './ActivatedAccount';
 import AllCourses from './Student/AllCourses';
+import Contract from './Contract';
 
 import '../styles/App.css';
 
@@ -35,10 +36,10 @@ class App extends React.Component{
         <Switch>
           {!data ?
             <>
+              <Route exact path="/contract"> <Contract/></Route>
               <Route exact path="/login"> <Login/> </Route>
               <Route exact path="/setting-account"> <SettingAccount/> </Route>
               <Route axact path="/activated-account"> <ActivatedAccount/> </Route>
-              <Route exact path="/class-detail" > <ClassDetail/> </Route>
               <Route exact path="/detail" > <TeacherDetail/> </Route>
               <Route exact path="/sign-up"> <SignUp/> </Route>
               <Route exact path="/"> <Home /> </Route>
@@ -56,6 +57,7 @@ class App extends React.Component{
                   <Route exact path="/student-update"> <StudentUpdate/> </Route>
                   <Route exact path="/add-new-course"> <AddNewCourse/> </Route>
                   <Route exact path="/all-courses"> <AllCourses/> </Route>
+                  <Route exact path="/detail"> <StudentDetail/> </Route>
                   <Route exact path="/"> <StudentHome/> </Route>
                 </>
               }
