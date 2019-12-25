@@ -31,21 +31,25 @@ function signUp(fullName, email, password, role){
                 'role': role
             })
         })
-        .then(res => {
-            res.text().then(text => {
-                const message = JSON.parse(text).message;
-                if(res.status === 400){
-                    dispatch(isFail(message));
-                    history.push('/sign-up');
-                }
-                else{
-                    dispatch(isSuccess(message))
-                    history.push('/activated-account', email);
-                }
-            });
-        })
+        .then(handleResponse)
+        .then(
+            res => {
+                console.log(res);
+                dispatch(alertActions.success(res.message));
+                history.push('/login');
+    
+            }
+        ).catch(error => {
+            console.log(error);
+            dispatch(alertActions.error(error));
+            history.push('/sign-up');
+        });
     }
 }
+
+
+
+
 
 function sendCodeActivatedAccountByEmail(email){
     function isFail(message){
@@ -437,6 +441,36 @@ function updateInfo(newUser){
     function updateResOfNavigation(data) { return { type: 'LOGIN_SUCCESS', data: data } }
 }
 
+function updateRole(role){
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/update-role`,{
+            method: 'PUT',
+            headers: {
+                ...authHeader(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify ({
+                role
+            })
+        })
+        .then(handleResponse)
+        .then(
+            res => {
+                const data = JSON.parse(localStorage.getItem('data'));
+                localStorage.removeItem('data');
+                data.user = {...data.user, role}
+                localStorage.setItem('data', JSON.stringify(data));
+                dispatch(updateResOfNavigation(data));
+                dispatch(alertActions.success(res.message));
+            },
+            error => {
+                dispatch(alertActions.error(error));
+            })
+        .catch(errors => console.log(errors))
+    };
+    function updateResOfNavigation(data) { return { type: 'LOGIN_SUCCESS', data: data } }
+}
+
 function addSkill(userEmail, skill){
     return dispatch => {
         fetch(`${config.apiUrlLocal}/users/add-skill`, {
@@ -565,7 +599,8 @@ const userActions = {
     activatedAccount,
     addNewCourse,
     getAllCourses,
-    updateInfo
+    updateInfo,
+    updateRole
 };
 
 export default userActions;

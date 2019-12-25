@@ -1,9 +1,7 @@
 import React from 'react';
-import {Image, Carousel, Navbar, Nav, Form, Button, Card, Pagination} from 'react-bootstrap';
-import {Link} from 'react-router-dom';
+import {Image, Carousel, Form, Button, Card, Pagination} from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Header from './Header';
-import Footer from './Footer';
+import { ToastContainer } from 'react-toastify';
 import userActions from '../actions/user';
 import logo from '../images/logo.PNG';
 import banner_img_1 from '../images/banner-img-1.jpg';
@@ -369,7 +367,7 @@ class Home extends React.Component{
                             </div>
                             {paginationBasic}
                         </div>
-                        
+                        <ToastContainer />
                     </div>
                 </div>
             </div>

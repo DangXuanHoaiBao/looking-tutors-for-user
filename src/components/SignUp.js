@@ -1,8 +1,7 @@
 import React from 'react';
 import {Form, Button} from 'react-bootstrap';
 import history from '../helpers/history';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import { ToastContainer } from 'react-toastify';
 
 class SignUp extends React.Component{
     constructor(props){
@@ -56,7 +55,7 @@ class SignUp extends React.Component{
 
         return (
             <div>
-                <div className="container form-margin-top">
+                <div className="container form-margin-top margin-bottom-10em">
                     <div className="row justify-content-center mt-4 mb-4" >
                         <div className='col-md-6 border border-dark shadow rounded'>
                             <div className="row justify-content-center">
@@ -79,6 +78,7 @@ class SignUp extends React.Component{
                                             Đăng Ký
                                         </Button>
                                     </Form>
+                                    <ToastContainer />
                                 </div>
                             </div>
                         </div>

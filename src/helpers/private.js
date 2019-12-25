@@ -18,7 +18,6 @@ const PrivateStartPage = ({...rest }) => {
         );
     }
     if(getData.user.role === 'teacher'){
-        console.log('teacher home ');
         return(
             <Route {...rest} render={props => (
                 <TeacherHome />
