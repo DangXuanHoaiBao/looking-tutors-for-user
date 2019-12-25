@@ -18,8 +18,9 @@ class StudentDetail extends React.Component{
         studentGetAllCoursesRequestingReceivedTeach(student);
     }
     
-    handleClickAccept(course){
-        history.push('/create-contract', course)
+    handleClickAccept(student, course){
+        const arrayObject = {student, course}
+        history.push('/create-contract', arrayObject)
     }
 
     render(){
@@ -50,7 +51,7 @@ class StudentDetail extends React.Component{
                                         <div><i class="fas fa-map-marker-alt"></i> Địa chỉ: {course.address}</div>
                                         <div>Mô tả công việc: {course.discribe}</div>
                                     </div>
-                                    <Button className="mt-2" variant="primary" onClick={() => this.handleClickAccept(course)}>Chấp Nhận</Button>
+                                    <Button className="mt-2" variant="primary" onClick={() => this.handleClickAccept(student, course)}>Chấp Nhận</Button>
                                 </div>
                             </div>
                         </Card.Text>
@@ -62,7 +63,7 @@ class StudentDetail extends React.Component{
         return (
             <div>
                 <Header/>
-                    <div className="container">
+                    <div className="container margin-top-6em">
                     <div className="col-md-12 mt-3 mb-3 border shadow">
                             <div className="row mt-3">
                                 <div className="col-md-1">

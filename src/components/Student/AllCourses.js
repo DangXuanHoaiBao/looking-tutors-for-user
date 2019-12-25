@@ -13,8 +13,8 @@ class AllCourses extends React.Component{
     }
     componentWillMount(){
         const {studentGetAllCoursesNoReceived} = this.props;
-        const {requestor} = history.location.state;
-        studentGetAllCoursesNoReceived(requestor);
+        const {student} = history.location.state;
+        studentGetAllCoursesNoReceived(student);
     }
 
     handleClickSubmitCourse(idCourse){
@@ -64,8 +64,7 @@ class AllCourses extends React.Component{
 
         return(
             <div>
-                <Header/>
-                <div className="container">
+                <div className="container margin-top-6em">
                     <div className="row mt-4 mb-4">
                         <div className="col-md-12">
                             <Card className="shadow">
@@ -77,7 +76,6 @@ class AllCourses extends React.Component{
                         </div>
                     </div> 
                 </div>
-                <Footer/>
             </div>
         );
     }

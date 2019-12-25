@@ -1,15 +1,14 @@
 import React from 'react';
 import {Form, Image, Button, Card, ListGroup, ListGroupItem} from 'react-bootstrap';
-import Header from '../Header';
-import Footer from '../Footer';
 import userActions from '../../actions/user';
 import { connect } from 'react-redux';
 import history from '../../helpers/history';
+import {Media} from 'reactstrap';
+import ProfileImg from '../../images/profile.png'
 
 class StudentHome extends React.Component{
     constructor(props){
         super(props);
-        this.handleClickUpdate = this.handleClickUpdate.bind(this);
         this.handleClickAddNewCourse = this.handleClickAddNewCourse.bind(this);
         this.handleClickSubmitCourse = this.handleClickSubmitCourse.bind(this);
         this.handleClickDetail = this.handleClickDetail.bind(this);
@@ -18,10 +17,6 @@ class StudentHome extends React.Component{
         const {getTeacherAll, getProfile} = this.props;
         getTeacherAll();
         getProfile();
-    }
-
-    handleClickUpdate(){
-        history.push('/student-update');
     }
 
     handleClickAddNewCourse(ownerCourse){
@@ -54,7 +49,7 @@ class StudentHome extends React.Component{
                         <Card.Body>
                             <div className='row'>
                                 <div className='col-md-2'>
-                                    <Image src={teacher.userImg} fluid roundedCircle/>
+                                    <Media object width={50} height={50} src={teacher.userImg ? teacher.userImg : ProfileImg} className="rounded-circle"/>
                                 </div>
                                 <div className='col-md-10'>
                                     <Card.Title>{teacher.fullName}</Card.Title>
@@ -77,8 +72,7 @@ class StudentHome extends React.Component{
 
         return(
             <div>
-                <Header/>
-                <div className="container">
+                <div className="container margin-top-6em">
                     <div className="row mt-4 mb-4">
                         <div className="col-md-2">
                             <div className="mt-3 mb-3 font-weight-bold">Hiển Thị Theo:</div>
@@ -142,14 +136,12 @@ class StudentHome extends React.Component{
                                 <div className="col-md-12">
                                     <div><i className="fas fa-envelope mr-2"></i>{user.email}</div>
                                     <div><i className="fas fa-phone-square mr-2"></i>{user.phoneNumber}</div>
-                                    <Button className="mt-2" variant="primary" onClick={this.handleClickUpdate}>Cập nhật thông tin</Button>
                                     <div className="mt-3"><Button onClick={() => this.handleClickAddNewCourse(user)}> Thêm khóa học mới</Button></div>
                                 </div>
                             </div>
                         </div>
                     </div> 
                 </div>
-                <Footer/>
             </div>
         );
     }

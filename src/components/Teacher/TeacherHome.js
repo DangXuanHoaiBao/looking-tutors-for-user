@@ -2,8 +2,6 @@ import React from 'react';
 import {Form, Image, ProgressBar, Button, Card, ListGroup} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import history from '../../helpers/history';
-import Header from '../Header';
-import Footer from '../Footer';
 import userActions from '../../actions/user';
 
 class TeacherHome extends React.Component{
@@ -14,7 +12,6 @@ class TeacherHome extends React.Component{
             salary: null,
 
         }
-        this.handleClickUpdate = this.handleClickUpdate.bind(this);
         this.handleClickDetail = this.handleClickDetail.bind(this);
         this.handleClickRequestReceivedTeach = this.handleClickRequestReceivedTeach.bind(this);
     }
@@ -25,17 +22,12 @@ class TeacherHome extends React.Component{
         teacherGetAllCoursesNoRequest(data.user);
     }
 
-    handleClickUpdate(){
-        history.push('/update-profile');
-    }
-
     handleClickDetail(user){
         history.push('/detail', user)
     }
 
     handleClickRequestReceivedTeach(course, user){
         const {teacherRequestingReceivedTeachCourse} = this.props;
-        console.log(course)
         teacherRequestingReceivedTeachCourse(course._id, user, course);
         history.push('/detail', user);
     }
@@ -91,8 +83,7 @@ class TeacherHome extends React.Component{
 
         return(
             <div>
-                <Header/>
-                <div className="container">
+                <div className="container margin-top-6em">
                     <div className="row mt-4 mb-4">
                         <div className="col-md-2">
                             <div className="mt-3 mb-3 font-weight-bold">Hiển Thị Theo:</div>
@@ -162,14 +153,12 @@ class TeacherHome extends React.Component{
                                     <p/>
                                     <div className="font-weight-bold"><i className="fa fa-cogs text-primary mr-1" aria-hidden="true"></i> Kĩ năng</div>
                                     {listSkill}
-                                    <p/>
-                                    <Button className="mt-2" variant="primary" onClick={this.handleClickUpdate}>Cập nhật thông tin</Button>
+                                
                                 </div>
                             </div>
                         </div>
                     </div> 
                 </div>
-                <Footer/>
             </div>
         );
     }

@@ -1,6 +1,8 @@
+/* eslint-disable no-restricted-globals */
 import history from '../helpers/history';
 import config from '../config/api-config';
-import { Alert } from 'react-bootstrap';
+import authHeader from '../helpers/auth-header';
+import alertActions from '../actions/alert';
 
 function signUp(fullName, email, password, role){
     return dispatch => {
@@ -103,6 +105,7 @@ function signUp_Login_With_Google_Facebook(fullName, email, password, userImg, t
                     const data = JSON.parse(text);
                     localStorage.setItem('data', JSON.stringify(data));
                     dispatch(getProfile());
+                    console.log('Phân quyền: ' + data.user.role);
                     if(data.user.role === ''){
                         history.push('/set-role');
                     }
@@ -116,7 +119,12 @@ function signUp_Login_With_Google_Facebook(fullName, email, password, userImg, t
     }
 }
 
-function login(email, password){
+function login(email, password, rememberUsername){
+    function request() { 
+        return { 
+            type: 'LOGIN_REQUEST' 
+        } 
+    }
     function isSuccess(data, message){
         return {
             type: 'LOGIN_SUCCESS',
@@ -131,6 +139,13 @@ function login(email, password){
         }
     }
     return dispatch => {
+        dispatch(request());
+        if(rememberUsername === true){
+            localStorage.setItem('username', email);
+        }
+        else{
+            localStorage.removeItem('username');
+        }
         fetch(`${config.apiUrlLocal}/users/login`, {
             method: 'POST',
             headers: {
@@ -142,24 +157,18 @@ function login(email, password){
                 'password': password
             })
         })
+        .then(handleResponse)
         .then(res => {
-                res.text().then(text => {
-                    const messageJson = JSON.parse(text).message;
-                    const message = messageJson.message;
-                if(res.status === 400){
-                    dispatch(isFail(message));
-                    history.push('/login');
-                }
-                else{
-                    const data = JSON.parse(text);
-                    localStorage.setItem('data', JSON.stringify(data));
-                    dispatch(isSuccess(data, message));
-                    dispatch(getProfile());
-                    history.push('/');
-                }
-            })
+            localStorage.setItem('data', JSON.stringify(res));
+                dispatch(isSuccess(res, "Đăng nhập thành công"));
+                dispatch(getProfile());
+                history.push('/');
+
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+            dispatch(alertActions.error(error.message));
+            dispatch(isFail(error.message));
+        });
     }
 }
 
@@ -326,72 +335,53 @@ function getProfile(){
     }
 }
 
-function updateProfile(oldEmail, newUser){
+function updateInfo(newUser){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/update-profile`,{
-            method: 'POST',
+        fetch(`${config.apiUrlLocal}/users/update-info`,{
+            method: 'PUT',
             headers: {
-                'Accept': 'application/json',
+                ...authHeader(),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify ({
-                oldEmail,
                 newUser
             })
         })
-        .then(res => {
-            res.text().then(text => {
-                if(res.status === 200){
-                    dispatch(logout());
-                    history.push('/');
-                }
+        .then(handleResponse)
+        .then(
+            res => {
+                const data = JSON.parse(localStorage.getItem('data'));
+                localStorage.removeItem('data');
+                const {fullName, address, phoneNumber, salary, discribe, skills, userImg} = newUser;
+                data.user = {...data.user, fullName, address, phoneNumber, salary, discribe, skills, userImg}
+                localStorage.setItem('data', JSON.stringify(data));
+                dispatch(updateResOfNavigation(data));
+                dispatch(alertActions.success(res.message));
+            },
+            error => {
+                dispatch(alertActions.error(error));
             })
-        })
         .catch(errors => console.log(errors))
-    }
+    };
+    function updateResOfNavigation(data) { return { type: 'LOGIN_SUCCESS', data: data } }
 }
 
-function addSkill(userEmail, skill){
-    return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/add-skill`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'Application/json',
-                'Content-Type': 'Application/json'
-            },
-            body: JSON.stringify({
-                userEmail,
-                skill
-            })
-        })
-        .then(res => {
-            if(res.status === 200){
-                history.push('/')
+function handleResponse(response) {
+    return response.text().then(text => {
+        const data = text && JSON.parse(text);
+        if (!response.ok) {
+            if (response.status === 401) {
+                // auto logout if 401 response returned from api
+                logout();
+                location.reload(true);
             }
-        })
-    }
-}
 
-function deleteSkill(userEmail, skillItem){
-    return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/delete-skill`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'Application/json',
-                'Content-Type': 'Application/json'
-            },
-            body: JSON.stringify({
-                userEmail,
-                skillItem
-            })
-        })
-        .then(res => {
-            res.text().then(text => {
-                history.push('/')
-            })
-        })
-        .catch(error => console.log(error))
-    }
+            const error = (data && data.message) || response.statusText;
+            return Promise.reject(error);
+        }
+
+        return data;
+    });
 }
 
 function addNewCourse(newCourse, ownerCourse){
@@ -619,13 +609,10 @@ const userActions = {
     login,
     logout,
     getProfile,
-    updateProfile,
     getTeacherAll,
     getTeacherWithAddress,
     getTeacherWithSalary,
     getTeacherWithSkill,
-    deleteSkill,
-    addSkill,
     signUp_Login_With_Google_Facebook,
     sendCodeActivatedAccountByEmail,
     activatedAccount,
@@ -639,7 +626,10 @@ const userActions = {
 
     studentGetAllCoursesRequestingReceivedTeach,
     studentGetAllCoursesNoReceived,
-    studentRequestingTeachCourse
+    studentRequestingTeachCourse,
+
+    updateInfo
+
 };
 
 export default userActions;

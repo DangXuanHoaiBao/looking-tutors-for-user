@@ -300,20 +300,6 @@ class Home extends React.Component{
         );
         return (
             <div>
-                <Header/>
-                <Navbar bg="light">
-                    <div className="container justify-content-center">
-                    <Nav>
-                        <Link className="mr-5" to="/">Toán</Link>
-                        <Link className="mr-5" to="/">Lý</Link>
-                        <Link className="mr-5" to="/">Hóa</Link>
-                        <Link className="mr-5" to="/">Ngữ Văn</Link>
-                        <Link className="mr-5" to="/">Lịch Sử</Link>
-                        <Link className="mr-5" to="/">Địa Lý</Link>
-                        <Link className="" to="/">Anh Văn</Link>
-                    </Nav>
-                    </div>
-                </Navbar>
                 <Carousel>
                     <Carousel.Item>
                     <Image
@@ -386,8 +372,6 @@ class Home extends React.Component{
                         
                     </div>
                 </div>
-                
-                <Footer/>
             </div>
         );
     }

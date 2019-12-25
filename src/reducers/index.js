@@ -17,6 +17,8 @@ import {
 
     studentGetAllCoursesNoReceived
 } from './user';
+import alert from './alert';
+
 
 export default combineReducers({
     login,
@@ -26,10 +28,14 @@ export default combineReducers({
     getTeacherWithSalary,
     getTeacherWithSkill,
 
+
     teacherGetAllCoursesNoRequest,
     teacherGetAllCoursesRequestingTeach,
     teacherGetAllCoursesRequestingReceivedTeach,
 
     studentGetAllCoursesRequestingReceivedTeach,
-    studentGetAllCoursesNoReceived
+    studentGetAllCoursesNoReceived,
+
+    alert
+
 });

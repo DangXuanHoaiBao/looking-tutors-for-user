@@ -1,18 +1,80 @@
 import React from 'react';
-import {Form, InputGroup, Button} from 'react-bootstrap';
+import {Form, Button} from 'react-bootstrap';
+import history from '../helpers/history';
 
 class Contract extends React.Component {
 
+    constructor(props){
+        super(props);
+        this.state = {
+            day: '',
+            month: '',
+            year: '',
+            fullNameStudent: '',
+            emailStudent: '',
+            phoneNumberStudent: '',
+            fullNameTeacher: '',
+            emailTeacher: '',
+            phoneNumberTeacher: ''
+
+        }
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentWillMount(){
+        const {student, course} = history.location.state;
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const yyyy = today.getFullYear();
+        if(student.email === course.emailRequestor){
+            this.setState({
+                day: dd,
+                month: mm,
+                year: yyyy,
+                fullNameStudent: course.fullNameRequestor,
+                emailStudent: course.emailRequestor,
+                phoneNumberStudent: course.phoneNumberRequestor,
+                fullNameTeacher: course.fullNameRequestedPerson,
+                emailTeacher: course.emailRequestedPerson,
+                phoneNumberTeacher: course.phoneNumberRequestedPerson,
+                
+            })
+        }
+        else{
+            this.setState({
+                day: dd,
+                month: mm,
+                year: yyyy,
+                fullNameStudent: course.fullNameRequestedPerson,
+                emailStudent: course.emailRequestedPerson,
+                phoneNumberStudent: course.phoneNumberRequestedPerson,
+                fullNameTeacher: course.fullNameRequestor,
+                emailTeacher: course.emailRequestor,
+                phoneNumberTeacher: course.phoneNumberRequestor
+            })
+        }
+    }
+
+    handleChange(){
+        
+    }
+
     render(){
+        const {day, month, year, fullNameStudent, emailStudent, phoneNumberStudent, fullNameTeacher, emailTeacher, phoneNumberTeacher} = this.state;
         return(
-            <div className="container">
+            <div className="container margin-top-6em">
                 <div className="row justify-content-center mt-4 mb-4" >
                     <div className='col-md-10 border border-dark shadow rounded'>
                         <div className="row justify-content-center">
                             <div className="col-md-11 mt-5 mb-5">
                                 <div className="row justify-content-center"><div>Cộng Hòa Xã Hội Chủ Nghĩa Việt Nam</div></div>
                                 <div className="row justify-content-center"><div>Đọc lập - Tự do - Hạnh phúc</div></div>
-                                <div className="row d-flex flex-row-reverse"><div>Ngày...Tháng...Năm...</div></div>
+                                <div className="row  d-flex flex-row-reverse">
+                                    <div>Năm <input className="w-10" name="year" value={year} onChange={this.handleChange}/></div>
+                                    <div>Tháng <input className="w-10" name="month" value={month} onChange={this.handleChange}/></div> 
+                                    <div>Ngày <input className="w-10" name="day" value={day} onChange={this.handleChange}/> </div> 
+                                </div>
                                 <div className="row justify-content-center"><h3 className="mb-3">Hợp Đồng Công Việc</h3></div>
                                 <br/><br/>
                                 <Form onSubmit={this.handleSubmit}>
@@ -21,36 +83,36 @@ class Contract extends React.Component {
                                             <h5>Bên A (bên thuê):</h5>
                                             <Form.Group controlId="formBasicFullName">
                                                 <Form.Label>Họ tên</Form.Label>
-                                                <Form.Control type="text" name="fullName" onChange={this.handleChange}/>
+                                                <Form.Control type="text" name="fullNameStudent" value={fullNameStudent} onChange={this.handleChange}/>
                                             </Form.Group>
 
                                             <Form.Group controlId="formBasicEmail">
                                                 <Form.Label>Email</Form.Label>
-                                                <Form.Control type="email" name="email"  onChange={this.handleChange}/>
+                                                <Form.Control type="email" name="emailStudent" value={emailStudent}  onChange={this.handleChange}/>
                                                 <Form.Text className="text-danger"></Form.Text>
                                             </Form.Group>
 
                                             <Form.Group controlId="formBasicPhoneNumber">
                                                 <Form.Label>Số điện thoại</Form.Label>
-                                                <Form.Control type="text" name="phoneNumber" onChange={this.handleChange}/>
+                                                <Form.Control type="text" name="phoneNumberStudent" value={phoneNumberStudent} onChange={this.handleChange}/>
                                             </Form.Group>
                                         </div>
                                         <div className="col-md-6">
                                             <h5>Bên B (bên được thuê):</h5>
                                             <Form.Group controlId="formBasicFullName">
                                                 <Form.Label>Họ tên</Form.Label>
-                                                <Form.Control type="text" name="fullName" onChange={this.handleChange}/>
+                                                <Form.Control type="text" name="fullNameTeacher" value={fullNameTeacher} onChange={this.handleChange}/>
                                             </Form.Group>
 
                                             <Form.Group controlId="formBasicEmail">
                                                 <Form.Label>Email</Form.Label>
-                                                <Form.Control type="email" name="email"  onChange={this.handleChange}/>
+                                                <Form.Control type="email" name="emailTeacher" value={emailTeacher}  onChange={this.handleChange}/>
                                                 <Form.Text className="text-danger"></Form.Text>
                                             </Form.Group>
 
                                             <Form.Group controlId="formBasicPhoneNumber">
                                                 <Form.Label>Số điện thoại</Form.Label>
-                                                <Form.Control type="text" name="phoneNumber" onChange={this.handleChange}/>
+                                                <Form.Control type="text" name="phoneNumberTeacher" value={phoneNumberTeacher} onChange={this.handleChange}/>
                                             </Form.Group>
                                         </div>
                                     </div>

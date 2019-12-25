@@ -7,6 +7,7 @@ import {composeWithDevTools} from 'redux-devtools-extension';
 import './styles/index.css';
 import App from './components/App';
 import indexReducer from './reducers/index';
+import Alert from './components/Alert';
 
 
 const store = createStore(
@@ -16,6 +17,7 @@ const store = createStore(
 
 ReactDOM.render(
     <Provider store={store}>
+        <Alert />
         <App />
     </Provider>, 
     document.getElementById('root')

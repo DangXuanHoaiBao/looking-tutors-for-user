@@ -1,10 +1,10 @@
 import React from 'react';
 import {Form, Button, Alert} from 'react-bootstrap';
-import FacebookLogin from 'react-facebook-login'
+import{ToastContainer} from 'react-toastify';
+import { FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { faFan } from '@fortawesome/free-solid-svg-icons';
 import userActions from '../actions/user';
 import {connect} from 'react-redux';
-import Header from './Header';
-import Footer from './Footer';
 import firebase from 'firebase';
 
 class Login extends React.Component{
@@ -17,7 +17,9 @@ class Login extends React.Component{
             errors: {
                 email: '',
                 password: ''
-            }
+            },
+            isLogining: false,
+            rememberUsername: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,13 +33,21 @@ class Login extends React.Component{
           }).catch(function(error) {
             // An error happened.
           });
+          const username = localStorage.getItem('username');
+          if(username){
+              this.setState({email: username, rememberUsername: true});
+          }
     }
 
     handleChange(e){
-        const {name, value} = e.target;
+        const {name } = e.target;
         let errors = {
             email: '',
             password: ''
+        }
+        let {value} = e.target;
+        if(name === 'rememberUsername'){
+            value = e.target.checked
         }
         if(name === 'email'){
             errors.email = (value.length < 1 || value[0] === ' ') ? 'email không hợp lệ': '';
@@ -53,10 +63,11 @@ class Login extends React.Component{
 
     handleSubmit(e){
         e.preventDefault();
-        const {email, password, errors} = this.state;
+        this.setState({isLogining: true});
+        const {email, password, errors, rememberUsername} = this.state;
         const {login} = this.props;
         if(errors.email === '' && errors.password === '' && email.length > 0 && password.length > 0){
-            login(email, password);
+            login(email, password, rememberUsername);
         }
     }
 
@@ -128,68 +139,63 @@ class Login extends React.Component{
 
     render(){
 
-        const {errors, email, password} = this.state;
-        const {message} = this.props;
+        const {errors, email, password, rememberUsername} = this.state;
+        const {message, isLogining} = this.props;
         let errorMessageLogin = false;
-        if(message === 'Đăng nhập thành công'){
-            alert(message);
-        }
-        if(message === 'Email hoặc mật khẩu không đúng'){
-            errorMessageLogin = true;
-        }
         return (
-            <div>
-                <Header/>
-                <div className="container ">
-                    {errorMessageLogin ? 
-                        <Alert variant='danger' className="mt-3">
-                            {message}
-                        </Alert>
-                        :
-                        null
-                    }
-                    <div className="row justify-content-center mt-4 mb-4" >
-                        <div className='col-md-6 border border-dark shadow rounded'>
-                            <div className="row justify-content-center">
-                                <div className="col-md-8 mt-5 mb-5">
-                                    <h3 className="mb-3">Đăng Nhập Tài Khoản</h3>
-                                    <Form onSubmit={this.handleSubmit}>
-                                        <Form.Group controlId="formBasicEmail">
-                                            <Form.Label>Email</Form.Label>
-                                            <Form.Control type="email" placeholder="Nhập email" name="email" value={email} onChange={this.handleChange}/>
-                                            {errors.email ? <Form.Text className="text-danger">{errors.email}</Form.Text> : null}
-                                        </Form.Group>
+            <div className="container form-margin-top">
+                {errorMessageLogin ? 
+                    <Alert variant='danger' className="mt-3">
+                        {message}
+                    </Alert>
+                    :
+                    null
+                }
+                <div className="row justify-content-center mt-4 mb-4" >
+                    <div className='col-md-6 border border-dark shadow rounded'>
+                        <div className="row justify-content-center">
+                            <div className="col-md-8 mt-5 mb-5">
+                                <h3 className="mb-3">Đăng Nhập Tài Khoản</h3>
+                                <Form onSubmit={this.handleSubmit}>
+                                    <Form.Group controlId="formBasicEmail">
+                                        <Form.Label>Email</Form.Label>
+                                        <Form.Control type="email" placeholder="Nhập email" name="email" value={email} onChange={this.handleChange} required/>
+                                        {errors.email ? <Form.Text className="text-danger">{errors.email}</Form.Text> : null}
+                                    </Form.Group>
 
-                                        <Form.Group controlId="formBasicPassword">
-                                            <Form.Label>Mật Khẩu</Form.Label>
-                                            <Form.Control type="password" placeholder="Nhập mật khẩu" name="password" value={password} onChange={this.handleChange}/>
-                                            {errors.password ? <Form.Text className="text-danger">{errors.password}</Form.Text> : null}
-                                        </Form.Group>
-                                        <Form.Group controlId="formBasicCheckbox">
-                                            <Form.Check type="checkbox" label="Ghi nhớ tài khoản" />
-                                        </Form.Group>
-                                        <Button className="w-100" variant="primary" type="submit">
-                                            Đăng Nhập
-                                        </Button>
-                                        <Button className="loginBtn loginBtn--facebook w-100" onClick={this.handleLoginWithFacebook}>
-                                            Đăng nhập với Facebook
-                                        </Button>
-                                        <Button className="loginBtn loginBtn--google w-100" onClick={this.handleLoginWithGoogle}>
-                                            Đăng nhập với Google
-                                        </Button>
-                                    </Form>
-                                </div>
+                                    <Form.Group controlId="formBasicPassword">
+                                        <Form.Label>Mật Khẩu</Form.Label>
+                                        <Form.Control type="password" placeholder="Nhập mật khẩu" name="password" value={password} onChange={this.handleChange} required/>
+                                        {errors.password ? <Form.Text className="text-danger">{errors.password}</Form.Text> : null}
+                                    </Form.Group>
+                                    <Form.Group controlId="formBasicCheckbox">
+                                        <Form.Check type="checkbox" name="rememberUsername"  label="Nhớ tài khoản" checked={rememberUsername} onChange={this.handleChange}/>
+                                    </Form.Group>
+                                    <Button className="w-100" variant="primary" type="submit">
+                                        Đăng Nhập
+                                        {isLogining === true &&
+                                            <FontAwesomeIcon className="ml-2 opacity-8" icon={faFan} spin/>
+                                        }
+                                    </Button>
+                                    <Button className="loginBtn loginBtn--facebook w-100" onClick={this.handleLoginWithFacebook}>
+                                        Đăng nhập với Facebook
+                                    </Button>
+                                    <Button className="loginBtn loginBtn--google w-100" onClick={this.handleLoginWithGoogle}>
+                                        Đăng nhập với Google
+                                    </Button>
+                                </Form>
+                                <ToastContainer />
                             </div>
                         </div>
                     </div>
                 </div>
-                <Footer/>
             </div>
         );
     }
 }
 const mapStateToProps = state => ({
-    message: state.login.message
+    message: state.login.message,
+    isLogining: state.login.isLogining
 });
 const actionCreator = {
     login: userActions.login,
