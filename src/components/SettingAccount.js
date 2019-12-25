@@ -139,13 +139,9 @@ class SettingAccount extends React.Component{
     }
 }
 
-const mapStateToProps = (state) => ({
-    messageFail: state.signUp.messageFail,
-    messageSuccess: state.signUp.messageSuccess
-})
 
 const actionCreator = {
     signUp: userActions.signUp
 }
 
-export default connect(mapStateToProps, actionCreator)(SettingAccount);
+export default connect(null, actionCreator)(SettingAccount);

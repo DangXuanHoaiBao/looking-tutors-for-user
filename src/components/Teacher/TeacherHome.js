@@ -1,10 +1,7 @@
 import React from 'react';
-import {Form, Image, ProgressBar, Button, Card, ListGroup, ListGroupItem} from 'react-bootstrap';
-import {Link} from 'react-router-dom';
+import {Form, Image, ProgressBar, Button, Card, ListGroup} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import history from '../../helpers/history';
-import Header from '../Header';
-import Footer from '../Footer';
 import userActions from '../../actions/user';
 
 class TeacherHome extends React.Component{
@@ -15,28 +12,30 @@ class TeacherHome extends React.Component{
             salary: null,
 
         }
-        this.handleClickUpdate = this.handleClickUpdate.bind(this);
         this.handleClickDetail = this.handleClickDetail.bind(this);
+        this.handleClickRequestReceivedTeach = this.handleClickRequestReceivedTeach.bind(this);
     }
 
     componentWillMount(){
-        const {getProfile, getAllCourses} = this.props;
+        const {getProfile, data, teacherGetAllCoursesNoRequest} = this.props;
         getProfile();
-        getAllCourses();
-    }
-
-    handleClickUpdate(){
-        history.push('/update-profile');
+        teacherGetAllCoursesNoRequest(data.user);
     }
 
     handleClickDetail(user){
         history.push('/detail', user)
     }
 
+    handleClickRequestReceivedTeach(course, user){
+        const {teacherRequestingReceivedTeachCourse} = this.props;
+        teacherRequestingReceivedTeachCourse(course._id, user, course);
+        history.push('/detail', user);
+    }
+
     render(){
         const now = 60;
         const {address, salary} = this.state;
-        const {userProfile, allCourses} = this.props;
+        const {userProfile, allCoursesNoRequest} = this.props;
         const user = Object.assign({}, userProfile);
 
         let listSkill;
@@ -48,33 +47,43 @@ class TeacherHome extends React.Component{
             )
         }
 
-        let listCourses
-        if(allCourses){
-            listCourses = allCourses.map((course, index)=> 
-                <ListGroup className="list-group-flush">
-                    <ListGroupItem>
-                        <Card.Body>
-                            <Card.Title>{course.nameCourse}</Card.Title>
-                            <Card.Text>
-                                <div>Tên người đăng việc: {course.fullName}</div>
-                                <div>Email: {course.email}</div>
-                                <div>Số điện thoại: {course.phoneNumber}</div>
-                                <div>Địa chỉ: {course.address}</div>
-                                <div>Giá/h: {course.salary}/h</div>
-                                <div>Thời gian trong tuần: {course.time}</div>
-                            </Card.Text>
-        
-                            <div>Mô tả: <span>{course.discribe}</span></div>
-                            <div className="mt-2"><Button variant="primary" onClick={this.handleClickSubmitCourse}>Đăng kí dạy</Button></div>
-                        </Card.Body>   
-                    </ListGroupItem>
-                </ListGroup>
+        let listCoursesNoRequest
+        if(allCoursesNoRequest){
+            listCoursesNoRequest = allCoursesNoRequest.map((course, index)=> 
+                <ListGroup.Item>
+                    <Card.Body>
+                        <Card.Title>Tên khóa học: {course.nameCourse}</Card.Title>
+                        <Card.Text>
+                            <div className="row">
+                                <div className="col-md-2 mt-3">
+                                <Image src={course.imageOwner} fluid roundedCircle/>
+                                </div>
+                                <div className="col-md-10 mt-2">  
+                                    <h5 className="mb-1">Thông tin người đăng việc</h5>    
+                                    <div className="ml-3">
+                                        <div><i class="fas fa-user"></i> Họ tên: <span>{course.fullNameOwner}</span></div>
+                                        <div><i class="fas fa-envelope-square"></i> Email: <span>{course.emailOwner}</span></div>
+                                        <div><i class="fas fa-phone-square-alt"></i> Số điện thoại: <span>{course.phoneNumberOwner}</span></div>
+                                    </div>
+                                    <h5 className="mt-3">Thông tin công việc</h5>
+                                    <div className="ml-3">
+                                        <div><i class="fas fa-donate"></i> Giá: {course.salary}/h</div>
+                                        <div><i class="far fa-clock"></i> Thời gian dạy: {course.time}</div>
+                                        <div><i class="fas fa-map-marker-alt"></i> Địa chỉ: {course.address}</div>
+                                        <div>Mô tả công việc: {course.discribe}</div>
+                                    </div>
+                                    <Button className="mt-2" variant="primary" onClick={() => this.handleClickRequestReceivedTeach(course, user)}>Nhận dạy</Button>
+                                </div>
+                            </div>
+                        </Card.Text>
+                    </Card.Body>
+                </ListGroup.Item>
             )
         } 
 
         return(
             <div>
-                <div className="container">
+                <div className="container margin-top-6em">
                     <div className="row mt-4 mb-4">
                         <div className="col-md-2">
                             <div className="mt-3 mb-3 font-weight-bold">Hiển Thị Theo:</div>
@@ -97,18 +106,15 @@ class TeacherHome extends React.Component{
                      
                             </Form.Group>
                         </div>
-                        <div className="col-md-7 mt-5">
+                        <div className="col-md-7">
                             <Card className="shadow">
-                                <Card.Img variant="top" src=''/>
-                                <Card.Body>
-                                    <Card.Title>Danh Sách Khóa Học</Card.Title>
-                                    <Card.Text>
-                                        {listCourses}
-                                    </Card.Text>
-                                </Card.Body>
+                                <Card.Header className="font-weight-bold">Danh sách khóa học hiện có</Card.Header>
+                                <ListGroup variant="flush">
+                                    {listCoursesNoRequest}
+                                </ListGroup>
                             </Card>
                         </div>
-                    
+
                         <div className="col-md-3">
                             <div className="row">
                                 <div className="col-md-4">
@@ -147,8 +153,7 @@ class TeacherHome extends React.Component{
                                     <p/>
                                     <div className="font-weight-bold"><i className="fa fa-cogs text-primary mr-1" aria-hidden="true"></i> Kĩ năng</div>
                                     {listSkill}
-                                    <p/>
-                                    <Button className="mt-2" variant="primary" onClick={this.handleClickUpdate}>Cập nhật thông tin</Button>
+                                
                                 </div>
                             </div>
                         </div>
@@ -160,11 +165,13 @@ class TeacherHome extends React.Component{
 }
 const mapStateToProps = state => ({
     userProfile: state.getProfile.userProfile,
-    allCourses: state.getAllCourses.allCourses
+    data: state.login.data,
+    allCoursesNoRequest: state.teacherGetAllCoursesNoRequest.allCoursesNoRequest
 })
 const actionCreator = {
     getProfile: userActions.getProfile,
-    getAllCourses: userActions.getAllCourses
+    teacherGetAllCoursesNoRequest: userActions.teacherGetAllCoursesNoRequest,
+    teacherRequestingReceivedTeachCourse: userActions.teacherRequestingReceivedTeachCourse
 }
 
 export default connect(mapStateToProps, actionCreator)(TeacherHome);

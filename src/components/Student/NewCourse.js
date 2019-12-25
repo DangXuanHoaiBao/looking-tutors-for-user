@@ -80,7 +80,7 @@ class NewCourse extends React.Component{
         return(
             <div>
                 <Header />
-                <div className="container ">
+                <div className="container margin-top-6em">
                     <div className="row justify-content-center mt-4 mb-4" >
                         <div className='col-md-6 border border-dark shadow rounded'>
                             <div className="row justify-content-center">

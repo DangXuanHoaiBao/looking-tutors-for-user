@@ -54,7 +54,6 @@ class UserBox extends React.Component {
 
     render() {
         const { data } = this.props;
-        console.log(data.user)
         return (
             <Fragment>
                 <div className="header-btn-lg pr-0">
@@ -74,11 +73,14 @@ class UserBox extends React.Component {
                                                 <FontAwesomeIcon className="mr-2 ml-2" icon={faInfo}/>
                                             </DropdownItem>
                                         </NavLink>
+                                        {data.user.typeAccount === 'Normal' &&
                                         <NavLink href="/change-password">
                                             <DropdownItem eventKey="2">Đổi mật khẩu
                                                 <FontAwesomeIcon className="mr-2 ml-2" icon={faExchangeAlt}/>
                                             </DropdownItem>
                                         </NavLink>
+                                        }
+                                      
                                         <NavLink>
                                             <DropdownItem onClick={this.handleLogout} eventKey="3">Đăng xuất
                                                 <FontAwesomeIcon className="mr-2 ml-2" icon={faSignOutAlt}/>

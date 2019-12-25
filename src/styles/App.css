@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+.w-10{
+  width: 3em !important;
+}
+
 /* Màng hình laptop hoặc desktop lớn*/
 @media (min-width: 1200px) {
   .logo{
@@ -668,6 +672,9 @@ a:hover {
   margin-top: 6em;
 }
 
+.margin-top-7em{
+  margin-top: 7em;
+}
 .margin-bottom-10em{
   margin-bottom: 10em;
 }

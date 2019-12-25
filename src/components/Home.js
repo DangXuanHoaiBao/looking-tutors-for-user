@@ -144,7 +144,7 @@ class Home extends React.Component{
     }
 
     handleClick(teacher){
-        history.push("/detail", teacher);
+        history.push("/detail-teacher", teacher);
     }
 
     renderUser(teacher, index){

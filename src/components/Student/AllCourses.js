@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Image, Button, Card, ListGroup, ListGroupItem} from 'react-bootstrap';
+import {Button, Card, ListGroup, Image} from 'react-bootstrap';
 import Header from '../Header';
 import Footer from '../Footer';
 import userActions from '../../actions/user';
@@ -9,72 +9,85 @@ import history from '../../helpers/history';
 class AllCourses extends React.Component{
     constructor(props){
         super(props);
-       
+        this.handleClickSubmitCourse = this.handleClickSubmitCourse.bind(this);
     }
     componentWillMount(){
-        const {getAllCourses} = this.props;
-        getAllCourses();
+        const {studentGetAllCoursesNoReceived} = this.props;
+        const {student} = history.location.state;
+        studentGetAllCoursesNoReceived(student);
     }
 
+    handleClickSubmitCourse(idCourse){
+        const {student, teacher} = history.location.state;
+        const {studentRequestingTeachCourse} = this.props;
+        studentRequestingTeachCourse(idCourse, student, teacher);
+        history.push('/');
+    }
 
     render(){
 
-        const {allCourses} = this.props;
+        const {allCoursesNoReceived} = this.props;
         
         let listCourses;
-        if(allCourses){
-            listCourses = allCourses.map((course, index)=> 
-                <ListGroup className="list-group-flush">
-                    <ListGroupItem>
-                        <Card.Body>
-                            <Card.Title>{course.nameCourse}</Card.Title>
-                            <Card.Text>
-                                <div>Tên: {course.fullName}</div>
-                                <div>Email: {course.email}</div>
-                                <div>Số điện thoại: {course.phoneNumber}</div>
-                                <div>Địa chỉ: {course.address}</div>
-                                <div>Giá: {course.salary}/h</div>
-                                <div>Thời gian trong tuần: {course.time}</div>
-                            </Card.Text>
-
-                            <div>Mô tả: <span>{course.discribe}</span></div>
-                            <div className="mt-2"><Button variant="primary" onClick={this.handleClickSubmitCourse}>Đăng kí học</Button></div>
-                        </Card.Body>   
-                    </ListGroupItem>
-                </ListGroup>
+        if(allCoursesNoReceived){
+            listCourses = allCoursesNoReceived.map((course, index)=> 
+                <ListGroup.Item>
+                    <Card.Body>
+                        <Card.Title>Tên khóa học: {course.nameCourse}</Card.Title>
+                        <Card.Text>
+                            <div className="row">
+                                <div className="col-md-1 mt-3">
+                                <Image src={course.imageOwner} fluid roundedCircle/>
+                                </div>
+                                <div className="mt-2">  
+                                    <h5 className="mb-1">Thông tin người đăng việc</h5>    
+                                    <div className="ml-3">
+                                        <div><i class="fas fa-user"></i> Họ tên: <span>{course.fullNameOwner}</span></div>
+                                        <div><i class="fas fa-envelope-square"></i> Email: <span>{course.emailOwner}</span></div>
+                                        <div><i class="fas fa-phone-square-alt"></i> Số điện thoại: <span>{course.phoneNumberOwner}</span></div>
+                                    </div>
+                                    <h5 className="mt-3">Thông tin khóa học</h5>
+                                    <div className="ml-3">
+                                        <div><i class="fas fa-donate"></i> Giá: {course.salary}/h</div>
+                                        <div><i class="far fa-clock"></i> Thời gian dạy: {course.time}</div>
+                                        <div><i class="fas fa-map-marker-alt"></i> Địa chỉ: {course.address}</div>
+                                        <div>Mô tả công việc: {course.discribe}</div>
+                                    </div>
+                                    <Button className="mt-2" variant="primary" onClick={() => this.handleClickSubmitCourse(course._id)}>Yêu cầu dạy</Button>
+                                </div>
+                            </div>
+                        </Card.Text>
+                    </Card.Body>
+                </ListGroup.Item>
             )
         }
 
         return(
             <div>
-                <Header/>
-                <div className="container">
+                <div className="container margin-top-6em">
                     <div className="row mt-4 mb-4">
                         <div className="col-md-12">
                             <Card className="shadow">
-                                <Card.Img variant="top" src=''/>
-                                <Card.Body>
-                                    <Card.Title>Danh Sách Khóa Học</Card.Title>
-                                    <Card.Text>
-                                        {listCourses}
-                                    </Card.Text>
-                                </Card.Body>
+                                <Card.Header className="font-weight-bold">Danh sách khóa học hiện có</Card.Header>
+                                <ListGroup variant="flush">
+                                    {listCourses}
+                                </ListGroup>
                             </Card>
                         </div>
                     </div> 
                 </div>
-                <Footer/>
             </div>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    allCourses: state.getAllCourses.allCourses,
+    allCoursesNoReceived: state.studentGetAllCoursesNoReceived.allCoursesNoReceived,
 })
 
 const actionCreator = {
-    getAllCourses: userActions.getAllCourses
+    studentGetAllCoursesNoReceived: userActions.studentGetAllCoursesNoReceived,
+    studentRequestingTeachCourse: userActions.studentRequestingTeachCourse
 }
 
 export default connect(mapStateToProps, actionCreator)(AllCourses);

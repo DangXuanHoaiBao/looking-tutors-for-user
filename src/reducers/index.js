@@ -1,18 +1,41 @@
 import {combineReducers} from 'redux';
-import {signUp, login, getProfile, getTeacherAll, getTeacherWithAddress, getTeacherWithSalary, getTeacherWithSkill,
-        sendCodeActivatedAccountByEmail, activatedAccount, getAllCourses} from './user';
+import {
+    login, 
+    getProfile, 
+    getTeacherAll, 
+    getTeacherWithAddress, 
+    getTeacherWithSalary, 
+    getTeacherWithSkill,
+
+    teacherGetAllCoursesNoRequest,
+
+    teacherGetAllCoursesRequestingTeach,
+
+    teacherGetAllCoursesRequestingReceivedTeach,
+
+    studentGetAllCoursesRequestingReceivedTeach,
+
+    studentGetAllCoursesNoReceived
+} from './user';
 import alert from './alert';
 
+
 export default combineReducers({
-    signUp,
     login,
     getProfile,
     getTeacherAll,
     getTeacherWithAddress,
     getTeacherWithSalary,
     getTeacherWithSkill,
-    sendCodeActivatedAccountByEmail,
-    activatedAccount,
-    getAllCourses,
+
+
+    teacherGetAllCoursesNoRequest,
+    teacherGetAllCoursesRequestingTeach,
+    teacherGetAllCoursesRequestingReceivedTeach,
+
+    studentGetAllCoursesRequestingReceivedTeach,
+    studentGetAllCoursesNoReceived,
+
     alert
+
 });

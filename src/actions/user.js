@@ -5,18 +5,6 @@ import authHeader from '../helpers/auth-header';
 import alertActions from '../actions/alert';
 
 function signUp(fullName, email, password, role){
-    function isSuccess(message){
-        return {
-            type: 'SIGN_UP_SUCCESS',
-            message
-        }
-    }
-    function isFail(message){
-        return {
-            type: 'SIGN_UP_FAIL',
-            message
-        }
-    }
     return dispatch => {
         fetch(`${config.apiUrlLocal}/users/sign-up`,{
             method: 'POST',
@@ -52,18 +40,6 @@ function signUp(fullName, email, password, role){
 
 
 function sendCodeActivatedAccountByEmail(email){
-    function isFail(message){
-        return {
-            type: 'SEND_CODE_ACTIVATED_ACCOUNT_BY_EMAIL_FAIL',
-            message
-        }
-    }
-    function isSuccess(message){
-        return {
-            type: 'SEND_CODE_ACTIVATED_ACCOUNT_BY_EMAIL_SUCCESS',
-            message
-        }
-    }
     return dispatch => {
         fetch(`${config.apiUrlLocal}/users/send-code-activated-account-by-email`, {
             method: 'POST',
@@ -76,33 +52,14 @@ function sendCodeActivatedAccountByEmail(email){
             })
         })
         .then(res => {
-            res.text().then(text => {
-                const message = JSON.parse(text).message;
-                console.log(message);
-                if(res.status === 200){
-                    dispatch(isFail(message));
-                }
-                else{
-                    dispatch(isSuccess(message));
-                }
+            res.json().then(message => {
+                alert(message);
             })
         })
     }
 }
 
 function activatedAccount(email, code){
-    function isFail(message){
-        return {
-            type: 'ACTIVATED_ACCOUNT_FAIL',
-            message
-        }
-    }
-    function isSuccess(message){
-        return {
-            type: 'ACTIVATED_ACCOUNT_SUCCESS',
-            message
-        }
-    }
     return dispatch => {
         fetch(`${config.apiUrlLocal}/users/activated-account`, {
             method: 'POST',
@@ -116,14 +73,12 @@ function activatedAccount(email, code){
             })
         })
         .then(res => {
-            res.text().then(text => {
-                const message = JSON.parse(text);
+            res.json().then(message => {
+                alert(message);
                 if(res.status === 400){
-                    dispatch(isFail(message))
                     history.push('/activated-account');
                 }
                 else{
-                    dispatch(isSuccess(message));
                     history.push('/login');
                 }
             })
@@ -147,27 +102,25 @@ function signUp_Login_With_Google_Facebook(fullName, email, password, userImg, t
                 'typeAccount': typeAccount
             })
         })
+        .then(handleResponse)
         .then(res => {
-            res.text().then(text => {
-                if(res.status === 400){
-                    history.push('/login');
-                }
-                else{
-                    const data = JSON.parse(text);
-                    localStorage.setItem('data', JSON.stringify(data));
-                    dispatch(getProfile());
-                    console.log('Phân quyền: ' + data.user.role);
-                    if(data.user.role === ''){
-                        history.push('/set-role');
-                    }
-                    else{
-                        history.push('/')
-                    }
-                }
-            })
+            localStorage.setItem('data', JSON.stringify(res));
+            if(res.user.role === ''){
+                dispatch(updateResOfNavigation(res));
+                history.push('/setting-role');
+            }
+            else{
+                history.push('/')
+                dispatch(updateResOfNavigation(res));
+            }
+
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+            dispatch(alertActions.error(error.message));
+        });
+        
     }
+    function updateResOfNavigation(data) { return { type: 'LOGIN_SUCCESS', data: data } }
 }
 
 function login(email, password, rememberUsername){
@@ -214,6 +167,7 @@ function login(email, password, rememberUsername){
                 dispatch(isSuccess(res, "Đăng nhập thành công"));
                 dispatch(getProfile());
                 history.push('/');
+
         })
         .catch(error => {
             dispatch(alertActions.error(error.message));
@@ -385,31 +339,6 @@ function getProfile(){
     }
 }
 
-function updateProfile(oldEmail, newUser){
-    return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/update-profile`,{
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify ({
-                oldEmail,
-                newUser
-            })
-        })
-        .then(res => {
-            res.text().then(text => {
-                if(res.status === 200){
-                    dispatch(logout());
-                    history.push('/');
-                }
-            })
-        })
-        .catch(errors => console.log(errors))
-    }
-}
-
 function updateInfo(newUser){
     return dispatch => {
         fetch(`${config.apiUrlLocal}/users/update-info`,{
@@ -462,6 +391,7 @@ function updateRole(role){
                 localStorage.setItem('data', JSON.stringify(data));
                 dispatch(updateResOfNavigation(data));
                 dispatch(alertActions.success(res.message));
+                history.push('/');
             },
             error => {
                 dispatch(alertActions.error(error));
@@ -469,6 +399,33 @@ function updateRole(role){
         .catch(errors => console.log(errors))
     };
     function updateResOfNavigation(data) { return { type: 'LOGIN_SUCCESS', data: data } }
+}
+
+function changePassword(oldPassword, newPassword, confirmPassword){
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/change-password`,{
+            method: 'PUT',
+            headers: {
+                ...authHeader(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify ({
+                oldPassword, 
+                newPassword, 
+                confirmPassword
+            })
+        })
+        .then(handleResponse)
+        .then(
+            res => {
+                dispatch(alertActions.success(res.message));
+                history.push('/');
+            },
+            error => {
+                dispatch(alertActions.error(error));
+            })
+        .catch(errors => console.log(errors))
+    };
 }
 
 function addSkill(userEmail, skill){
@@ -553,32 +510,204 @@ function addNewCourse(newCourse, ownerCourse){
     }
 }
 
-function getAllCourses(){
+function teacherGetAllCoursesNoRequest(teacher){
 
-    function isSuccess(allCourses){
+    function isSuccess(courses){
         return {
-            type: 'GET_ALL_COURSES_SUCCESS',
-            allCourses
+            type: 'TEACHER_GET_ALL_COURSES_NO_REQUEST',
+            courses
         }
     }
 
     return dispatch=> {
-        fetch(`${config.apiUrlLocal}/users/get-all-courses`, {
-            method: 'GET',
+        fetch(`${config.apiUrlLocal}/users/teacher-get-all-courses-no-request`, {
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({
+                teacher
+            })
         })
         .then(res => {
             res.text().then(text => {
-                const allCourses = JSON.parse(text);
-                if(res.status === 200){
-                    dispatch(isSuccess(allCourses));
+                if(text){
+                    const courses = JSON.parse(text);
+                    if(res.status === 200){
+                        dispatch(isSuccess(courses));
+                    }
                 }
+                
             })
         })
         .catch(error => console.log(error));
+    }
+}
+
+function teacherRequestingReceivedTeachCourse(idCourse, requestor, requestedPersonTemp){
+    const requestedPerson = {
+        email:  requestedPersonTemp.emailOwner,
+        fullName: requestedPersonTemp.fullNameOwner,
+        phoneNumber: requestedPersonTemp.phoneNumberOwner
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/teacher-requesting-received-teach-course`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                idCourse,
+                requestor,
+                requestedPerson
+            })
+        })
+        .then(res => {
+            res.json().then(message=>  {
+                alert(message);
+            })
+        })
+    }
+}
+
+function teacherGetAllCoursesRequestingTeach(teacher){
+    function isGot(courses){
+        return {
+            type: 'TEACHER_GET_ALL_COURSES_REQUESTING_TEACH',
+            courses
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/teacher-get-all-courses-requesting-teach`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ teacher })
+        })
+        .then(res => {
+            res.json().then(courses => {
+                dispatch(isGot(courses))
+            })
+        })
+    }
+}
+
+function teacherGetAllCoursesRequestingReceivedTeach(teacher){
+    function isGot(courses){
+        return {
+            type: 'TEACHER_GET_ALL_COURSES_REQUESTING_RECEIVED_TEACH',
+            courses
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/teacher-get-all-courses-requesting-received-teach`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ teacher })
+        })
+        .then(res => {
+            res.json().then(courses => {
+                dispatch(isGot(courses))
+            })
+        })
+    }
+}
+
+function teacherCancelRequestingReceivedTeach(idCourse){
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/teacher-cancel-requesting-received-teach`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({idCourse})
+        })
+        .then(res => {
+            res.json().then(message => {
+                alert(message);
+                history.push('/');
+            })
+        })
+    }
+}
+
+function studentGetAllCoursesRequestingReceivedTeach(student){
+    function isGot(courses){
+        return {
+            type: 'STUDENT_GET_ALL_COURSES_REQUESTING_RECEIVED_TEACH',
+            courses
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/student-get-all-courses-requesting-received-teach`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({student})
+        })
+        .then(res => {
+            res.json().then(courses => {
+                dispatch(isGot(courses));
+            })
+        })
+    }
+}
+
+function studentGetAllCoursesNoReceived(requestor){
+    function isGot(courses){
+        return {
+            type: 'STUDENT_GET_ALL_COURSES_NO_RECEIVED',
+            courses
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/student-get-all-courses-no-received`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                requestor
+            })
+        })
+        .then(res => {
+            res.json().then(courses => {
+                dispatch(isGot(courses));
+            })
+        })
+    }
+}
+
+function studentRequestingTeachCourse(idCourse, student, teacher){
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/student-requesting-teach-course`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                idCourse,
+                student,
+                teacher
+            })
+        })
+        .then(res => {
+            res.json().then(message=>  {
+                alert(message);
+            })
+        })
     }
 }
 
@@ -587,20 +716,29 @@ const userActions = {
     login,
     logout,
     getProfile,
-    updateProfile,
     getTeacherAll,
     getTeacherWithAddress,
     getTeacherWithSalary,
     getTeacherWithSkill,
-    deleteSkill,
-    addSkill,
     signUp_Login_With_Google_Facebook,
     sendCodeActivatedAccountByEmail,
     activatedAccount,
     addNewCourse,
-    getAllCourses,
+
+    teacherGetAllCoursesNoRequest,
+    teacherRequestingReceivedTeachCourse,
+    teacherGetAllCoursesRequestingTeach,
+    teacherGetAllCoursesRequestingReceivedTeach,
+    teacherCancelRequestingReceivedTeach,
+
+    studentGetAllCoursesRequestingReceivedTeach,
+    studentGetAllCoursesNoReceived,
+    studentRequestingTeachCourse,
+
     updateInfo,
-    updateRole
+    updateRole,
+    changePassword
+
 };
 
 export default userActions;

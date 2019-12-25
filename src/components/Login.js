@@ -6,6 +6,7 @@ import { faFan } from '@fortawesome/free-solid-svg-icons';
 import userActions from '../actions/user';
 import {connect} from 'react-redux';
 import firebase from 'firebase';
+import history from '../helpers/history';
 
 class Login extends React.Component{
 
@@ -49,12 +50,7 @@ class Login extends React.Component{
         if(name === 'rememberUsername'){
             value = e.target.checked
         }
-        if(name === 'email'){
-            errors.email = (value.length < 1 || value[0] === ' ') ? 'email không hợp lệ': '';
-        }
-        if(name === 'password'){
-            errors.password = (value.length < 1 || value[0] === ' ') ? 'password không hợp lệ': '';
-        }
+       
         this.setState({
             [name]: value,
             errors
@@ -86,7 +82,7 @@ class Login extends React.Component{
             var user = result.user;
             console.log(user);
             if(user){
-                signUp_Login_With_Google_Facebook(user.displayName, user.email, '', user.photoURL, 'Facebook')
+                signUp_Login_With_Google_Facebook(user.displayName, user.email, '', user.photoURL, 'Facebook');
                 console.log("Đã đăng nhập");
 
             }
