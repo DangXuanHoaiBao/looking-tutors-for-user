@@ -180,3 +180,27 @@ export const studentGetAllCoursesNoReceived = (state = {}, action) => {
         default: return state;
     }
 }
+
+export const studentGetAllContract= (state = {}, action) => {
+    switch(action.type){
+        case 'STUDENT_GET_ALL_CONTRACT': {
+            return {
+                ...state,
+                allContract: action.contracts
+            }
+        }
+        default: return state;
+    }
+}
+
+export const teacherGetAllContractOffer= (state = {}, action) => {
+    switch(action.type){
+        case 'TEACHER_GET_ALL_CONTRACT_OFFER': {
+            return {
+                ...state,
+                allContract: action.contracts
+            }
+        }
+        default: return state;
+    }
+}

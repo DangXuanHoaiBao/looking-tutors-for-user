@@ -12,10 +12,14 @@ import {
     teacherGetAllCoursesRequestingTeach,
 
     teacherGetAllCoursesRequestingReceivedTeach,
+    
+    teacherGetAllContractOffer,
 
     studentGetAllCoursesRequestingReceivedTeach,
 
-    studentGetAllCoursesNoReceived
+    studentGetAllCoursesNoReceived,
+
+    studentGetAllContract
 } from './user';
 import alert from './alert';
 
@@ -32,9 +36,11 @@ export default combineReducers({
     teacherGetAllCoursesNoRequest,
     teacherGetAllCoursesRequestingTeach,
     teacherGetAllCoursesRequestingReceivedTeach,
+    teacherGetAllContractOffer,
 
     studentGetAllCoursesRequestingReceivedTeach,
     studentGetAllCoursesNoReceived,
+    studentGetAllContract,
 
     alert
 

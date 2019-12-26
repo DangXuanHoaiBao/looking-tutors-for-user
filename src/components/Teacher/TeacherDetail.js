@@ -1,8 +1,6 @@
 import React from 'react';
 import {Image, Card, ListGroup, Button} from 'react-bootstrap';
 import history from '../../helpers/history';
-import Header from '../Header';
-import Footer from '../Footer';
 import userActions from '../../actions/user';
 import { connect } from 'react-redux';
 
@@ -10,13 +8,16 @@ class TeacherDetail extends React.Component{
     constructor(props){
         super(props);
         this.handleClickCancelRequestingReceivedTeach = this.handleClickCancelRequestingReceivedTeach.bind(this);
+        this.handleClickAcceptContract = this.handleClickAcceptContract.bind(this);
+        this.handleClickCancelContract = this.handleClickCancelContract.bind(this);
     }
 
     componentWillMount(){
-        const {teacherGetAllCoursesRequestingTeach, teacherGetAllCoursesRequestingReceivedTeach} = this.props;
+        const {teacherGetAllCoursesRequestingTeach, teacherGetAllCoursesRequestingReceivedTeach, teacherGetAllContractOffer} = this.props;
         const teacher = history.location.state;
         teacherGetAllCoursesRequestingTeach(teacher);
         teacherGetAllCoursesRequestingReceivedTeach(teacher);
+        teacherGetAllContractOffer(teacher);
     }
 
     handleClickCancelRequestingReceivedTeach(idCourse){
@@ -24,9 +25,19 @@ class TeacherDetail extends React.Component{
         teacherCancelRequestingReceivedTeach(idCourse);
     }
 
+    handleClickCancelContract(contract){
+        const {teacherCancelContract} = this.props;
+        teacherCancelContract(contract);
+    }
+
+    handleClickAcceptContract(contract){
+        const {teacherAcceptContract} = this.props;
+        teacherAcceptContract(contract);
+    }
+
     render(){
         const teacher = history.location.state;
-        const {allCoursesRequestingTeach, allCoursesRequestingReceivedTeach} = this.props;
+        const {allCoursesRequestingTeach, allCoursesRequestingReceivedTeach, allContract} = this.props;
         let listCoursesRequestingTeach;
         if(allCoursesRequestingTeach){
             listCoursesRequestingTeach = allCoursesRequestingTeach.map(course => 
@@ -95,10 +106,49 @@ class TeacherDetail extends React.Component{
             )
         }
 
+        let listContract;
+        if(allContract){
+            listContract = allContract.map(contract => 
+                <ListGroup.Item>
+                    <Card.Body>
+                        <Card.Text>
+                            <div className="row">
+                                <div className="mt-2">  
+                                    <h5 className="mb-1 mb-3">Thông tin hợp đồng</h5>    
+                                    <div className="ml-3">
+                                        <div>Id: {contract._id}</div>
+                                        <div>Ngày tạo: {contract.day}/<span>{contract.month}/</span><span>{contract.year}</span></div>
+                                        <div>Bên người học:</div>
+                                        <div>Họ tên: {contract.funllNameStudent}</div>
+                                        <div>Email: {contract.emailStudent}</div>
+                                        <div>Số điện thoại: {contract.phoneNumberStudent}</div>
+                                        <div>Bên người dạy: </div>
+                                        <div>Họ tên: {contract.fullNameTeacher}</div>
+                                        <div>Email: {contract.emailTeacher}</div>
+                                        <div>Số điện thoại: {contract.phoneNumberTeacher}</div>
+                                        <div>Số thời lượng dạy trong tuần: {contract.teachTime}</div>
+                                        <div>Địa chỉ: {contract.address}</div>
+                                        <div>Giá: {contract.salary}</div>
+                                        <div>Mô tả: {contract.discribe}</div>
+                                        <div>Thời hạn hợp đồng: {contract.term}</div>
+                                        <div className="mt-2 mb-2">
+                                            {!contract.acceptTeacher ? <div><Button onClick={() => this.handleClickAcceptContract(contract)}>Chấp nhận</Button> &nbsp; <Button onClick={() => this.handleClickCancelContract(contract)}> Hủy yêu cầu </Button></div>
+                                                : <Button disabled>Hợp đồng đã được kí kết</Button>}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Card.Text>
+                    </Card.Body>
+                </ListGroup.Item>
+            )
+        }
+       
+
         let listSkill;
         if(teacher){
             listSkill = teacher.skills.map((skill, index) => {
-                return <Button key={index} variant="secondary" disabled >{skill}</Button>
+                return <Button key={index} variant="secondary" disabled className="mr-2">{skill}</Button>
             })
         }
        
@@ -165,6 +215,18 @@ class TeacherDetail extends React.Component{
                     </div>
 
                     <div className="row mb-3">
+                        <div className="col-md-12">
+                            <Card className="shadow">
+                                <Card.Header className="font-weight-bold">Lịch sử hợp đồng</Card.Header>
+                                <ListGroup variant="flush">
+                                    {listContract}
+                                </ListGroup>
+                            </Card>
+                        </div>
+                    </div>
+
+
+                    <div className="row mb-3">
                         <div  className="col-md-12">
                             <Card className="shadow">
                                 <Card.Header className="font-weight-bold">Lịch sử đã dạy và phản hồi</Card.Header>
@@ -194,12 +256,16 @@ class TeacherDetail extends React.Component{
 
 const mapStateToProps = state => ({
     allCoursesRequestingTeach: state.teacherGetAllCoursesRequestingTeach.allCoursesRequestingTeach,
-    allCoursesRequestingReceivedTeach: state.teacherGetAllCoursesRequestingReceivedTeach.allCoursesRequestingReceivedTeach
+    allCoursesRequestingReceivedTeach: state.teacherGetAllCoursesRequestingReceivedTeach.allCoursesRequestingReceivedTeach,
+    allContract: state.teacherGetAllContractOffer.allContract
 })
 
 const actionCreator = {
     teacherGetAllCoursesRequestingTeach: userActions.teacherGetAllCoursesRequestingTeach,
     teacherGetAllCoursesRequestingReceivedTeach: userActions.teacherGetAllCoursesRequestingReceivedTeach,
-    teacherCancelRequestingReceivedTeach: userActions.teacherCancelRequestingReceivedTeach
+    teacherCancelRequestingReceivedTeach: userActions.teacherCancelRequestingReceivedTeach,
+    teacherGetAllContractOffer: userActions.teacherGetAllContractOffer,
+    teacherCancelContract: userActions.teacherCancelContract,
+    teacherAcceptContract: userActions.teacherAcceptContract
 }
 export default connect(mapStateToProps, actionCreator)(TeacherDetail);

@@ -711,6 +711,148 @@ function studentRequestingTeachCourse(idCourse, student, teacher){
     }
 }
 
+function studentCreateContract(contract){
+    return dispatch=> {
+        fetch(`${config.apiUrlLocal}/users/student-create-contract`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contract
+            })
+        })
+        .then(res => {
+            res.json().then(message=>  {
+                alert(message);
+                if(res.status === 200){
+                    history.push('/');
+                }
+            })
+        })
+    }
+}
+
+function checkout(token, contract){
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/student-checkout`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token,
+                contract
+            })
+        })
+        .then(res => {
+            res.json().then(message=>  {
+                alert(message);
+                if(res.status === 200){
+                    history.push('/');
+                }
+            })
+        })
+        .catch(error => console.log(error));
+    }
+}
+
+function studentGetAllContract(student){
+    function isGot(contracts){
+        return {
+            type: 'STUDENT_GET_ALL_CONTRACT',
+            contracts
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/student-get-all-contract`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                student
+            })
+        })
+        .then(res => {
+            res.json().then(constracts => {
+                dispatch(isGot(constracts));
+            })
+        })
+    }
+}
+
+function teacherGetAllContractOffer(teacher){
+    function isGot(contracts){
+        return {
+            type: 'TEACHER_GET_ALL_CONTRACT_OFFER',
+            contracts
+        }
+    }
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/teacher-get-all-contract-offer`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                teacher
+            })
+        })
+        .then(res => {
+            res.json().then(constracts => {
+                dispatch(isGot(constracts));
+            })
+        })
+    }
+}
+
+function teacherCancelContract(contract){
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/teacher-cancel-contract`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contract
+            })
+        })
+        .then(res => {
+            res.json().then(message => {
+                alert(message);
+                history.push('/');
+            })
+        })
+    }
+}
+
+function teacherAcceptContract(contract){
+    return dispatch => {
+        fetch(`${config.apiUrlLocal}/users/teacher-accept-contract`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contract
+            })
+        })
+        .then(res => {
+            res.json().then(message => {
+                alert(message);
+                history.push('/');
+            })
+        })
+    }
+}
+
 const userActions = {
     signUp,
     login,
@@ -730,10 +872,16 @@ const userActions = {
     teacherGetAllCoursesRequestingTeach,
     teacherGetAllCoursesRequestingReceivedTeach,
     teacherCancelRequestingReceivedTeach,
+    teacherGetAllContractOffer,
+    teacherCancelContract,
+    teacherAcceptContract,
 
     studentGetAllCoursesRequestingReceivedTeach,
     studentGetAllCoursesNoReceived,
     studentRequestingTeachCourse,
+    studentCreateContract,
+    checkout,
+    studentGetAllContract,
 
     updateInfo,
     updateRole,
