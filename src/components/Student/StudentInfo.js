@@ -208,9 +208,6 @@ class Info extends React.Component {
           notify1, notify2, notify3
     } = this.state;
 
-  
-   
-
     let { userImg } = this.state;
     const span = <span style={{ color: "red" }}>(*)</span>;
     if(reviewImage !== null){

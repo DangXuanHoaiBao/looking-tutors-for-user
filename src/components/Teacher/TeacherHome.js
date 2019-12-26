@@ -1,8 +1,10 @@
 import React from 'react';
 import {Form, Image, ProgressBar, Button, Card, ListGroup} from 'react-bootstrap';
+import {Media} from 'reactstrap';
 import {connect} from 'react-redux';
 import history from '../../helpers/history';
 import userActions from '../../actions/user';
+import ProfileImg from '../../images/profile.png'
 
 class TeacherHome extends React.Component{
     constructor(props){
@@ -118,7 +120,7 @@ class TeacherHome extends React.Component{
                         <div className="col-md-3">
                             <div className="row">
                                 <div className="col-md-4">
-                                    <Image src={user.userImg} fluid roundedCircle/>
+                                <Media object width={50} height={50} src={user.userImg ? user.userImg : ProfileImg} className="rounded-circle"/>
                                 </div>
                                 <div>
                                     <div className="font-weight-bold">{user.fullName}<span><i className="fas fa-check-circle text-primary"></i></span></div>

@@ -6,7 +6,7 @@ import alertActions from '../actions/alert';
 
 function signUp(fullName, email, password, role){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/sign-up`,{
+        fetch(`${config.apiUrlHeroku}/users/sign-up`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -41,7 +41,7 @@ function signUp(fullName, email, password, role){
 
 function sendCodeActivatedAccountByEmail(email){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/send-code-activated-account-by-email`, {
+        fetch(`${config.apiUrlHeroku}/users/send-code-activated-account-by-email`, {
             method: 'POST',
             headers:{
                 'Accept': 'application/json',
@@ -61,7 +61,7 @@ function sendCodeActivatedAccountByEmail(email){
 
 function activatedAccount(email, code){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/activated-account`, {
+        fetch(`${config.apiUrlHeroku}/users/activated-account`, {
             method: 'POST',
             header: {
                 'Accept': 'application/json',
@@ -88,7 +88,7 @@ function activatedAccount(email, code){
 
 function signUp_Login_With_Google_Facebook(fullName, email, password, userImg, typeAccount){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/check-to-signup-or-login`,{
+        fetch(`${config.apiUrlHeroku}/users/check-to-signup-or-login`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -150,7 +150,7 @@ function login(email, password, rememberUsername){
         else{
             localStorage.removeItem('username');
         }
-        fetch(`${config.apiUrlLocal}/users/login`, {
+        fetch(`${config.apiUrlHeroku}/users/login`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -193,7 +193,7 @@ function getTeacherAll(){
     }
 
     return dispatch=> {
-        fetch(`${config.apiUrlLocal}/users/get-teacher-all`, {
+        fetch(`${config.apiUrlHeroku}/users/get-teacher-all`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -220,7 +220,7 @@ function getTeacherWithAddress(address){
         }
     }
     return dispatch => {
-        fetch('http://localhost:3001/users/get-teacher-with-address',{
+        fetch(`${config.apiUrlHeroku}/users/get-teacher-with-address`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -251,7 +251,7 @@ function getTeacherWithSalary(salary){
         }
     }
     return dispatch => {
-        fetch('http://localhost:3001/users/get-teacher-with-salary',{
+        fetch(`${config.apiUrlHeroku}/users/get-teacher-with-salary`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -281,7 +281,7 @@ function getTeacherWithSkill(skill){
         }
     }
     return dispatch => {
-        fetch('http://localhost:3001/users/get-teacher-with-skill',{
+        fetch(`${config.apiUrlHeroku}/users/get-teacher-with-skill`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -324,7 +324,7 @@ function getProfile(){
         }
     }
     return dispatch=>{
-        fetch(`${config.apiUrlLocal}/users/get-profile`, {
+        fetch(`${config.apiUrlHeroku}/users/get-profile`, {
             method: 'GET',
             headers: authenticationHeader()
         })
@@ -341,7 +341,7 @@ function getProfile(){
 
 function updateInfo(newUser){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/update-info`,{
+        fetch(`${config.apiUrlHeroku}/users/update-info`,{
             method: 'PUT',
             headers: {
                 ...authHeader(),
@@ -372,7 +372,7 @@ function updateInfo(newUser){
 
 function updateRole(role){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/update-role`,{
+        fetch(`${config.apiUrlHeroku}/users/update-role`,{
             method: 'PUT',
             headers: {
                 ...authHeader(),
@@ -403,7 +403,7 @@ function updateRole(role){
 
 function changePassword(oldPassword, newPassword, confirmPassword){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/change-password`,{
+        fetch(`${config.apiUrlHeroku}/users/change-password`,{
             method: 'PUT',
             headers: {
                 ...authHeader(),
@@ -430,7 +430,7 @@ function changePassword(oldPassword, newPassword, confirmPassword){
 
 function addSkill(userEmail, skill){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/add-skill`, {
+        fetch(`${config.apiUrlHeroku}/users/add-skill`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',
@@ -451,7 +451,7 @@ function addSkill(userEmail, skill){
 
 function deleteSkill(userEmail, skillItem){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/delete-skill`, {
+        fetch(`${config.apiUrlHeroku}/users/delete-skill`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',
@@ -490,7 +490,7 @@ function handleResponse(response) {
 
 function addNewCourse(newCourse, ownerCourse){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/add-new-course`, {
+        fetch(`${config.apiUrlHeroku}/users/add-new-course`, {
             method: 'POST',
             headers: {
                 'Accept': 'Application/json',
@@ -520,7 +520,7 @@ function teacherGetAllCoursesNoRequest(teacher){
     }
 
     return dispatch=> {
-        fetch(`${config.apiUrlLocal}/users/teacher-get-all-courses-no-request`, {
+        fetch(`${config.apiUrlHeroku}/users/teacher-get-all-courses-no-request`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -552,7 +552,7 @@ function teacherRequestingReceivedTeachCourse(idCourse, requestor, requestedPers
         phoneNumber: requestedPersonTemp.phoneNumberOwner
     }
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/teacher-requesting-received-teach-course`, {
+        fetch(`${config.apiUrlHeroku}/users/teacher-requesting-received-teach-course`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -580,7 +580,7 @@ function teacherGetAllCoursesRequestingTeach(teacher){
         }
     }
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/teacher-get-all-courses-requesting-teach`, {
+        fetch(`${config.apiUrlHeroku}/users/teacher-get-all-courses-requesting-teach`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -604,7 +604,7 @@ function teacherGetAllCoursesRequestingReceivedTeach(teacher){
         }
     }
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/teacher-get-all-courses-requesting-received-teach`, {
+        fetch(`${config.apiUrlHeroku}/users/teacher-get-all-courses-requesting-received-teach`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -622,7 +622,7 @@ function teacherGetAllCoursesRequestingReceivedTeach(teacher){
 
 function teacherCancelRequestingReceivedTeach(idCourse){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/teacher-cancel-requesting-received-teach`, {
+        fetch(`${config.apiUrlHeroku}/users/teacher-cancel-requesting-received-teach`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -647,7 +647,7 @@ function studentGetAllCoursesRequestingReceivedTeach(student){
         }
     }
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/student-get-all-courses-requesting-received-teach`, {
+        fetch(`${config.apiUrlHeroku}/users/student-get-all-courses-requesting-received-teach`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -671,7 +671,7 @@ function studentGetAllCoursesNoReceived(requestor){
         }
     }
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/student-get-all-courses-no-received`, {
+        fetch(`${config.apiUrlHeroku}/users/student-get-all-courses-no-received`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -691,7 +691,7 @@ function studentGetAllCoursesNoReceived(requestor){
 
 function studentRequestingTeachCourse(idCourse, student, teacher){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/student-requesting-teach-course`, {
+        fetch(`${config.apiUrlHeroku}/users/student-requesting-teach-course`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -713,7 +713,7 @@ function studentRequestingTeachCourse(idCourse, student, teacher){
 
 function studentCreateContract(contract){
     return dispatch=> {
-        fetch(`${config.apiUrlLocal}/users/student-create-contract`, {
+        fetch(`${config.apiUrlHeroku}/users/student-create-contract`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -736,7 +736,7 @@ function studentCreateContract(contract){
 
 function checkout(token, contract){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/student-checkout`, {
+        fetch(`${config.apiUrlHeroku}/users/student-checkout`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -767,7 +767,7 @@ function studentGetAllContract(student){
         }
     }
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/student-get-all-contract`, {
+        fetch(`${config.apiUrlHeroku}/users/student-get-all-contract`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -793,7 +793,7 @@ function teacherGetAllContractOffer(teacher){
         }
     }
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/teacher-get-all-contract-offer`, {
+        fetch(`${config.apiUrlHeroku}/users/teacher-get-all-contract-offer`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -813,7 +813,7 @@ function teacherGetAllContractOffer(teacher){
 
 function teacherCancelContract(contract){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/teacher-cancel-contract`, {
+        fetch(`${config.apiUrlHeroku}/users/teacher-cancel-contract`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -834,7 +834,7 @@ function teacherCancelContract(contract){
 
 function teacherAcceptContract(contract){
     return dispatch => {
-        fetch(`${config.apiUrlLocal}/users/teacher-accept-contract`, {
+        fetch(`${config.apiUrlHeroku}/users/teacher-accept-contract`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

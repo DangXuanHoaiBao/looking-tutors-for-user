@@ -8,6 +8,8 @@ import banner_img_1 from '../images/banner-img-1.jpg';
 import banner_img_3 from '../images/banner-img-3.jpg';
 import history from '../helpers/history';
 import '../styles/App.css';
+import ProfileImg from '../images/profile.png';
+import {Media} from 'reactstrap';
 
 class Home extends React.Component{
     constructor(props){
@@ -154,7 +156,7 @@ class Home extends React.Component{
                 <Card.Header className="bg-gray-300">
                     <div className="row">
                         <div className="col-md-3">
-                            <Image src={teacher.userImg} className="img-fluid rounded-circle hoverable" alt="" />
+                            <Media object width={50} height={50} src={teacher.userImg ? teacher.userImg : ProfileImg} className="rounded-circle"/>
                         </div>
                         <div className="col-md-9">
                             <div className="font-weight-bold">{teacher.fullName}<span><i className="fas fa-check-circle text-primary"></i></span></div>
@@ -305,6 +307,7 @@ class Home extends React.Component{
                         src={banner_img_1}
                         alt="First slide"
                     />
+                    
                     <Carousel.Caption className="mb-200">
                         <Image src ={logo} className="w-20 mb-4" alt="" roundedCircle/>
                         <h4>UBER CHO GIA SƯ</h4>
@@ -336,10 +339,8 @@ class Home extends React.Component{
                                     <Form.Control as="select" name="address" value={address} onChange={this.handleChange}>
                                         <option></option>
                                         <option>TPHCM</option>
-                                        <option>Quận 9</option>
-                                        <option>Vung Tau</option>
-                                        <option>Ha Noi</option>
-                                        <option>My Tho</option>
+                                        <option>TPHN</option>
+                                        <option>Đà Nẵng</option>
                                     </Form.Control>
                             </Form.Group>
 
@@ -355,6 +356,10 @@ class Home extends React.Component{
                                     <Form.Control as="select" name="skill" value={skill} onChange={this.handleChange}>
                                         <option></option>
                                         <option>Toán</option>
+                                        <option>Lý</option>
+                                        <option>Hóa</option>
+                                        <option>Sinh</option>
+                                        <option>Địa</option>
                                     </Form.Control>
                             </Form.Group>
                         </div>
